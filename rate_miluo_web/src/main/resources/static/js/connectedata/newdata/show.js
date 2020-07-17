@@ -1028,6 +1028,7 @@ function d() {
 
 //查询
 function query1() {
+    debugger
     if(index == 0){
         a();
     }

@@ -3,22 +3,22 @@ let markerLayer;
 let typeOfSite;
 let siteOnlyInfo;
 let markers;
-
+let dateTime;
 function getMap(map) {
     this.map = map;
 }(window);
 
 $(function () {
+    dateTime=preMonth(new Date());
     layui.use('laydate',function() {
         var laydate = layui.laydate;
         laydate.render({
             elem: '#dateTime'
             ,type: 'month'
             ,range: false,
-            value :preMonth(new Date())
+            value :dateTime
         });
     });
-
     initWaterWarnMark();
 })
 function preMonth(nowDate) {
@@ -42,6 +42,7 @@ function initWaterWarnMark() {
     $.ajax({
         url: "/water/warn/getMarker",
         type: "get",
+        data:{"dateTime":$("#dateTime").val()},
         success: function (res) {
             markers = res;
             putSiteWaterMarkerToMap(markers);

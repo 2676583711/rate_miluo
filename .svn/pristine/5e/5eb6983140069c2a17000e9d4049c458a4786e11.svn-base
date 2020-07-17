@@ -1,0 +1,52 @@
+package com.rate.web.statistic.dao;
+
+import com.rate.web.statistic.entity.AverageCompare;
+import com.rate.web.statistic.entity.DailyStatement;
+import com.rate.web.statistic.entity.Grade;
+import com.rate.web.statistic.entity.PrimaryDays;
+import com.rate.web.statistic.vo.AirStationInfoVo;
+import com.rate.web.statistic.vo.QualityCategory;
+import com.rate.web.statistic.vo.RankVo;
+import org.beetl.sql.core.annotatoin.SqlResource;
+import org.beetl.sql.core.engine.PageQuery;
+import org.beetl.sql.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Author LiuYong
+ * @Date 2019/6/24 17:48
+ * @Version 1.0
+ **/
+@Repository
+@SqlResource("statistic.dailyStatement")
+public interface DailyStatementDao extends BaseMapper<DailyStatement> {
+
+    PageQuery<QualityCategory> qualityCategoryPageList(PageQuery<QualityCategory> pageQuery);
+
+    PageQuery<QualityCategory> qualityCategoryPageList2(PageQuery<QualityCategory> pageQuery);
+
+    PageQuery<RankVo> selRankVo(PageQuery<RankVo> pageQuery);
+
+    List<RankVo> selAllRankVo(Map<String, Object> params);
+
+    PageQuery<PrimaryDays> primaryList(PageQuery<PrimaryDays> pageQuery);
+
+    List<PrimaryDays> primaryGraphicList(Map<String, Object> params);
+
+    PageQuery<Grade> gradeList(PageQuery<Grade> pageQuery);
+
+    List<PrimaryDays> primaryListToExcel(Map<String, Object> params);
+
+    List<Grade> gradeListToExcel(Map<String, Object> params);
+
+    List<AverageCompare> averageCompareListByPrimeval(Map<String, Object> params);
+
+    List<AverageCompare> averageCompareListByExamine(Map<String, Object> params);
+
+    List<AirStationInfoVo> getStaionInfos();
+
+}
+

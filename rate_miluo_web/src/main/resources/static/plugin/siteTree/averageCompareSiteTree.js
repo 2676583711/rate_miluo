@@ -49,7 +49,6 @@ var num4;
         var ww = window.innerHeight - 20;
         $(el).css({
             'height': ww + "px",
-            // 'overflow-y': 'auto'
         });
     }
 
@@ -141,7 +140,6 @@ var num4;
             });
 
         }
-
         tabResize();
     }
 
@@ -275,6 +273,6 @@ var num4;
         var $el = $("li[lay-id='"+id+"']").css({display:"inline-block"});
         $el.click();
     }
-    $.siteTree = $this;
 
+    $.siteTree = $this;
 })();

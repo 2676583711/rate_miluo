@@ -217,5 +217,5 @@ function removeVideo(id) {
 }
 //下载播放器
 function downHikPlayer() {
-    	 location.href = "http://218.75.181.68:8306/hikPlayer/VSPlayer.exe";
+   location.href = "http://218.75.181.68:8306/hikPlayer/VSPlayer.exe";
 }

@@ -227,11 +227,11 @@ $('#jstree').on("changed.jstree", function(e, data) {
 		}
 		$('#exampleTable').bootstrapTable('refresh', opt);
 	} else {
-		deptIds = data.selected[0]+',';
-		for(var i in data.node.children){
+		deptIds = data.selected[0] + ',';
+		for (var i in data.node.children) {
 			deptIds += data.node.children[i]+','
 		}
-		deptIds = deptIds.substr(0,deptIds.length-1);
+		deptIds = deptIds.substr(0,deptIds.length - 1);
 		var opt = {
 			query : {
 				deptIds : deptIds

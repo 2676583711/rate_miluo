@@ -105,6 +105,7 @@ averageCompareListByPrimeval
 ===
      SELECT
     	d1.site_code,
+    	ms.name siteName,
     	ROUND( AVG( d1.so2 ) ) so2Avg,
     	ROUND( AVG( d1.no2 ) ) no2Avg,
     	ROUND( AVG( d1.pm10 ) ) pm10Avg,
@@ -153,19 +154,6 @@ averageCompareListByPrimeval
       @}
     ORDER BY d1.`query_time` DESC
      
- 
-    	
-getStaionInfos
-===
-    SELECT
-     site_code,
-     station_name
-    FROM
-     miluo_air_daily_statements	
-    WHERE
-     site_code=1
-    
- 
         
 selRankVo
 ===

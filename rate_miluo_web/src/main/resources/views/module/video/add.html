@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">摄像机所有人：</label>
+                            <label class="col-sm-2 control-label">摄像机所属：</label>
                             <div class="col-sm-3">
                                 <select id="ownerId" name="ownerId" class="form-control">
                                     <option value="">-请选择-</option>
@@ -99,6 +99,18 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">ezopen协议回放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="ezopenPlaybackUrl" name="ezopenPlaybackUrl" class="form-control"
+                                       type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">通道：</label>
+                            <div class="col-sm-3">
+                                <input id="channelNo" name="channelNo" class="form-control"
+                                       type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">默认直播地址：</label>
                             <div class="col-sm-3">
                                 <select id="defaultUrl" name="defaultUrl" class="form-control">
@@ -110,19 +122,11 @@
                                     <option value="ezopenUrl">ezopen流畅播放</option>
                                 </select>
                             </div>
-                            <label class="col-sm-2 control-label">ezopen协议回放地址：</label>
-                            <div class="col-sm-3">
-                                <input id="ezopenPlaybackUrl" name="ezopenPlaybackUrl" class="form-control"
-                                       type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label">安装时间：</label>
                             <div class="col-sm-3">
                                 <input id="installationDate" name="installationDate" class="form-control"
                                        type="text" placeholder="选择时间" autocomplete="off">
                             </div>
-
                         </div>
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-6">

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时音视频demo</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/js/audio/css/jquery.toast.min.css">
+    <style>
+        #local_stream{
+            height:500px;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="join">加入房间</button>
+    </div>
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="leave">退出房间</button>
+    </div>
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="publish">开始推流</button>
+    </div>
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="unpublish">停止推流</button>
+    </div>
+</div>
+<div id="video-grid" style="height: 100%; flex: 1">
+    <!-- 主视频 -->
+    <div id="main-video" class="video-box col-div" style="justify-content: flex-end">
+        <!-- 主视频控制按钮 -->
+        <div id="main-video-btns" class="row-div"
+             style="width: 156px; position: absolute; z-index: 10; justify-content: center; align-self: flex-end">
+            <img id="video-btn" style="width: 68px; height: 68px" onClick="event.cancelBubble = true"
+                 src="./img/big-camera-on.png" alt="" title="关闭摄像头">
+            <img id="mic-btn" style="width: 68px; height: 68px" onClick="event.cancelBubble = true"
+                 src="./img/big-mic-on.png" alt="" title="关闭麦克风">
+        </div>
+        <div id="mask_main" class="mask col-div">
+            <!-- “摄像头未开启”遮罩 -->
+            <div style="height: 100%; width: 100%; position: absolute; background-color: #D8D8D8"></div>
+            <img style="width: 63px; height: 69px; z-index: 10;" src="./img/camera-max.png" alt="">
+            <div style="height: 10px"></div>
+            <div style="z-index: 10">摄像头未打开</div>
+        </div>
+    </div>
+    <!-- 小视频 -->
+</div>
+<!--<div class="row">-->
+    <!--<div class="col col-xs-12">-->
+        <!--<div id="main-video" class="video-placeholder">-->
+            <!--<div id="local_video_info" class="video-info"></div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+
+
+<!-- jquery -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<!-- 提示框插件 -->
+<script src="/js/audio/js/jquery.toast.js"></script>
+<!-- bootstrap -->
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- 引入 TRTC WEB SDK 脚本 -->
+<script src="/js/audio/js/trtc.js"></script>
+<!-- 下面是demo相关脚本 -->
+<!-- 生成签名 -->
+<script src="/js/audio/js/lib-generate-test-usersig.min.js"></script>
+<script src="/js/audio/js/debug/GenerateTestUserSig.js"></script>
+<script src="/js/audio/js/common.js"></script>
+<script src="/js/audio/js/rtc-client.js"></script>
+<script>
+    let rtc = null;
+    // 加入房间
+    $('#join').on('click', function(e) {
+        e.preventDefault();
+        console.log('join');
+        if (rtc) return;
+        let userId = 'user_' + parseInt(Math.random() * 100000000);
+        const config = genTestUserSig(userId);//根据userId生成一个对象含：sdkAppId、userSig，具体代码见GenerateTestUserSig.js
+         rtc = new RtcClient({//创建一个rtc实例  传入userid、房间号、sdkAppId、userSig
+            userId,
+            roomId:'889988',
+            sdkAppId: config.sdkAppId,
+            userSig: config.userSig
+        });
+        rtc.join();//调用join方法
+    });
+    // 退出房间
+    $('#leave').on('click', function(e) {
+        e.preventDefault();
+        console.log('leave');
+        if (!rtc) {
+            $.toast('请先加入房间！');
+            return;
+        }
+        rtc.leave();
+        rtc = null;
+    });
+    // 开始推流
+    $('#publish').on('click', function(e) {
+        e.preventDefault();
+        console.log('publish');
+        if (!rtc) {
+            $.toast('请先加入房间！');
+            return;
+        }
+        rtc.publish();
+    });
+    // 停止推流
+    $('#unpublish').on('click', function(e) {
+        e.preventDefault();
+        console.log('unpublish');
+        if (!rtc) {
+            $.toast('请先加入房间！');
+            return;
+        }
+        rtc.unpublish();
+    });
+
+</script>
+</body>
+</html>
+

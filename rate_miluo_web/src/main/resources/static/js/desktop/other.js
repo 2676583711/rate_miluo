@@ -981,7 +981,7 @@ function buildPollutePopupContent(siteType, siteCategory, info, newDatas, hour, 
                 "<div>" + deviceName + "</div>" +
                 "<div>" + (newData.recordingTime?newData.recordingTime:"-") + "</div>" +
             "</div>" +
-            (newData.so2?(
+            ((newData.so2 || new Data.so2 === 0)?(
                 newData.so22?(
                 "<div class='site-popup-p pollutant-attr2'>" +
                 "<div >二氧化硫(mg/m³)</div>" +
@@ -992,7 +992,7 @@ function buildPollutePopupContent(siteType, siteCategory, info, newDatas, hour, 
                     "<div class='text-center'>" + newData.so2 + "</div>" +
                     "</div>")
             ):'') +
-            (newData.nox?(
+            ((newData.nox || newData.nox === 0)?(
                 newData.nox2?(
                 "<div class='site-popup-p pollutant-attr2'>" +
                 "<div>氮氧化物(mg/m³)</div>" +
@@ -1001,75 +1001,74 @@ function buildPollutePopupContent(siteType, siteCategory, info, newDatas, hour, 
                     "<div class='site-popup-p pollutant-attr'>" +
                     "<div>氮氧化物(mg/m³)</div>" +
                     "<div class='text-center'>" + newData.nox + "</div>" +
-                    "</div>"
-                )
-                ):'') +
-            (newData.o2?(
+                    "</div>")
+                ): '') +
+            ((newData.o2 || newData.o2 === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>氧气含量(%)</div>" +
                 "<div class='text-center'>" + newData.o2 + "</div>" +
                 "</div>"):'') +
-            (newData.flowVelocity?(
+            ((newData.flowVelocity || newData.flowVelocity === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>烟气流速(m/s)</div>" +
                 "<div class='text-center'>" + newData.flowVelocity + "</div>" +
                 "</div>"):'') +
-            (newData.temp?(
+            ((newData.temp || newData.temp === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>烟气温度(℃)</div>" +
                 "<div class='text-center'>" + newData.temp + "</div>" +
                 "</div>"):'') +
-            (newData.press?(
+            ((newData.press || newData.temp === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>烟气压力(kPa)</div>" +
                 "<div class='text-center'>" + newData.press + "</div>" +
                 "</div>"):'') +
-            (newData.dust?(
+            ((newData.dust || newData.dust === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>烟尘(mg/m³)</div>" +
                 "<div class='text-center'>" + newData.dust + "</div>" +
                 "</div>"):'') +
-            (newData.exhaust?(
+            ((newData.exhaust || newData.exhaust === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>排放量(m³/s)</div>" +
                 "<div class='text-center'>" + newData.exhaust + "</div>" +
                 "</div>"):'') +
-            (newData.co?(
+            ((newData.co || newData.co === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>一氧化碳(mg/m³)</div>" +
                 "<div class='text-center'>" + newData.co + "</div>" +
                 "</div>"):'') +
-            (newData.co2?(
+            ((newData.co2 || newData.co2 === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>二氧化碳(mg/m³)</div>" +
                 "<div class='text-center'>" + newData.co2 + "</div>" +
                 "</div>"):'') +
-            (newData.hcl?(
+            ((newData.hcl || newData.hcl === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>氯化氢(mg/m³)</div>" +
                 "<div class='text-center'>" + newData.hcl + "</div>" +
                 "</div>"):'') +
-            (newData.no?(
+            ((newData.no || newData.no === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>一氧化氮(mg/m³)</div>" +
                 "<div class='text-center'>" + newData.no + "</div>" +
                 "</div>"):'') +
-            (newData.no2?(
+            ((newData.no2 || newData.no2 === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>二氧化氮(mg/m³)</div>" +
                 "<div class='text-center'>" + newData.no2 + "</div>" +
                 "</div>"):'') +
-            (newData.humidity?(
+            ((newData.humidity || newData.humidity === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>烟气湿度(%)</div>" +
                 "<div class='text-center'>" + newData.humidity + "</div>" +
                 "</div>"):'') +
-            (newData.avgTempInChamber?(
+            ((newData.avgTempInChamber || newData.avgTempInChamber === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>炉膛内平均温度(℃)</div>" +
                 "<div class='text-center'>" + newData.avgTempInChamber + "</div>" +
                 "</div>"):'') +
-            (newData.dcsTempInChamber?(
+            ((newData.dcsTempInChamber || newData.dcsTempInChamber === 0)?(
                 "<div class='site-popup-p pollutant-attr'>" +
                 "<div>炉膛内DCS温度(℃)</div>" +
                 "<div class='text-center'>" + newData.dcsTempInChamber + "</div>" +

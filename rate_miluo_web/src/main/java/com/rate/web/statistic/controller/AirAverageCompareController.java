@@ -6,17 +6,12 @@ import com.rate.web.site.service.SiteService;
 import com.rate.web.statement.vo.AirDailyVO;
 import com.rate.web.statistic.service.CompareService;
 import com.rate.web.statistic.entity.AverageCompare;
-import com.rate.web.statistic.service.DailyStatementService;
-import com.rate.web.statistic.service.DayExamineService;
 import com.rate.web.statistic.util.DateParamUtil;
 import com.rate.web.statistic.util.ExportExcelStatementUtil;
-import com.rate.web.statistic.vo.AirStationInfoVo;
-import lombok.experimental.var;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +39,6 @@ import java.util.Map;
 public class AirAverageCompareController extends BaseController {
     @Autowired
     private CompareService compareService;
-
-    @Autowired
-    private DayExamineService dayExamineService;
-
-    @Autowired
-    private DailyStatementService dailyStatementService;
-
     @Autowired
     private UserService userService;
 
@@ -72,6 +59,7 @@ public class AirAverageCompareController extends BaseController {
     @ResponseBody
     @RequestMapping("/list")
     public List<AverageCompare> list(@RequestParam Map<String, Object> params) {
+        //site id
         params = DateParamUtil.initParam(params, Calendar.YEAR);
         String siteCode = (String) params.get("siteCodes");
         String[] siteCodes = null;
@@ -120,7 +108,6 @@ public class AirAverageCompareController extends BaseController {
                                    List<AverageCompare> dataSet, Class<?> pojoClass, String title, String dateRange) throws Exception {
         response.setContentType("application/vnd.ms-excel");
         ServletOutputStream fOut = null;
-
         try {
             response.reset();
             response.setHeader("Cache-Control", "private");

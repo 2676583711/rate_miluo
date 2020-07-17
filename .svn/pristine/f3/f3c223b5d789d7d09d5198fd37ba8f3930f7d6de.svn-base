@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时音视频demo</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/js/audio/css/jquery.toast.min.css">
+    <style>
+        #local_stream {
+            height:784px;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="join">加入房间</button>
+    </div>
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="leave">退出房间</button>
+    </div>
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="publish">开始推流</button>
+    </div>
+    <div class="col col-xs-3">
+        <button class="btn btn-primary" id="unpublish">停止推流</button>
+    </div>
+</div>
+<div class="center-page">
+    <div v-html="remoteStream"
+         :class="remoteStream?'distant-stream':''">
+    </div>
+    <div id='local_stream'
+         class="local-stream">
+    </div>
+</div>
+<script src="/js/audio/js/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/js/audio/js/trtc.js"></script>
+<script src="/js/audio/js/lib-generate-test-usersig.min.js"></script>
+<!--<script src="/js/audio/js/debug/GenerateTestUserSig.js"></script>-->
+<script type="text/javascript" src="/js/audio/js/addSwitch.js"></script>
+</body>
+</html>
