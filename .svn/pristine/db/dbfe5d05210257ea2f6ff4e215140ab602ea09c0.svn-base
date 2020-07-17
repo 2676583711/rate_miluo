@@ -1,0 +1,14 @@
+.layui-tab-title{
+    /*border: none;*/
+}
+ul.layui-tab-title>li{
+    border-bottom: 1px solid #e6e6e6;
+}
+.site-tree-content{
+    height: 775px;
+    overflow-y: auto;
+    min-width: 280px;
+    width: 10%;
+    display: inline-block;
+    margin-top: 5px;
+}

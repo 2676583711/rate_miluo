@@ -1,0 +1,26 @@
+<% layout('/include/default.html',{libs:["table","layer","layui"]}){ %>
+<link href="/plugin/site/style.css" rel="stylesheet"/>
+<script src="/plugin/babel/polyfill.min.js"></script>
+<style>
+    .wrapper-content {
+        padding: 10px;
+    }
+</style>
+<div class="wrapper-content ">
+
+   <div style="float:right">
+    <button onclick="javascript:history.back(1);">返回</button>
+   </div>
+    <!--<button type="button" onclick="openw(3)">点</button>-->
+    <div class="col-md-12">
+        <div class="col-md-10" style="width: auto">
+            <table id="exampleTable"
+                   style="overflow: hidden; background-color: #f1f1f1;">
+            </table>
+        </div>
+    </div>
+    <input type="hidden" id="siteCode" value="${siteCode}">
+</div>
+<% } %>
+<script type="text/javascript" src="/js/connectedata/dataRate/getwaterautodetails.js">
+</script>

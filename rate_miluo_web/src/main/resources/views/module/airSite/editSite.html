@@ -1,0 +1,211 @@
+<% layout('/include/default.html',{libs:["layui"]}){ %>
+<link href="/content/css/bootstrap-select.min.css" rel="stylesheet">
+<div class="wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <input  name="id" class="form-control" value="${airSite.id}"
+                                   type="hidden">
+                            <input id="fzr2"   class="form-control" value="${airSite.fzr}"
+                                    type="hidden">
+                            <label class="col-sm-3 control-label">站点名称：</label>
+                            <div class="col-sm-3">
+                                <input id="name" name="name" class="form-control" value="${airSite.name}"
+                                       type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">站点类型：</label>
+                            <div class="col-sm-3">
+                                <select id="siteType" name="siteType" class="form-control"
+                                        onchange="typeChange()" value="${airSite.siteType }">
+                                    <option value=1 ${airSite.siteType=='1'?'selected':''}>水</option>
+                                    <option value=2 ${airSite.siteType=='2'?'selected':''}>空气</option>
+                                    <option value=3 ${airSite.siteType=='3'?'selected':''}>涉气污染源</option>
+                                    <option value=4 ${airSite.siteType=='4'?'selected':''}>涉水污染源</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">经度：</label>
+                            <div class="col-sm-3">
+                                <input type="text" id="longitude" name="longitude" value="${airSite.longitude}"
+                                       class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">纬度：</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="latitude" name="latitude" value="${airSite.latitude}"
+                                       class="form-control">
+                            </div>
+                        </div>
+
+                        <div id="airD">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">站点编码<font color="red">*</font>：</label>
+                                <div class="col-sm-3">
+                                    <input id="siteCode" name="siteCode" class="form-control" value="${airSite.siteCode}"
+                                           type="text">
+                                </div>
+                                <label class="col-sm-2 control-label">站点地址<font color="red">*</font>：</label>
+                                <div class="col-sm-4">
+                                    <input id="address" name="address" class="form-control" value="${airSite.address}"
+                                           type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-sm-3 control-label">站点状态：</label>
+                            <div class="col-sm-3">
+                                <label  class="radio-inline checkbox-inline">
+                                    <input type="radio" name="status" class="radio-inline checkbox-inline" checked="true" value="1"
+                                           ${airSite.status=='1'?'checked':''} >正常
+                                </label>
+                                <label  class="radio-inline checkbox-inline">
+                                    <input type="radio" name="status" class="radio-inline checkbox-inline" value="0"
+                                           ${airSite.status=='0'?'checked':''} >停运
+                                </label>
+                            </div>
+                            <label class="col-sm-2 control-label">行政区划：</label>
+                            <div class="col-sm-3">
+                                <select id="areaType" class="form-control" value="${airSite.areaType}">
+                                    <option value="1"  ${airSite.areaType=='1'?'selected':''} >--城区--</option>
+                                    <option value="2" ${airSite.areaType=='2'?'selected':''} >--乡镇--</option>
+                                </select>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">原公司名：</label>
+                                <div class="col-sm-3">
+                                    <input id="oldName" name="oldName" class="form-control" value="${airSite.oldName}"
+                                           type="text">
+                                </div>
+                                <label class="col-sm-2 control-label">备注：</label>
+                                <div class="col-sm-4">
+                                    <input id="remark" name="remark" class="form-control" value="${airSite.remark}"
+                                           type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="pollutantD">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">负责人：</label>
+                                <div class="col-sm-3">
+                                    <select id="fzr" name="fzr" class="selectpicker show-tick form-control" data-live-search="true">
+                                        <option value="">-请选择-</option>
+                                        <%if(userList!=null && userList.~size > 0){%>
+                                        <%for(user in userList){%>
+
+                                        <option value="${user.userId}" ${user.userId==airSite.fzr2?'selected':''}>${user.username}</option>
+                                        <%}%>
+                                        <%}%>
+                                    </select>
+
+                                </div>
+                                <label class="col-sm-2 control-label">联系方式：</label>
+                                <div class="col-sm-3">
+                                    <input id="phone" name="phone" class="form-control" disabled="true"
+                                           type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="button" class="btn btn-primary" onclick="updateE()">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/airSite/bootstrap-select.min.js"></script>
+
+<script>
+
+    $(function () {
+        $.ajax({
+            type : "GET",
+            dataType : "json",
+            url : "/airSite/getUserList",
+            data : {},
+            success : function (data) {
+                debugger
+                var fzr2 =$("#fzr2").val();
+                userList=data;
+                for (var p in userList) {//遍历json数组时，这么写p为索引，0,1
+                    var userId= userList[p].userId;
+                    if (fzr2==userId) {
+
+
+                        $("#phone").val(userList[p].mobile);
+                        break
+                    }
+                }
+
+            }
+
+        });
+    });
+
+
+    //日期时间选择器
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#test5'
+            ,type: 'datetime'
+        });
+    });
+
+
+    $("#fzr").change(function(){
+
+        var id =$("#fzr").val();
+        for (var p in userList) {//遍历json数组时，这么写p为索引，0,1
+            var userId= userList[p].userId;
+            if (id==userId) {
+                $("#phone").val(userList[p].mobile);
+                break
+            }
+        }
+
+    });
+
+
+    function updateE() {
+        /*  var type = $("#siteType").val();
+          var typeX="POST";
+         // 污染源提交方法为 get  水和空气的 为  post
+         if(type==3||type=="3"){
+             typeX="GET";
+          }*/
+        $.ajax({
+            type : "POST",
+            url : "/airSite/updateSite",
+            data : $("#signupForm").serialize(),
+            error : function(request) {
+                parent.layer.alert("Connection error");
+            },
+            success : function(data) {
+                if (data.code == 0) {
+                    parent.layer.msg("操作成功");
+                    parent.reFresh();
+                    var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(index);
+
+                } else {
+                    parent.layer.alert(data.msg)
+                }
+
+            }
+        });
+    }
+
+
+</script>

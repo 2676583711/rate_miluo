@@ -1,0 +1,526 @@
+package com.rate.web.alarm.monitor.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.mascloud.sdkclient.Client;
+import com.rate.system.rate_system.controller.BaseController;
+import com.rate.system.rate_system.dao.UserDao;
+import com.rate.system.rate_system.entity.User;
+import com.rate.system.rate_system.service.DictService;
+import com.rate.system.rate_system.service.UserService;
+import com.rate.system.rate_system.utils.*;
+import com.rate.system.rate_system.utils.excel.ExportExcel;
+import com.rate.web.alarm.dao.MsgRecordDao;
+import com.rate.web.alarm.entity.AlarmEntity;
+import com.rate.web.alarm.entity.AlarmEntityEpx;
+import com.rate.web.alarm.entity.MsgRecord;
+import com.rate.web.alarm.monitor.dao.ExceedDao;
+import com.rate.web.alarm.monitor.entity.Exceed;
+import com.rate.web.alarm.monitor.service.ExceedService;
+import com.rate.web.alarm.pollutantdata.service.PolluteFactoryService;
+import com.rate.web.site.enums.RoleConstant;
+import com.rate.web.statement.entity.PolluteRealtime;
+import com.rate.web.statement.entity.PolluteRealtimeExp;
+import com.rate.web.task.entity.MiluoTaskInfo;
+import com.rate.web.task.service.MiluoTaskInfoService;
+import com.rate.web.vidicon.entity.Vidicon;
+import com.rate.web.vidicon.service.VidiconService;
+import org.beetl.sql.core.engine.PageQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@Controller
+@RequestMapping("/index")
+public class MonitorController extends BaseController {
+
+    @Autowired
+    private ExceedService airExceedService;
+
+    private String prefix = "module/alarm";
+
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PolluteFactoryService polluteFactoryService;
+
+    @Autowired
+    private ExceedDao exceedDao;
+
+    @Autowired
+    private MiluoTaskInfoService miluoTaskInfoService;
+
+    @Autowired
+    private VidiconService vidiconService;
+    @Autowired
+    private DictService dictService;
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private MsgRecordDao msgRecordDao;
+
+    /**
+     * @Param
+     * @Return
+     * @author xiaoshi
+     * @Description
+     * @Date 2019/6/17
+     * @Time 16:31
+     **/
+    @RequestMapping("/air")
+    public String getAirHourSmallStatement(Model model, String siteId) {
+        model.addAttribute("siteId", siteId);
+        model.addAttribute("roleId", getRoleId());
+        return prefix + "/airmonitor/show";
+    }
+
+    /**
+     * @Param [params, pageSize, pageNumber]
+     * @Return com.rate.system.rate_system.utils.PageUtils
+     * @author xiaoshi
+     * @Description
+     * @Date 2019/6/10
+     * @Time 17:45
+     **/
+    @RequestMapping("/getAir")
+    @ResponseBody
+    public PageUtils getUtils(@RequestParam Map<String, Object> params, Long pageSize, Long pageNumber) {
+        String siteCodeList = (String) params.get("siteIds");
+        if (params.get("page") != null) {
+            params.put("startDate", DateUtils.format(new Date(), "yyyy-MM-dd 00:00:00"));
+        }
+        if ( siteCodeList == null || siteCodeList.equals("undefined") || siteCodeList == "" ) {
+            if (Arrays.asList(RoleConstant.ROLEIDS).contains(getRoleId())) {
+                params.put("siteIds", userService.getSitePowerList(getUserId()));
+            } else {
+                params.put("siteIds", userService.getAllSiteId());
+            }
+        } else {
+            params.put("siteIds", siteCodeList.split(","));
+        }
+        PageQuery<AlarmEntity> paras = new PageQuery<>(pageNumber, pageSize, params);
+        PageQuery<AlarmEntity> page = airExceedService.airAlarmQuery(paras);
+        PageUtils pageUtils = new PageUtils(page.getList(), page.getTotalRow());
+
+        return pageUtils;
+
+    }
+
+    /**
+     * 报警情况导出
+     * @param params
+     * @param response
+     */
+
+    @RequestMapping("/exportSituationExcel")
+    @ResponseBody
+    public void exportSituationExcel(@RequestParam Map<String, Object> params,HttpServletResponse response) {
+        String beginTime = (String) params.get("startDate");
+        String endTime = (String) params.get("endDate");
+        String date = beginTime + "至" + endTime;
+        String siteCodeList = (String) params.get("siteIds");
+        if ( siteCodeList==null || siteCodeList.equals("undefined") || siteCodeList == "") {
+            if (Arrays.asList(RoleConstant.ROLEIDS).contains(getRoleId())) {
+                params.put("siteIds", userService.getSitePowerList(getUserId()));
+            }
+            params.put("siteIds", userService.getAllSiteId());
+        } else {
+            params.put("siteIds", siteCodeList.split(","));
+        }
+        Calendar c = Calendar.getInstance();
+        List<AlarmEntityEpx> exceeds = airExceedService.airAlarmQuerySituationExp(params);
+        for (AlarmEntityEpx alarmEntityEpx : exceeds) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("siteId",alarmEntityEpx.getId());
+            Date dataTime = alarmEntityEpx.getDataTime();
+            c.setTime(dataTime);
+            c.add(Calendar.DATE, 1);
+            Date d = c.getTime();
+            map.put("startTime" ,dataTime);
+            map.put("endTime", d);
+            String pollutant = alarmEntityEpx.getPollutant();
+            if (pollutant.contains("二氧化硫")){
+                map.put("pollutant","so2");
+            }
+            if (pollutant.contains("氮氧化物")){
+                map.put("pollutant","nox");
+            }
+            if (pollutant.contains("氧气")){
+                map.put("pollutant","o2");
+            }
+
+            PolluteRealtime polluteRealtime=polluteFactoryService.selHourPollutant(map);
+            //getSiteName是借用字段 实际上是平均值
+            alarmEntityEpx.setValue24H(polluteRealtime.getSiteName());
+            Double indexValue = Double.valueOf(alarmEntityEpx.getIndexValue());
+            String siteName1 = polluteRealtime.getSiteName();
+            if (siteName1==null){
+
+
+                alarmEntityEpx.setText("仍超标");
+            }else {
+                Double siteName = Double.valueOf(polluteRealtime.getSiteName());
+                if (siteName>indexValue){
+                    alarmEntityEpx.setText("仍超标");
+                }else {
+                    alarmEntityEpx.setText("已整改");
+                }
+            }
+
+            if (alarmEntityEpx.getStatus() == 0) {
+                alarmEntityEpx.setStatusText("未处理");
+            } else if (alarmEntityEpx.getStatus() == 1) {
+                alarmEntityEpx.setStatusText("已处理");
+            } else if (alarmEntityEpx.getStatus() == 2) {
+                alarmEntityEpx.setStatusText("任务已添加");
+            }
+
+        }
+
+        String title = "涉气污染源处理情况表";
+
+        try {
+            new ExportExcel(date + title, AlarmEntityEpx.class, 2).setDataList(exceeds).write(response, title + ".xlsx")
+                    .dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 报警情况详情导出
+     * @param params
+     * @param response
+     */
+    @RequestMapping("/eventDetailExp")
+    @ResponseBody
+    public void eventDetailExp(@RequestParam Map<String, Object> params,HttpServletResponse response) throws ParseException {
+        String id = String.valueOf(params.get("id"));
+        String time = String.valueOf(params.get("time"));
+        String pollutant = String.valueOf(params.get("pollutant"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        Map<String, Object> map = new HashMap<>();
+        params.put("siteId",id);
+        Date dataTime = sdf.parse(time);
+        c.setTime(dataTime);
+        c.add(Calendar.DATE, 1);
+        Date d = c.getTime();
+        params.put("startTime" ,dataTime);
+        params.put("endTime", d);
+
+        if (pollutant.contains("二氧化硫")){
+            params.put("pollutant","so2");
+        }
+        if (pollutant.contains("氮氧化物")){
+            params.put("pollutant","nox");
+        }
+        if (pollutant.contains("氧气")){
+            params.put("pollutant","o2");
+        }
+        List<PolluteRealtimeExp> polluteRealtime=polluteFactoryService.selHourPollutantList(params);
+
+        for (PolluteRealtimeExp polluteRealtimeExp : polluteRealtime) {
+            polluteRealtimeExp.setPollutant(pollutant);
+        }
+
+        String title = "涉气污染源处理详情表";
+
+        try {
+            new ExportExcel(  title, PolluteRealtimeExp.class, 2).setDataList(polluteRealtime).write(response, title + ".xlsx")
+                    .dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @RequestMapping("/exportExcel")
+    @ResponseBody
+    public void getExp(@RequestParam Map<String, Object> params,HttpServletResponse response) {
+        String beginTime = (String) params.get("startDate");
+        String endTime = (String) params.get("endDate");
+        String date = beginTime + "至" + endTime;
+        String siteCodeList = (String) params.get("siteIds");
+        if ( siteCodeList==null || siteCodeList.equals("undefined") || siteCodeList == "") {
+            if (Arrays.asList(RoleConstant.ROLEIDS).contains(getRoleId())) {
+                params.put("siteIds", userService.getSitePowerList(getUserId()));
+            }
+            params.put("siteIds", userService.getAllSiteId());
+        } else {
+            params.put("siteIds", siteCodeList.split(","));
+        }
+        List<AlarmEntity> exceeds = airExceedService.airAlarmQueryExp(params);
+        exceeds = formatAlarmEntity(exceeds);
+        String type = (String) params.get("type");
+        String title = "";
+        if ("air".equals(type)) {
+            title = "空气站点监测浓度报警表";
+        } else if ("pollute".equals(type)) {
+            title = "涉气污染源站点监测浓度报警表";
+        } else if ("polluteWater".equals(type)) {
+            title = "涉水污染源监测浓度报警表";
+        } else if ("water".equals(type)) {
+            title = "水质自动站监测浓度报警表";
+        }
+        try {
+            new ExportExcel(date + title, AlarmEntity.class, 2).setDataList(exceeds).write(response, title + ".xlsx")
+                    .dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<AlarmEntity> formatAlarmEntity(List<AlarmEntity> exceeds) {
+        for (AlarmEntity entity : exceeds) {
+            if (entity.getSeriousExceed() != null && entity.getSeriousExceed() == 1) {
+                entity.setText("严重超标");
+            }
+            if (entity.getStatus() == 0) {
+                entity.setStatusText("未处理");
+            } else if (entity.getStatus() == 1) {
+                entity.setStatusText("已处理");
+            } else if (entity.getStatus() == 2) {
+                entity.setStatusText("任务已添加");
+            }
+        }
+        return exceeds;
+    }
+    @RequestMapping("/getButtonAir")
+    @ResponseBody
+    public PageUtils getAirUtils(@RequestParam Map<String, Object> params, Long pageSize, Long pageNumber) {
+        if (Arrays.asList(RoleConstant.ROLEIDS).contains(getRoleId())) {
+            params.put("siteIds2", userService.getSitePowerList(getUserId()));
+        } else {
+            params.put("siteIds2", userService.getAllSiteId());
+        }
+
+        PageQuery<Exceed> paras = new PageQuery<>(pageNumber, pageSize, params);
+        PageQuery<Exceed> page = airExceedService.buttonAirAlarm(paras);
+        PageUtils pageUtils = new PageUtils(page.getList(), page.getTotalRow());
+        return pageUtils;
+
+    }
+
+    @RequestMapping("/video/{id}")
+    public String getVideo(Model model, @PathVariable(value = "id", required = false) String id) {
+        model.addAttribute("id", id);
+        return prefix + "/airmonitor/video";
+    }
+
+    @GetMapping("/video")
+    @ResponseBody
+    public JSONObject getVideoList(@RequestParam Map<String, Object> params) {
+        JSONObject result = new JSONObject();
+        String id = (String) params.get("id");
+        List<Vidicon> siteVidicons = vidiconService.getVidiconsById(id);
+        result.put("videos", siteVidicons);
+        return result;
+    }
+
+    /**
+     * 忽略
+     * @param id
+     * @Return  com.rate.system.rate_system.utils.R
+     * @Author  chenshixue
+     * @Date    2019/12/20 16:51
+     */
+    @RequestMapping("/updateIgnore")
+    @ResponseBody
+    public R airUpdateIgnore(@RequestParam(value = "id") String id) {
+        AlarmEntity entity = exceedDao.single(Long.parseLong(id));
+        entity.setStatus(1);
+        entity.setHandler(getUserId());
+        entity.setHandleTime(new Date());
+        exceedDao.updateById(entity);
+        return new R().ok("操作成功！");
+    }
+
+    @RequestMapping("/updateReturn")
+    @ResponseBody
+    public R airUpdateReturn(@RequestParam(value = "id") String id) {
+        AlarmEntity entity = exceedDao.single(Long.parseLong(id));
+        entity.setStatus(0);
+        entity.setHandler(null);
+        entity.setHandleTime(null);
+        exceedDao.updateById(entity);
+        return new R().ok("操作成功！");
+    }
+
+    /**
+     * 添加任务界面
+     * @param model
+     * @param id
+     * @Return  java.lang.String
+     * @Author  chenshixue
+     * @Date    2019/12/19 18:00
+     */
+    @GetMapping("/add")
+    public String add(Model model, Long id) {
+        AlarmEntity entity = airExceedService.findInfoById(id);
+        if (entity.getSeriousExceed() != null && entity.getSeriousExceed() == 1) {
+            entity.setText("严重超标");
+        }
+        entity.setPollutant(entity.getPollutant() + entity.getText());
+        model.addAttribute("info", entity);
+        return prefix + "/airmonitor/add";
+    }
+
+    /**
+     * 任务下发操作
+     * @param miluoTaskInfo
+     * @Return  com.rate.system.rate_system.utils.R
+     * @Author  chenshixue
+     * @Date    2019/12/20 16:13
+     */
+    @PostMapping("/alarm/save")
+    @ResponseBody
+    public R save(MiluoTaskInfo miluoTaskInfo) {
+        R res = new R();
+        String Uid = dictService.listByType("sms_username").get(0).getValue();
+        String Key = dictService.listByType("sms_key").get(0).getValue();
+        miluoTaskInfo.setId(IdGen.uuid());
+        miluoTaskInfo.setPubPersonId(getUserId() + "");  //任务发布人
+        try {
+            if(StringUtils.isBlank(miluoTaskInfo.getMobile())
+                    && StringUtils.isNotBlank(miluoTaskInfo.getChargePersonId())){  //如果负责人没有电话
+                miluoTaskInfoService.save(miluoTaskInfo);
+                return res.ok("操作成功！短信未推送");
+            }else{  // 有电话，则发送信息
+                String degree = null;
+                if (miluoTaskInfo.getDegreeEmergency().equals("2")) {
+                    degree = "最高级别";
+                } else if (miluoTaskInfo.getDegreeEmergency().equals("0")) {
+                    degree = "普通不紧急";
+                } else if (miluoTaskInfo.getDegreeEmergency().equals("1")) {
+                    degree = "重要紧急";
+                }
+                String taskType = "";
+                if (miluoTaskInfo.getTaskType().equals("1")) {
+                    taskType = "巡检";
+                } else if (miluoTaskInfo.getTaskType().equals("2")) {
+                    taskType = "维护";
+                } else if (miluoTaskInfo.getTaskType().equals("5")) {
+                    taskType = "设备维修";
+                } else if (miluoTaskInfo.getTaskType().equals("8")) {
+                    taskType = "其他任务";
+                } else if (miluoTaskInfo.getTaskType().equals("9")) {
+                    taskType = "因子超标";
+                } else {
+                    taskType = "未知";
+                }
+                String seriousExceed = miluoTaskInfo.getSeriousExceed();  // 是否严重超标
+
+                User user = userDao.userById(Integer.parseInt(miluoTaskInfo.getChargePersonId()));
+                String fzrName = user.getName();  // 负责人
+                String mobile = user.getMobile(); // 负责人电话
+                String remark = miluoTaskInfo.getRemark();
+                String smsText = "负责人：" + fzrName + "； 报警级别：" + degree + "； 报警类型：" + taskType + "； 报警内容：" + remark + "。请尽快处理";
+
+                MsgRecord record1;
+                MsgRecord record2 = null;
+                Date date = new Date();
+
+                // 严重超标会发送给负责人及他的上级
+                String[] mobiles = null;
+                if ("1".equals(seriousExceed) && user.getMgrId() != null) {
+                    Integer mgrId = user.getMgrId();
+                    User marUser= userDao.userById(mgrId);  // 上级
+                    if (marUser != null && StringUtils.isNotBlank(marUser.getMobile())) {
+                        String mobile1 = marUser.getMobile();  // 上级电话
+                        mobiles = new String[]{mobile, mobile1};
+                        record2 = new MsgRecord();
+                        record2.setId(IdGen.uuid());
+                        record2.setUserId(marUser.getUserId());
+                        record2.setMobile(mobile1);
+                        record2.setContent(smsText);
+                        record2.setCreateTime(date);
+                        record2.setMsgType("1");
+                        record2.setVideoId(miluoTaskInfo.getStationCode());
+                    }
+                } else {
+                    mobiles = new String[]{mobile};
+                }
+                record1 = new MsgRecord();
+                record1.setId(IdGen.uuid());
+                record1.setUserId(user.getUserId());
+                record1.setMobile(mobile);
+                record1.setContent(smsText);
+                record1.setCreateTime(date);
+                record1.setMsgType("1");
+                record1.setVideoId(miluoTaskInfo.getStationCode());
+
+                // 登录账户
+                Client client = Client.getInstance();
+                // 登录地址需另外提供
+                boolean isLoggedIn = client.login( "http://112.35.4.197:15000",Uid, Key, "汨罗市环境保护保护局" );
+                int result = 1;
+                if (isLoggedIn) {  // 登录成功，普通短信
+                    result = client.sendDSMS(mobiles, smsText, "", 1, "yKIvhGE1V", null, true );
+                }
+                if (result == 1) {
+                    if (record1 != null) {
+                        msgRecordDao.insert(record1);
+                    }
+                    if (record2 != null) {
+                        msgRecordDao.insert(record2);
+                    }
+                    res = R.ok("任务添加成功，短信已发送");
+                } else {
+                    res = R.ok("任务添加成功，短信推送失败");
+                }
+                miluoTaskInfoService.save(miluoTaskInfo);
+                return res;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
+    }
+
+    //getUser
+    @PostMapping("/getUser")
+    @ResponseBody
+    public List<User> getUser(@RequestParam Long deptId) {
+        List<User> users = userService.findUsersByDeptId(deptId);
+        return users;
+    }
+
+
+    @RequestMapping("/openVideoPage")
+    public String openVideoPage(Model model, String id) throws ParseException {
+        String[] split = id.split(",");
+        String endTime = split[1];
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date parse = sdf.parse(endTime);
+        Long s=parse.getTime()-10*60*1000;
+        Date date = new Date();
+        date.setTime(s);
+        String startTime = sdf.format(date);
+
+        List<Vidicon> vidiconList = vidiconService.getVidiconsBySiteId(Integer.valueOf(split[0]));
+        if (vidiconList!=null && vidiconList.size()>0){
+        for (Vidicon vidicon : vidiconList) {
+            String ezopenPlaybackUrl = vidicon.getEzopenPlaybackUrl();
+
+            String accessToken = vidicon.getAccessToken();
+            vidicon.setEzopenPlaybackUrl(ezopenPlaybackUrl+","+accessToken);
+        }}
+        model.addAttribute("vidiconList", vidiconList);
+        model.addAttribute("endTime", split[1]);
+        model.addAttribute("startTime", startTime);
+        // 监控地址
+            return "/module/alarm/monitorPage";
+
+    }
+}
+

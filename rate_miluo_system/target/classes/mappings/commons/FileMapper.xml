@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rate.system.rate_system.dao.FileDao">
+
+	<select id="get" resultType="com.rate.system.rate_system.entity.FileDO">
+		select id,type,url,create_date,file_nm,file_titl,file_size,file_ext,nt from sys_file where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.rate.system.rate_system.entity.FileDO">
+		<if test="offset != null and limit != null">
+			select * from
+			(
+				select TP.*,rownum as rn from
+				(
+		</if>
+		select id,type,url,create_date,file_nm,file_titl,file_size,file_ext,nt from sys_file
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="url != null and url != ''"> and url = #{url} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="fileNm != null and fileNm != ''"> and file_nm = #{fileNm} </if>
+		  		  <if test="fileTitl != null and fileTitl != ''"> and file_titl = #{fileTitl} </if>
+		  		  <if test="fileSize != null and fileSize != ''"> and file_size = #{fileSize} </if>
+		  		  <if test="fileExt != null and fileExt != ''"> and file_ext = #{fileExt} </if>
+		  		  <if test="nt != null and nt != ''"> and nt = #{nt} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			) TP 
+				)where rn > #{offset} and #{limit} >= rn
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from sys_file
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="url != null and url != ''"> and url = #{url} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="fileNm != null and fileNm != ''"> and file_nm = #{fileNm} </if>
+		  		  <if test="fileTitl != null and fileTitl != ''"> and file_titl = #{fileTitl} </if>
+		  		  <if test="fileSize != null and fileSize != ''"> and file_size = #{fileSize} </if>
+		  		  <if test="fileExt != null and fileExt != ''"> and file_ext = #{fileExt} </if>
+		  		  <if test="nt != null and nt != ''"> and nt = #{nt} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.rate.system.rate_system.entity.FileDO" >
+		<selectKey resultType="Long" order="BEFORE" keyProperty="id">  
+            SELECT SYS_FILE_ID_SEQ.NEXTVAL as id from DUAL
+        </selectKey>
+		insert into sys_file
+		(
+			id,
+			type, 
+			url, 
+			create_date,
+			file_nm,
+			file_titl,
+			file_size,
+			file_ext,
+			nt
+		)
+		values
+		(
+			#{id,jdbcType=BIGINT},
+			#{type,jdbcType=INTEGER}, 
+			#{url,jdbcType=VARCHAR}, 
+			#{createDate,jdbcType=TIMESTAMP},
+			#{fileNm,jdbcType=VARCHAR},
+			#{fileTitl,jdbcType=VARCHAR},
+			#{fileSize,jdbcType=DECIMAL},
+			#{fileExt,jdbcType=VARCHAR},
+			#{nt,jdbcType=VARCHAR}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.rate.system.rate_system.entity.FileDO">
+		update sys_file 
+		<set>
+			<if test="type != null">type = #{type}, </if>
+			<if test="url != null">url = #{url}, </if>
+			<if test="createDate != null">create_date = #{createDate}</if>
+			<if test="fileNm != null">file_nm = #{fileNm}</if>
+			<if test="fileTitl != null">file_titl = #{fileTitl}</if>
+			<if test="fileSize != null">file_size = #{fileSize}</if>
+			<if test="fileExt != null">file_ext = #{fileExt}</if>
+			<if test="nt != null">nt = #{nt}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from sys_file where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from sys_file where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,154 @@
+<% layout('/include/default.html',{libs:["layui"]}){ %>
+<link href="/content/css/bootstrap-select.min.css" rel="stylesheet">
+
+<div class="wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <input type="hidden" id="id" name="id" value="${vidicon.id}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">站点名称：</label>
+                            <div class="col-sm-3">
+                                <select id="siteId" name="siteId" class="selectpicker show-tick form-control" data-live-search="true">
+                                    <option value="">-请选择-</option>
+                                    <%if(siteList!=null && siteList.~size > 0){%>
+                                    <%for(site in siteList){%>
+                                    <option value="${site.id}" ${site.id==(vidicon.siteId+'')?'selected':''}>${site.name}</option>
+                                    <%}%>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <label for="vidiconName" class="col-sm-2 control-label">摄像机名称：</label>
+                            <div class="col-sm-3">
+                                <input type="text" id="vidiconName" name="vidiconName" value="${vidicon.vidiconName}"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">摄像机供应商：</label>
+                            <div class="col-sm-3">
+                                <input type="text" id="supplier" name="supplier" value="${vidicon.supplier}"
+                                       class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">设备序列号：</label>
+                            <div class="col-sm-3">
+                                <input type="text" id="seriesNumber" name="seriesNumber" value="${vidicon.seriesNumber}"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">摄像机所有人>：</label>
+                            <div class="col-sm-3">
+                                <select id="ownerId" name="ownerId" class="form-control">
+                                    <option value="">-请选择-</option>
+                                    <%if(ownerList!=null && ownerList.~size > 0){%>
+                                    <%for(owner in ownerList){%>
+                                    <option value="${owner.ownerId}" ${owner.ownerId==vidicon.ownerId?'selected':''}>${owner.ownerName}</option>
+                                    <%}%>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label">摄像机位置：</label>
+                            <div class="col-sm-3">
+                                <select id="vidiconLocation" name="vidiconLocation" class="form-control">
+                                    <option value="1" ${vidicon.vidiconLocation=='1'?'selected':''}>监测点位置</option>
+                                    <option value="2" ${vidicon.vidiconLocation=='2'?'selected':''}>水排放口</option>
+                                    <option value="3" ${vidicon.vidiconLocation=='3'?'selected':''}>进水口</option>
+                                    <option value="4" ${vidicon.vidiconLocation=='4'?'selected':''}>气排放口</option>
+                                    <option value="5" ${vidicon.vidiconLocation=='5'?'selected':''}>站房内</option>
+                                    <option value="6" ${vidicon.vidiconLocation=='6'?'selected':''}>站房外</option>
+                                    <option value="7" ${vidicon.vidiconLocation=='7'?'selected':''}>生产车间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">HLS高清播放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="hlshdUrl" name="hlshdUrl" class="form-control" value="${vidicon.hlshdUrl}"
+                                       type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">HLS流畅播放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="hlsUrl" name="hlsUrl" class="form-control" value="${vidicon.hlsUrl}"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">rtmp高清播放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="rtmphdUrl" name="rtmphdUrl" class="form-control" value="${vidicon.rtmphdUrl}"
+                                       type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">HLS流畅播放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="rtmpUrl" name="rtmpUrl" class="form-control" value="${vidicon.rtmpUrl}"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">ezopen协议高清播放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="ezopenhdUrl" name="ezopenhdUrl" class="form-control" value="${vidicon.ezopenhdUrl}"
+                                       type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">ezopen协议流畅播放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="ezopenUrl" name="ezopenUrl" class="form-control" value="${vidicon.ezopenUrl}"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">默认直播地址：</label>
+                            <div class="col-sm-3">
+                                <select id="defaultUrl" name="defaultUrl" class="form-control">
+                                    <option value="hlshdUrl" ${vidicon.defaultUrl=='hlshdUrl'?'selected':''}>HLS高清播放</option>
+                                    <option value="hlsUrl" ${vidicon.defaultUrl=='hlsUrl'?'selected':''}>HLS流畅播放</option>
+                                    <option value="rtmphdUrl" ${vidicon.defaultUrl=='rtmphdUrl'?'selected':''}>rtmp高清播放</option>
+                                    <option value="rtmpUrl" ${vidicon.defaultUrl=='rtmpUrl'?'selected':''}>rtmp流畅播放</option>
+                                    <option value="ezopenhdUrl" ${vidicon.defaultUrl=='ezopenhdUrl'?'selected':''}>ezopen高清播放</option>
+                                    <option value="ezopenUrl" ${vidicon.defaultUrl=='ezopenUrl'?'selected':''}>ezopen流畅播放</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label">ezopen协议回放地址：</label>
+                            <div class="col-sm-3">
+                                <input id="ezopenPlaybackUrl" name="ezopenPlaybackUrl" class="form-control" value="${vidicon.ezopenPlaybackUrl}"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">安装时间：</label>
+                            <div class="col-sm-3">
+                                <input id="installationDate" name="installationDate" class="form-control" value="${vidicon.installationDate, 'yyyy-MM-dd'}"
+                                       type="text" placeholder="选择时间" autocomplete="off">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-6">
+                                <button style="width: 100px;" type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<!--<script type="text/javascript" src="/js/common.js"></script>-->
+<script type="text/javascript" src="/js/video/edit.js"></script>
+<script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+<script>
+
+
+    //日期时间选择器
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#installationDate'
+        });
+    });
+</script>

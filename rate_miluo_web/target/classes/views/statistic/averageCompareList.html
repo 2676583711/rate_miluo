@@ -1,0 +1,125 @@
+<%layout('/include/default.html',{libs:["table","layer","layui","tree"]}){%>
+<link href="/plugin/site/style.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="/plugin/siteTree/siteTree.css">
+<style>
+    ::-webkit-scrollbar {
+        width: initial;
+    }
+
+    .input-bgcolor:hover {
+        background-color: #dddddd !important;
+    }
+
+    .select-bg {
+        border: 1px solid #dddddd;
+        border-radius: 6px;
+        background-color: #F4F4F4;
+        padding-left: 10px;
+        padding-bottom: 20px;
+        /*margin-bottom: -20px;*/
+        padding-bottom: 8px;
+        padding-top: 8px;
+        width: 99.5%;
+    }
+
+    .table {
+        table-layout: fixed;
+    }
+</style>
+
+<div class="wrapper-content">
+    <div class="row">
+        <div class="col-md-2" style="height: -webkit-calc(92vh); ">
+            <!--overflow: auto;-->
+            <div class="ibox-content">
+                <div id="stationCode"></div>
+                <!--<div id="siteTree"></div>-->
+            </div>
+        </div>
+
+        <div class="col-md-10" id="listContent">
+            <div class="form-inline select-bg">
+                <label style="padding-left: 23px;">时间：</label> <input
+                    class="form-control input-bgcolor" size="10px" id="startDate"/>
+                <label style="padding-left: 10px; padding-right: 10px">至</label>
+                <input class="form-control input-bgcolor" size="10px" id="endDate"/>
+
+                <button class="layui-btn layui-btn-normal layui-btn-sm" style="margin-left: 23px" onclick="reload()">
+                    <i class="layui-icon">&#xe615;</i> 查询
+                </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" style="margin-left: 10px"
+                        onclick="exportExcel();">
+                    <i class="layui-icon">&#xe601;</i> 导出
+                </button>
+            </div>
+            <table id="exampleTable">
+            </table>
+        </div>
+    </div>
+</div>
+<% } %>
+
+
+<script type="text/javascript" src="/js/statistic/averageCompare/averageCompareList.js"></script>
+<script src="/plugin/siteTree/averageCompareSiteTree.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+    $.siteTree.build("#stationCode", false);
+    $.siteTree.treeSingleLoadedEvent = function (e, data) {
+        data.instance.select_node(e.target.firstChild.childNodes[0]);
+    }
+    $.siteTree.treeLoadedEvent = function () {
+        setTimeout(function () {
+            load();
+        }, 300)
+    }
+</script>
+
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+        element.on('tab(test)', function () {
+            changeTabContent($(this).attr("lay-id"));
+        });
+    });
+</script>
+<script>
+    var defaultSiteType = $("#defaultSiteType").val();
+    var defaultSiteId = $("#defaultSiteId").val();
+    var roleId = $("#roleId").val();
+    $.siteTree.treeLoadedEvent = function (e, data) {
+        // $.siteTree.$tabs["-1"].css({display:"none"});
+        $.siteTree.hideTab(["-1","-3","-4"]);
+        if(defaultSiteType && defaultSiteId){
+            if(defaultSiteType == '1'){
+                $("li[lay-id=3]").click();
+                loadMinuteAuto(defaultSiteId);
+            }else if(defaultSiteType == '2'){
+                $("li[lay-id=1]").click();
+                b(defaultSiteId);
+            }else if(defaultSiteType == '4'){
+                $("li[lay-id=4]").click();
+                loadMinutePlant(defaultSiteId)
+            }else if(defaultSiteType == '3'){
+                $("li[lay-id=2]").click();
+                loadMinutePollute(defaultSiteId);
+            }
+        }else{
+            b();
+        }
+    };
+    $.siteTree.treeSingleLoadedEvent = function(e, data){
+        if(defaultSiteId){
+            data.instance.select_node($("#"+defaultSiteId));
+        }else{
+            data.instance.select_node(e.target.firstChild.childNodes[0]);
+        }
+    }
+    $.siteTree.build(false);
+    $.siteTree.tabChangeEvent = function (id) {
+        // console.log(id);
+    };
+
+</script>
+<script src="/plugin/bootstrap/bootstrap-table-merge-cells.js"></script>

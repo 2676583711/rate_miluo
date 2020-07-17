@@ -1,0 +1,320 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>${productName}-登录</title>
+<script src="/plugins/jquery/jquery-1.12.4.min.js"></script>
+<script src="/plugins/jquery-cookie/jquery.cookie.js"></script>
+<script src="/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="/plugins/jquery/jquerysession.js"></script>
+<script src="/plugins/layui/layui.js"></script>
+<link href="/plugins/layui/css/layui.css" rel="stylesheet" />
+<!-- CSS -->
+<link href="/css/reset-login.css" rel="stylesheet" />
+<link href="/css/style-login.css" rel="stylesheet" />
+<link href="/css/supersized.css" rel="stylesheet" />
+<!-- <script src="js/Common/common_util.js?"></script>
+     <script src="js/Common/DESEncrypt.js" charset="utf-8"></script> -->
+
+</head>
+<style>
+body {
+	width: 100%;
+	height: 100% !important;
+	overflow: hidden;
+}
+
+.page-container {
+	position: absolute;
+	right: 5%;
+	top: 42%;
+	margin-left: -300px;
+	margin-top: -145px;
+}
+
+.connect {
+	position: absolute;
+	left: 50%;
+	margin-left: -400px;
+	bottom: 10px;
+}
+
+#projectName {
+	position: absolute;
+	top: 88px;
+	left: 90px;
+	font-weight: bold;
+}
+
+h1 {
+	font-size: 60px;
+	color: white;
+	font-weight: inherit;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+}
+
+#textLight {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.page-container {
+	right: 8%;
+	top: 45%;
+	width: 420px;
+	background-color: rgba(176, 189, 222, 0.5);
+	border: none;
+}
+
+#loginBtn {
+	background: #55e626;
+}
+/*canvas{*/
+/*height: 100%;*/
+/*position: absolute;*/
+/*top: 0;*/
+/*left: 0;*/
+/*}*/
+</style>
+
+<body oncontextmenu="return false;">
+	<div class="snow" count="7000"
+		style="height: 100%; width: 100%; position: absolute; top: 0; left: 0; overflow: hidden;">
+
+	</div>
+	<h1 id="projectName">${productName}</h1>
+	<!--<canvas id="textLight"></canvas>-->
+	<div class="page-container"
+		style="color: #fff; padding: 20px 0 20px 0;">
+		<form id="signupForm" action="" method="post">
+			<div class="user_pwd">
+				<div>
+					<input type="text" style="font-weight: bold; color: #fff;"
+						name="username" id="username" maxlength="20" class="username"
+						placeholder="请输入用户名" autocomplete="off" />
+				</div>
+				<div>
+					<input type="password" style="font-weight: bold; color: #fff;"
+						id="password" maxlength="20" name="password" class="password"
+						placeholder="请输入密码" />
+				</div>
+				<div>
+					<input type="text" style="font-weight: bold; color: #fff;" id="inRandomCode" maxlength="4"
+						   name="inRandomCode" class="password" placeholder="请输入验证码" />
+					<img alt="验证码" id="randomCode" src="/randomCode" style="display:inline;" onclick="changeImg();">
+				</div>
+			</div>
+			<div>
+				<input id="ck_rmbUser" type="checkbox" />&nbsp; <label
+					for="ck_rmbUser"
+					style="display: inline-block; cursor: pointer; font-size: 14px; color: blue; margin-right: 20px"
+					onclick="pwdCheck()">记住密码</label>
+				<button id="loginBtn" type="button">登录</button>
+			</div>
+
+		</form>
+	</div>
+	<div class="connect">
+		<p>
+			建设单位 : <a href="#"
+				style="color: white; width: 265px; margin: 0px; padding: 0px; text-align: left;">${constructionUnit}</a>
+		</p>
+		<p>
+			技术支持：<a href="http://www.leitechina.com.cn/" target="_blank"
+				style="color: white; width: 265px; margin: 0px; padding: 0px; text-align: left;">${technicalSupport}</a>
+		</p>
+		<p>浏览器请选择IE8以上、360浏览器(极速模式)、火狐浏览器</p>
+	</div>
+
+
+	<!-- Javascript -->
+	<script src="/js/supersized.3.2.7.min.js"></script>
+	<script src="/js/supersized-init.js"></script>
+	<!--<script src="/plugin/snow/snowflakes.min.js"></script>-->
+	<!--<script src="/plugin/snow/Stats.min.js"></script>-->
+	<!--<script src="/plugin/snow/index.js"></script>-->
+	<script src="/plugin/star/three.min.js"></script>
+	<script src="/plugin/star/index.js"></script>
+
+
+	<script>
+		// var sf = new Snowflakes({
+		//     color: "#ffffff",
+		//     count: 75,
+		//     minOpacity: 0.2,
+		//     maxOpacity: 0.6
+		// });
+		// if(screen.height===864){
+		//     $("#projectName").css({top: 94});
+		// }else if(screen.height===960){
+		//     $("#projectName").css({top: 88});
+		// }else{
+		//     $("#projectName").hide();
+		// }
+		// textLight({
+		//     text: "${productName}",
+		//     el: "textLight",
+		//     width: 900,
+		//     height: 280
+		// });
+		// function isIE() { //ie?
+		//     if (!!window.ActiveXObject || "ActiveXObject" in window)
+		//         return true;
+		//     else
+		//         return false;
+		// }
+		// if(!isIE()){
+		//     var snow = document.createElement("script");
+		//     snow.src = "/plugin/snow/index.js";
+		//     $("body").append(snow);
+		// }
+		var layer;
+		layui.use([ 'layer' ], function() {
+			layer = layui.layer;
+
+		})
+		$(document).ready(function() {
+
+			$(".connect p").eq(0).animate({
+				"left" : "0%"
+			}, 600);
+			$(".connect p").eq(1).animate({
+				"left" : "0%"
+			}, 400);
+			$(".connect p").eq(2).animate({
+				"left" : "14px"
+			}, 400);
+			if (window != top) {
+				top.location.href = location.href;
+			}
+
+			if ($.cookie("rmbUser") == "true") {
+				$("#ck_rmbUser").prop("checked", true);
+				$("#username").val($.cookie("username"));
+				// $("#password").remove();
+				//$("#pass").append("<input id='password' type='password' class='txt2'/>");
+				$("#password").val($.cookie("password"));
+			}
+			$("#loginBtn").click(function() {
+
+				login();
+			});
+			$("body").bind('keypress', function(event) {
+				if (event.keyCode == "13") {
+					login();
+				}
+			});
+		});
+
+		function pwdCheck() {
+			if ($("#ck_rmbUser").attr('checked')) {
+				$("#ck_rmbUser").attr('checked', false);
+			} else {
+				$("#ck_rmbUser").attr('checked', true);
+			}
+		}
+
+		//记住用户名密码
+		function save() {
+			if ($("#ck_rmbUser").prop("checked")) {
+				var username = $("#username").val();
+				var password = $("#password").val();
+				$.cookie("rmbUser", "true", {
+					expires : 7
+				}); //存储一个带7天期限的cookie
+				$.cookie("username", username, {
+					expires : 7
+				});
+				$.cookie("password", password, {
+					expires : 7
+				});
+			} else {
+				$.cookie("rmbUser", "false", {
+					expire : -1
+				});
+				$.cookie("username", "", {
+					expires : -1
+				});
+				$.cookie("password", "", {
+					expires : -1
+				});
+			}
+		};
+
+		function validateForm() {
+			/* var message = "";
+			 message = RegObj.isEngName({ Name: "用户名", Require: true, Value: $("#username").val() });
+			if (message.length > 0) {
+			    layer.tips(message, '#username', {
+			        tips: [2, 'red']
+			    });
+			    return false;
+			} */
+			//message = RegObj.isEngName({ Name: "密码", Require: true, Value: $("#password").val() });
+			//if (message.length > 0) {
+			//    layer.tips(message, '#password', {
+			//        tips: [2, 'red']
+			//    });
+			//    return false;
+			//}
+			if ($("#username").val().trim().length == 0) {
+				layer.tips('用户名不能为空', '#username', {
+					tips : [ 2, 'red' ]
+				});
+				return false;
+			}
+			if ($("#password").val().trim().length == 0) {
+				layer.tips('密码不能为空', '#password', {
+					tips : [ 2, 'red' ]
+				});
+				return false;
+			}
+            if ($("#inRandomCode").val().trim().length == 0) {
+                layer.tips('验证码不能为空', '#inRandomCode', {
+                    tips: [4, 'red']
+                });
+                return false;
+            }
+
+			/* if (RegObj.isSpecialCharNew($("#password").val())) {
+			    layer.tips('密码包含有特殊字符！', '#password', {
+			        tips: [2, 'red']
+			    });
+			    return false;
+			} */
+			return true
+		}
+
+		function login() {
+			var name = $("#username").val();
+			var password = $("#password").val();
+			if (!validateForm())
+				return false;
+
+			$.ajax({
+				type : "POST",
+				url : "/login",
+				data : $('#signupForm').serialize(),
+				success : function(r) {
+					if (r.code == 0) {
+						var index = layer.load(1, {
+							shade : [ 0.1, '#fff' ]
+						//0.1透明度的白色背景
+						});
+						parent.location.href = '/index';
+					} else {
+						layer.msg(r.msg);
+					}
+				}
+			});
+		}
+
+        function changeImg(){
+            var img = document.getElementById("randomCode");
+            img.src = "/randomCode?"+Math.random();
+        }
+
+	</script>
+</body>
+</html>

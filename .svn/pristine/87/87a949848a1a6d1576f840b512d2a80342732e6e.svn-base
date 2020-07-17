@@ -1,0 +1,309 @@
+<% layout('/include/default.html',{libs:["layer","layui"]}){ %>
+
+<div class="col-md-9">
+    <input type="hidden" id="endTime" value="${endTime}">
+    <input type="hidden" id="startTime" value="${startTime}">
+
+    <div id="videoDiv" style="width: 80%;height: 600px;position: absolute;left: 100px;top: 30px;">
+        <iframe style="border: 1px solid" id="ysOpenDevice" width="100%" height="120%" allowfullscreen></iframe>
+    </div>
+
+</div>
+<div class="col-md-3">
+    <form class="form-horizontal m-t" id="signupForm">
+        <div class="ibox-content" style="padding-top: 0px;">
+            <div class="form-horizontal m-t" id="videoTool">
+                <div class="form-group">
+                    <div class="col-sm-8">
+                        <select id="videoId" class="form-control">
+
+                            <%if(vidiconList!=null && vidiconList.~size > 0){%>
+                            <%for(vidicon in vidiconList){%>
+                            <option value="${vidicon.ezopenPlaybackUrl}" >${vidicon.vidiconName}</option>
+                            <%}%>
+
+                            <%}else{%>
+                            <option value="">-请选择-</option>
+                            <%}%>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-primary" onclick="startPlay()">播放</button>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <input style="font-size: 12px;" type="text" class="layui-input form-control" id="begin"
+                               placeholder="开始时间" autocomplete="off">
+                    </div>
+                    <div class="col-sm-6">
+                        <input style="font-size: 12px;" type="text" class="layui-input form-control" id="end" placeholder="结束时间" autocomplete="off">
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">截图:</label>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-primary" onclick="printScreen()" style="display:block"
+                                id="capturePicbtn">PrintScreen
+                        </button>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">云台:</label>
+                    <div class="col-sm-8">
+                        <table class="table">
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="button"  class="btn btn-primary" onclick="changeVideo(0)">
+                                        上
+                                    </button>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button"  class="btn btn-primary" onclick="changeVideo(2)">
+                                        左
+                                    </button>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <button type="button"  class="btn btn-primary" onclick="changeVideo(3)">
+                                        右
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="button"  class="btn btn-primary" onclick="changeVideo(1)">
+                                        下
+                                    </button>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr/>
+                <!--<div class="form-group">-->
+                    <!--<label class="col-sm-3 control-label">操作结果:</label>-->
+                    <!--<div class="col-sm-8">-->
+                        <!--<textarea rows=8 cols=70 id="showPanel" class="form-control"></textarea>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </form>
+</div>
+<%}%>
+<script src="/js/vidicon/ezuikit.js"></script>
+<script src="/js/vidicon/hls.min.js"></script>
+<!--<script src="/js/video/common.js"></script>-->
+<script src="/js/vidicon/jquery-confirm.min.js"></script>
+<script type="text/javascript">
+
+
+    $(function () {
+        var  start_str = $("#startTime").val().replace(/-/g,"/");
+        var  end_str = $("#endTime").val().replace(/-/g,"/");
+        var starts = new Date(start_str);//将字符串转化为时间
+        var ends = new Date(end_str);//将字符串转化为时间
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            laydate.render({
+                type: 'datetime',
+                elem: '#begin',
+                value:starts
+            });
+        });
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            laydate.render({
+                type: 'datetime',
+                elem: '#end',
+                value:ends
+            });
+        });
+        setVideo()
+
+
+    });
+
+    function setVideo() {
+      var str=  $("#videoId").val()
+        if (str==null || str==undefined || str==""){
+            layer.alert("无摄像头");
+
+        } else {
+            playFirst()
+        }
+
+    }
+
+    function playFirst() {
+        var str=  $("#videoId").val()
+        var  ezopenPlaybackUrl=str.split(",")[0];
+        var accessToken=str.split(",")[1];
+      //  let videoSrc = "https://open.ys7.com/ezopen/h5/iframe_se?url=" +  data.ezopenhdUrl + "&autoplay=1&audio=1&accessToken=" + accessToken;
+        let begin = format($("#startTime").val());
+        let end = format($("#endTime").val());
+
+        let  videoSrc = "https://open.ys7.com/ezopen/h5/iframe_se?url=" + ezopenPlaybackUrl + (begin !== '' ? ("&begin=" + begin) : '') + (end !== '' ? ("&end=" + end) : '') + "&autoplay=1&audio=1&accessToken=" + accessToken;
+
+        //let videoSrc = "https://open.ys7.com/ezopen/h5/iframe?url=" + data.ezopenhdUrl + "&autoplay=1&accessToken=" + accessToken;
+        $("#ysOpenDevice").attr('src', videoSrc);
+    }
+
+    function startPlay() {
+        var str=  $("#videoId").val()
+        if (str==null || str==undefined || str==""){
+            layer.alert("无摄像头");
+            return
+        } else {
+            playFirst()
+        }
+        var  ezopenPlaybackUrl=str.split(",")[0];
+        var accessToken=str.split(",")[1];
+        //let type = $("#videoId").val();
+        let type = "ezopenPlaybackUrl";
+        let videoSrc = '';
+        if (type === 'ezopenPlaybackUrl') {     // 回放，可选时间
+            let begin = format($("#begin").val());
+            let end = format($("#end").val());
+           // videoSrc = "https://open.ys7.com/ezopen/h5/iframe?url=" + data.ezopenPlaybackUrl + (begin !== '' ? ("&begin=" + begin) : '') + (end !== '' ? ("&end=" + end) : '') + "&autoplay=1&accessToken=" + accessToken;
+             videoSrc = "https://open.ys7.com/ezopen/h5/iframe_se?url=" +    ezopenPlaybackUrl + (begin !== '' ? ("&begin=" + begin) : '') + (end !== '' ? ("&end=" + end) : '') + "&autoplay=1&audio=1&accessToken=" + accessToken;
+
+        } else {
+           //   videoSrc = "https://open.ys7.com/ezopen/h5/iframe_se?url=" +  data[type] + "&autoplay=1&audio=1&accessToken=" + accessToken;
+
+           // videoSrc = "https://open.ys7.com/ezopen/h5/iframe?url=" + data[type] + "&autoplay=1&accessToken=" + accessToken;
+        }
+        $("#ysOpenDevice").attr('src', videoSrc);
+    }
+
+    function format(str) {
+        if (str.indexOf("-") > 0) {
+            str = str.replace("-", "").replace("-", "");
+        }
+        if (str.indexOf(":") > 0) {
+            str = str.replace(":", "").replace(":", "");
+        }
+        if (str.indexOf(" ") > 0) {
+            str = str.replace(" ", "");
+        }
+        return str;
+    }
+
+    //云台控制
+    function changeVideo(direction) {
+        if (videoType == "海康") {
+            changeVideoDirection(direction);
+            clearVideo(direction);
+        } else {
+            //弹出窗
+            $.alert({
+                title: '提示',
+                content: "目前该设备不能支持云台控制",
+                boxWidth: '40px',
+                buttons: {
+                    ok: {
+                        text: '确定'
+                    }
+                }
+            });
+        }
+    }
+
+    function clearVideo(direction) {
+        var obj = {
+            accessToken: accessToken,
+            deviceSerial: deviceSerial,
+            channelNo: channelNumber,
+            direction: direction,
+            speed: 1
+        };
+        $.ajax({
+            url: 'https://open.ys7.com/api/lapp/device/ptz/stop',
+            type: 'post',
+            data: obj,
+            async: false,
+            success: function (data) {
+
+            }
+        });
+
+    }
+
+    // 调整摄像头
+    function changeVideoDirection(direction) {
+        var obj = {
+            accessToken: accessToken,
+            deviceSerial: deviceSerial,
+            channelNo: channelNumber,
+            direction: direction,
+            speed: 1
+        };
+        $.ajax({
+            url: 'https://open.ys7.com/api/lapp/device/ptz/start',
+            type: 'post',
+            data: obj,
+            async: false,
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+    }
+
+    //截图
+    function printScreen() {
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: "https://open.ys7.com/api/lapp/device/capture",
+            data: {
+                accessToken: accessToken,
+                deviceSerial: deviceSerial,
+                channelNo: "1"
+            },
+            async: false,
+            success: function (data) {
+                if (data.code == "200") {
+                    //将图片上传至服务器
+                    uploadPic(data.data.picUrl);
+                } else {
+                    parent.layer.alert(data.msg);
+                }
+            }
+        });
+    }
+
+    // 截图上传
+    function uploadPic(picUrl) {
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: "/vidicon/uploadPic",
+            data: {
+                picUrl: picUrl
+            },
+            async: false,
+            success: function (data) {
+                // var showpanel = document.getElementById("showPanel");
+                if (data.code == 0) {
+                    parent.layer.alert("截图成功，图片已上传!!");
+                    // $("#showpanel").val("截图成功!!");
+                    // clear();
+                } else {
+                    parent.layer.alert("截图失败!!");
+                }
+            }
+        });
+    }
+
+</script>

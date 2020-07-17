@@ -1,0 +1,38 @@
+<% layout('/include/default.html',{libs:["table","layer","layui"]}){ %>
+<link href="/plugin/site/style.css" rel="stylesheet"/>
+<!--<script src="/plugin/babel/polyfill.min.js"></script>-->
+<style>
+    .wrapper-content {
+        padding: 10px;
+    }
+</style>
+<div class="wrapper-content ">
+<!--
+   <div style="float:right">
+    <button onclick="javascript:history.back(1);">返回</button>
+   </div>-->
+    <!--<button type="button" onclick="openw(3)">点</button>-->
+    <!--<div class="col-md-12">-->
+        <!--<div class="col-md-10" style="width: auto">-->
+            <!--<table id="exampleTable"-->
+                   <!--style="overflow: hidden; background-color: #f1f1f1;">-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <select class="hidden" id="videoSelect">
+
+    </select>
+    <div class="videoDiv hidden" id="videoDiv">
+        <video id="myPlayer" autoplay>
+            <source src="###" />
+        </video>
+    </div>
+    <input type="hidden" id="id" value="${id}">
+</div>
+<% } %>
+<script type="text/javascript" src="/js/alarm/pollutantdata/video.js">
+</script>
+<script src="/js/vidicon/ezuikit.js"></script>
+<script src="/js/vidicon/hls.min.js"></script>
+<script src="/js/vidicon/common.js"></script>

@@ -1,0 +1,92 @@
+<% layout('/include/default.html', {libs:["tree","table","socket","layer","layui"]}){ %>
+<link href="/css/common.css" rel="stylesheet" />
+<link href="/plugin/siteTree/siteTree.css" rel="stylesheet"/>
+<style type="text/css">
+    body {
+       overflow-y: hidden;
+    }
+    #siteTree ul li {
+        font-size: 12px;
+    }
+    #siteTree .jstree-container-ul>li>a {
+        pointer-events: none;
+    }
+    tr>td:first-child,tr>th:first-child{
+        border-left:  1px solid #e4eaec!important;
+    }
+    tr>td:last-child,tr>th:last-child{
+        border-right:  1px solid #e4eaec!important;
+    }
+    th{
+        border-top:  1px solid #e4eaec!important;
+    }
+</style>
+<!-- </head>
+<body class="easyui-layout"> -->
+<div layout="Right">
+    <div id="siteTree" class="stationCode" style="float: left;width:20%;">
+    </div>
+
+    <div style="float: right;width:79%;">
+        <div class="search pt10 pl10 hidden" id="stationSearch">
+            <form searchForm="true" method="get" class="form-inline">
+                <input type="hidden" id="siteId" name="siteId">
+                <div class="input-control">
+                    <div class="form-group" description="">
+                        <label for="pluName">污染物：</label> <input
+                            class="form-control" id="pluName" name="pluName"
+                            type="text" placeholder="名称/标识"/>
+                    </div>
+                </div>
+                <div class="search-control">
+                    <div class="form-group">
+                        <input class="btn btn-primary search-button" id="btnSearchSubmit"
+                               name="" type="button" value="查询" onclick="reLoad()"/>
+                        <button class="btn btn-primary" onclick="reFresh()">刷新</button>
+
+                        <% if(shiro.hasPermission('system:site:operate')){ %>
+                        <input class="btn btn-success" id="btnInsert" name="" type="button"
+                               value="新增" onclick="add()"/>
+                        <%}%>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-bordered table-striped table-hover" id="exampleTable"></table>
+    </div>
+</div>
+
+<% } %>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/param/list.js"></script>
+<script type="text/javascript" src="/plugin/siteTree/siteTree.js"></script>
+<script>
+    var siteId;
+    $.siteTree.build(true);
+    $.siteTree.treeClickEvent = function (e, data) {
+        siteId=$.siteTree.siteCodes()[0];
+        $("#siteId").val(siteId);
+        // console.log(siteCodes[0]);
+        if ($("#stationSearch").hasClass('hidden')) {
+            $("#stationSearch").removeClass('hidden');
+        }
+        load(siteId);
+    };
+    function resetHeight() {
+        var ww=window.innerHeight;
+        var tjH=$("#stationSearch").outerHeight(true);
+        var pageH=$(".pagination-detail").outerHeight(true);
+        $(".fixed-table-body").height(ww-tjH-pageH-20);
+        $(".fixed-table-container").css("border","none");
+    }
+    function treeHeight() {
+        var ww=window.innerHeight;
+        $("#siteTree").height(ww-30);
+    }
+    $.siteTree.treeSingleLoadedEvent=function (e,data) {
+        // console.log(e);
+        // console.log(data);
+    }
+
+
+</script>

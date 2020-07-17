@@ -1,0 +1,62 @@
+<% layout('/include/default.html', {libs:["tree","table","socket","layer","layui"]}){ %>
+<link href="/css/common.css" rel="stylesheet" />
+<link href="/plugin/siteTree/siteTree.css" rel="stylesheet"/>
+<style type="text/css">
+    .blue {
+        color: blue;
+    }
+    tr>td:first-child,tr>th:first-child{
+        border-left:  1px solid #e4eaec!important;
+    }
+    tr>td:last-child,tr>th:last-child{
+        border-right:  1px solid #e4eaec!important;
+    }
+    th{
+        border-top:  1px solid #e4eaec!important;
+    }
+</style>
+    <div class="search pt10 pl10"
+         componentId="f3b753d6-b1cc-435d-a470-b71b8e71d52c"
+         id="BSDStationSearch" targetId="BSDStationTable" widget="Search" >
+        <form searchForm="true" method="get" class="form-inline">
+            <div class="input-control">
+                <div class="form-group" description="">
+                    <label for="positionName">因子名称：</label> <input
+                        class="form-control" id="positionName" name="PositionName"
+                        type="text"/>
+                </div>
+            </div>
+            <div class="search-control">
+                <div class="form-group">
+                    <input class="btn btn-primary search-button" id="btnSearchSubmit"
+                           name="" type="button" value="查询" onclick="reLoad()"/>
+                    <button class="btn btn-primary" onclick="reFresh()">刷新</button>
+
+                    <input class="btn btn-primary" id="btnInsert" name="" type="button"
+                           value="新增" onclick="add()"/>
+
+                    <input class="btn btn-warning" id="batchRemove" name=""
+                           type="button" value="批量删除" onclick="batchRemove2()"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-bordered table-striped table-hover" id="exampleTable"></table>
+   
+
+<% } %>
+<script type="text/javascript" src="/js/pollutantfactor/list.js"></script>
+<script>
+    function resetHeight() {
+        var ww=window.innerHeight;
+        var tjH=$("#BSDStationSearch").outerHeight(true);
+        var pageH=$(".pagination-detail").outerHeight(true);
+        $(".fixed-table-body").height(ww-tjH-pageH-20);
+        $(".fixed-table-container").css("border","none");
+    }
+    function treeHeight() {
+        var ww=window.innerHeight;
+        $("#siteTree").height(ww-30);
+    }
+
+</script>

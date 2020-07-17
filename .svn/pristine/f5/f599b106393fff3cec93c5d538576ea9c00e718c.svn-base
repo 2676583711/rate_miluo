@@ -1,0 +1,139 @@
+<% layout('/include/default.html',{libs:["layer","layui","table","tree"]}){ %>
+<!--<link href="/plugin/site/style.css" rel="stylesheet"/>-->
+<!-- 引入样式 -->
+<link href="/plugin/site/style.css" rel="stylesheet"/>
+<link href="/plugin/siteTree/siteTree.css" rel="stylesheet"/>
+<script src="/plugins/jquery/jquery-3.3.1.min.js"></script>
+<style>
+    html{
+        height: 100%;
+    }
+    body {
+        overflow: hidden;
+    }
+
+    .layui-tab {
+        margin-top: 0;
+    }
+
+    .layui-tab-content {
+        padding: 0;
+        padding-bottom: 5px;
+    }
+
+    .selDiv{
+        padding-top: 7px;
+        width: 200px;
+        height: 70px;
+        padding-bottom: 15px;
+        margin-bottom: 0;
+        margin-left: 50px;
+    }
+    .search {
+        position: static;
+        top: 0;
+        padding-left: 50px;
+        background-color: white;
+    }
+    .chartsContents{
+        width: 90%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        margin: auto;
+    }
+    .chartsContent{
+        height: 400px;
+        width: 100%;
+    }
+    #weekInputDiv{
+        font-size: 12px;
+    }
+    #weekInputDiv input{
+        font-size: 12px;
+        width: 155px;
+        height: 25px;
+    }
+    .el-input{
+        width: 145px!important;
+    }
+    .el-input__prefix,.el-input__suffix{
+        top: -3px;
+    }
+    .toggler {
+        background: white;
+    }
+
+    #wind-left-menu {
+        width: 300px;
+        height: 250px;
+        opacity: 0.95;
+        margin: auto;
+    }
+    #wind-left-menu li{
+        list-style: circle;
+    }
+    #wind-left-menu span{
+        font-weight: bold;
+    }
+    .SectionBox .first li span.icon-click {
+        left: 20px !important;
+    }
+    .select-border{
+        box-shadow: 0 2px 2px 0px #efefef inset;
+        padding: 4px 5px;
+        border: solid 1px #d0d0d0;
+        background: #fff;
+        height: 29px !important;
+        line-height: 29px;
+        border-radius: 3px;
+        position: relative;
+        top: 1px;
+    }
+</style>
+<div class="wrapper-content " style="padding-bottom: 0;padding-top: 0;">
+    <div class="row">
+        <div class="col-md-2">
+            <div id="siteTree">
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="layui-tab layui-tab-brief" lay-filter="polluteTab">
+                <ul class="layui-tab-title">
+                    <li lay-id="1" class="layui-this" style="margin-left: 50px;">分钟值曲线</li>
+                    <li lay-id="2">小时值曲线</li>
+                    <li lay-id="3">日均值曲线</li>
+                    <!--<li lay-id="4">24小时数据变化曲线</li>-->
+                </ul>
+                <div class="layui-tab-content">
+                    <!-- 分钟值分析div开始 -->
+                    <div id="minuteChartContent" class="layui-tab-item layui-show">
+                    </div>
+                    <!-- 分钟值分析div结束 -->
+                    <!-- 小时值分析div开始 -->
+                    <div id="hourChartContent" class="layui-tab-item">
+                    </div>
+                    <!-- 小时值分析div结束 -->
+                    <!-- 日均值分析div开始 -->
+                    <div id="dayChartContent" class="layui-tab-item">
+                    </div>
+                    <!-- 日均值分析div结束 -->
+                    <!-- 24小时数据变化曲线div开始 -->
+                    <div id="changeChartContent" class="layui-tab-item">
+                    </div>
+                    <!-- 24小时数据变化曲线div结束 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js" type="text/javascript"></script>
+<!--<script src="/plugin/echarts/echarts.js" type="text/javascript"></script>-->
+<script src="/plugin/siteTree/siteTree.js" type="text/javascript"></script>
+<script src="/plugin/date/getDate.js" type="text/javascript"></script>
+<script src="/js/graphics/pollute/index.js" type="text/javascript"></script>
+
+<script src="/js/graphics/pollute/minute/minute.js" type="text/javascript"></script>
+<script src="/js/graphics/pollute/hour/hour.js" type="text/javascript"></script>
+<script src="/js/graphics/pollute/day/day.js" type="text/javascript"></script>
+<script src="/js/graphics/pollute/change/change.js" type="text/javascript"></script>

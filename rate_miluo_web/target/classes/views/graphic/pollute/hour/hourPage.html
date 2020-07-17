@@ -1,0 +1,110 @@
+<div class="search" id="hourForm">
+    <!--<span class="sp2" id="hourSiteTypeR">站点类型：-->
+    <!--<label>-->
+    <!--<input class="margin20-l" style="margin-top: 0;"  type="radio" name="siteType"-->
+    <!--checked="checked" value="4">微型站-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class="margin20-l" style="margin-top: 0;" type="radio" name="siteType" value="1">标准站-->
+    <!--</label>-->
+    <!--</span>-->
+    <!-- <span class="sp2">站点：
+        <input class="stationCode pt border-all-3" type="hidden" value="">
+        <input class="stationName pt border-all-3 selectStation sel valid"
+               type="text"
+               value="" readonly="readonly" style="width: 200px">
+    </span>
+    <div class="wid">
+    </div> -->
+    <!--<span class="sp2">监测项:-->
+    <!--<input type="hidden" class="pollutantCodes" value="">-->
+    <!--<input readonly="readonly"-->
+    <!--class="pollutantNames pt border-all-3 selectPollutant sel" type="text"-->
+    <!--style="width: 250px; margin-left: 4px;" value="">-->
+    <!--</span>-->
+    <!--<div class="widPollutant">-->
+    <!--</div>-->
+    <span class="sp2">时间：
+        <input type="text" class="dateRange pt border-all-3" style="width: 275px">
+    </span>
+    <script>
+        initDateInput({
+            elem: '#hourForm .dateRange'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm'
+            , range: '~'
+            , value: defaultDateTime(3)
+        });
+    </script>
+    <!--<span class="sp2">数&nbsp; 据&nbsp;源：-->
+    <!--<label>-->
+    <!--<input class="margin20-l" style="margin-top: 0;" type="radio" name="hourSource"-->
+    <!--checked="checked" value="false">原始-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class="margin20-l" style="margin-top: 0;" type="radio" name="hourSource" value="true">审核-->
+    <!--</label>-->
+
+    <!--<label><input type="checkbox" id="hourMark">包含标识数据</label>-->
+    <!--</span>-->
+    <!--<span class="sp2" style="clear: left;">数据类型:-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="hourDataType"-->
+    <!--checked="checked" value="starndard">标况-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="hourDataType"-->
+    <!--value="real">实况-->
+    <!--</label>-->
+    <!--</span>-->
+    <div class="sp2">
+        <a id="hourSearch" class="a-search border-all-3" href="#">
+            <i class="fa fa-search" aria-hidden="true"></i> 分析
+        </a>
+        <a id="hourRefresh" class="a-search border-all-3" href="#">
+            <i class="fa fa-refresh" aria-hidden="true"></i> 刷新
+        </a>
+    </div>
+    <!--<div class="sp2 hidden" id="chart3">-->
+    <!--<span class="sp2">拟合方式：-->
+    <!--<label>-->
+    <!--<input class="margin20-l" style="margin-top: 0;"  type="radio" name="fittingType"-->
+    <!--checked="checked" value="0">y=ax+b-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class="margin20-l" style="margin-top: 0;" type="radio" name="fittingType" value="1">y=a<sup>r</sup>+b-->
+    <!--</label>-->
+    <!--</span>-->
+    <!--<span style="width: 500px" class="sp2">-->
+    <!--参数X:-->
+    <!--<select id="chart3X">-->
+    <!--<option value="pm10">PM10</option>-->
+    <!--<option value="pm25">PM2.5</option>-->
+    <!--<option value="so2">SO2</option>-->
+    <!--<option value="no2">NO2</option>-->
+    <!--<option value="co">CO</option>-->
+    <!--<option value="o3">O3</option>-->
+    <!--</select>-->
+    <!--参数Y:-->
+    <!--<select id="chart3Y">-->
+    <!--<option value="pm25">PM2.5</option>-->
+    <!--<option value="pm10">PM10</option>-->
+    <!--<option value="so2">SO2</option>-->
+    <!--<option value="no2">NO2</option>-->
+    <!--<option value="co">CO</option>-->
+    <!--<option value="o3">O3</option>-->
+    <!--</select>-->
+    <!--</span>-->
+    <!--</div>-->
+    <div style="clear: both"></div>
+</div>
+<!--<div id="hourSelDiv" class="form-group selDiv">-->
+<!--<label for="hourType">图表展示类型</label>-->
+<!--<select class="form-control" id="hourType">-->
+<!--<option value="hourOp1">单站点多污染物分析</option>-->
+<!--<option value="hourOp2">多站点多污染物分析</option>-->
+<!--<option value="hourOp3">污染物相关性分析</option>-->
+<!--</select>-->
+<!--</div>-->
+<div id="hourChartsContents" class="chartsContents">
+</div>

@@ -1,0 +1,16 @@
+<!-- Bootstrap 3.3.7 -->
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link href="/css/font-awesome.css" rel="stylesheet">
+<link href="/css/style.css?v=4.1.0" rel="stylesheet">
+<!-- jQuery 3 -->
+<script src="/plugins/jquery/jquery-1.12.4.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- 进度条 -->
+<script src="/plugins/pace/pace.min.js"></script>
+<!-- 表单验证 -->
+<script src="/plugins/jquery/jquery.validate.min.js"></script>
+
+

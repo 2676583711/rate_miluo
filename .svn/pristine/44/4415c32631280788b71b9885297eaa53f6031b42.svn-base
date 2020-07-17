@@ -1,0 +1,159 @@
+<% layout('/include/default.html', {libs:["tree","table","layer","layui"]}){ %>
+<link href="/plugin/siteTree/siteTree.css" rel="stylesheet"/>
+<!--<link href="/content/css/bootstrap-select.min.css" rel="stylesheet">-->
+<body class="gray-bg">
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="signupForm">
+                    <input id="userId" name="userId" value="${user.userId}"
+                           type="hidden">
+                    <input id="siteList" name="siteList" value="${siteList}" type="hidden">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">姓名：</label>
+                        <div class="col-sm-8">
+                            <input id="name" name="name" class="form-control" type="text"
+                                   value="${user.name}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名：</label>
+                        <div class="col-sm-8">
+                            <input id="username" name="username" class="form-control"
+                                   type="text" value="${user.username}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系方式：</label>
+                        <div class="col-sm-8">
+                            <input id="mobile" name="mobile" class="form-control"
+                                   type="text" value="${user1.mobile}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">部门：</label>
+                        <div class="col-sm-8">
+                            <input id="deptId" name="deptId" class="hidden" value="${user.deptId}">
+                            <input id="deptName" name="deptName"
+                                   class="form-control" type="text" style="cursor: pointer;"
+                                   onclick="openDept()" readonly="readonly" placeholder="所属部门" value="${user.deptName}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">上级领导：</label>
+                        <div class="col-sm-8">
+                            <input id="mgrName" name="mgrName" class="form-control"
+                                   type="text" value="${user.mgrName}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">状态:</label>
+                        <div class="col-sm-8">
+                            <% var sta = user.status;
+                            if(sta==1){ %>
+                            <label class="radio-inline"> <input type="radio" name="status" value="1" checked="checked"/>
+                                正常</label>
+                            <% }else{ %>
+                            <label class="radio-inline"> <input type="radio" name="status" value="1"/>正常</label>
+                            <%}if(sta==0){%>
+                            <label class="radio-inline"> <input
+                                    type="radio" name="status" value="0" checked="checked"/>
+                                禁用
+                            </label>
+                            <% }else{ %>
+                            <label class="radio-inline"> <input
+                                    type="radio" name="status" value="0"/>
+                                禁用
+                            </label>
+                            <% } %>
+                        </div>
+                    </div>
+                    <input type="hidden" name="roleIds" id="roleIds"
+                           value="">
+                    <input type="hidden" name="roleId" id="roleId"
+                           value="">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">角色:</label>
+                        <div class="col-sm-8">
+                            <% for(var role in roles){
+                            var sign = role.roleSign;
+                            if(sign == 'true'){
+                            %>
+                            <label class="radio-inline checkbox-inline">
+                                <input name="role" type="radio" value="${role.roleId}"
+                                       checked="checked"/>${role.roleName}</label>
+                            <% }else{ %>
+                            <label class="radio-inline checkbox-inline">
+                                <input name="role" type="radio" value="${role.roleId}"/>${role.roleName}
+                            </label>
+                            <% }} %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">站点权限：</label>
+                        <div class="col-sm-8">
+                            <div id="siteTree"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-3">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<script src="/plugin/siteTree/siteTree.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/appjs/sys/user/edit.js"></script>
+<!--<script type="text/javascript" src="/content/js/bootstrap-select.min.js"></script>-->
+
+<script type="text/javascript">
+    $.siteTree.setUrlData({type: '1'});
+    $.siteTree.build(false);
+    $("#mobile").blur(function () {
+        function checkMobile(mobile) {
+            var regu = /^1[3|4|5|8][0-9]\d{4,8}$/;
+            var re = new RegExp(regu)
+            if (re.test(mobile)) {
+                // alert("手机号码符合格式要求");
+            } else {
+                alert("手机号码不符合格式要求");
+            }
+        }
+        var mobile = $("#mobile").val()
+        checkMobile(mobile)
+    });
+    var roleId = $("input:radio[name='role']:checked").val();
+    $("#roleId").val(roleId);
+    $.siteTree.treeSingleLoadedEvent = function (e, data) {
+        if(roleId == 79 || roleId == 82){
+            $.siteTree.hideTab(["-1","-2"]);
+            $.siteTree.showTab("-3");
+        }else if(roleId == 78){
+            $.siteTree.hideTab(["-2","-3"]);
+            $.siteTree.showTab("-1");
+        }else if(roleId == 81){
+            $.siteTree.hideTab(["-1","-3"]);
+            $.siteTree.showTab("-2");
+        }else{
+            $("#siteTree").addClass('hidden');
+        }
+        var siteCodeList = $("#siteList").val();
+        if(siteCodeList.trim().length > 0){
+            var codesArr = siteCodeList.substring(1,siteCodeList.length-1).split(", ");
+            console.log(codesArr);
+            for (var num in codesArr) {
+                // $("a[id^=\'" + siteCodeList[num] + "\']").addClass("jstree-clicked");
+                let id = codesArr[num].trim();
+                //选中
+                data.instance.select_node($("a[id^=\'" + id + "\']"));
+            }
+            console.log($.siteTree.allSiteCodes());
+        }
+    }
+</script>

@@ -1,0 +1,61 @@
+<% layout('/include/default.html', {libs:["layer"]}){ %>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">上级：</label>
+								<div class="col-sm-8">
+									<input id="parentId" name="parentId" value="${pId}"
+										class="form-control hidden" type="text">
+								</div>
+								<div class="col-sm-8">
+									<input id="pName" name="pName" value="${pName}"
+										class="form-control" type="text" readonly>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">名称：</label>
+								<div class="col-sm-8">
+									<input id="name" name="name" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">排序：</label>
+								<div class="col-sm-8">
+									<input id="orderNum" name="orderNum" class="form-control"
+										type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">权限：</label>
+								<div class="col-sm-8">
+									<select id="delFlag" name="delFlag" class="form-control">
+										<%if(saveCompany){if(delFlag == 1){ %>
+										<option value=1>技术支持部门</option>
+										<option value=2>环保局</option>
+										<option value=3>运维公司</option> <%}else if(delFlag == 2){ %>
+										<option value=2>环保局</option>
+										<option value=3>运维公司</option> <%}else if(delFlag == 3){ %>
+										<option value=3>运维公司</option> <%}}else{if(delFlag == 1){%>
+										<option value=1>技术支持部门</option><%}else if(delFlag == 2){ %>
+										<option value=2>环保局</option> <%}else if(delFlag == 3){ %>
+										<option value=3>运维公司</option><%}}%>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% } %>
+	<script type="text/javascript" src="/js/appjs/system/sysDept/add.js"></script>

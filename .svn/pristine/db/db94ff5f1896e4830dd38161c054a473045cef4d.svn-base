@@ -1,0 +1,23 @@
+<%
+	if(@ListUtils.inString("tree", libs!)){
+%>
+		<link href="/css/jsTree/style.min.css" rel="stylesheet">
+		<link href="/css/jquery.treegrid.css" rel="stylesheet">
+<%	}  %>
+
+<%
+	if(@ListUtils.inString("table", libs!)){
+%>
+		<link href="/plugin/fixed-column/bootstrap-table.min.css" rel="stylesheet">
+<%	}  %>
+
+<%
+	if(@ListUtils.inString("layui", libs!)){
+%>
+		<link href="/plugins/layui/css/layui.css" rel="stylesheet">
+<%	}  %>
+<%
+     if(@ListUtils.inString("layuiAll", libs!)){
+%>
+     <link href="/plugins/layui/css/layui.mobile.css" rel="stylesheet">
+<%	}  %>

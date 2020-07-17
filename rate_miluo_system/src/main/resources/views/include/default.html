@@ -1,0 +1,39 @@
+<%/* Copyright (c) 2013-Now http://leitechina.com.cn/ All rights reserved. */%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>${productName} ${productVersion}</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<% include('/include/head.html'){}%>
+    <%if(isNotEmpty(desktop)){%>
+    <script>
+        let state;
+        getState();
+        function getState() {
+            var worker = new Worker('/js/desktop/initState.js');  // 主线程
+            worker.addEventListener("message", function(evt){  // 监听Worker线程发送的消息
+                state = JSON.parse(evt.data);
+                let stateInfoI = setInterval(function () {
+                    if(map || map!==undefined){
+                        clearInterval(stateInfoI)
+                        firstInitMarker(state);
+                        worker.terminate();
+                    }
+                },10);
+            }, false);
+            worker.postMessage("start") // 主线程发消息
+        }
+    </script>
+    <%}%>
+<% include('/include/csslibs.html',{libs: libs!}){}%>
+</head>
+	<body class="hold-transition skin-blue sidebar-mini  fixed">
+		${layoutContent}
+		<% include('/include/jslibs.html',{libs: libs!}){}%>
+	</body>
+	
+</html>
+

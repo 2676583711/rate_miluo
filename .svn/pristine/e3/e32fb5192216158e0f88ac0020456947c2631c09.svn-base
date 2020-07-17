@@ -1,0 +1,1280 @@
+<%layout('/include/default.html',{libs:["table","layer","layui","tree"]}){%>
+    <title>${productName}</title>
+    <script src="/plugins/pace/pace.min.js"></script>
+    <!--<link href="/css/reset.css" rel="stylesheet"/>-->
+    <!--<link href="/css/common.css" rel="stylesheet"/>-->
+    <!--<link href="/css/icon.css" rel="stylesheet"/>-->
+    <!--<link href="/css/animate.min.css" rel="stylesheet"/>-->
+    <link href="/css/font-awesome.css" rel="stylesheet"/>
+
+    <link href="/plugins/themes/default/default.css" rel="stylesheet"/>
+    <script src="/plugins/jquery/jquery-1.12.4.min.js"></script>
+    <link href="/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <!--菜单-->
+    <!--<link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--<link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">-->
+    <!--<link rel="stylesheet" type="text/css" href="/plugins/menu/css/demo.css">-->
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/plugins/menu/css/bootsnav.css">
+    <!--<link href="/plugins/menu/css/superfish.css" rel="stylesheet" media="screen" type="text/css"/>-->
+    <!--<script type="text/javascript" src="/plugins/menu/js/hoverIntent.js"></script>-->
+    <!--<script type="text/javascript" src="/plugins/menu/js/superfish.js"></script>-->
+    <!--     <script src="/js/collapse.js"></script>
+        <script src="/js/dropdown.js"></script> -->
+    <!-- <script src="content/js/zTree_v3/js/jquery.ztree.all-3.5.min.js"></script> -->
+    <script src="/js/common.js"></script>
+    <!-- <script src="content/js/showModalDialog.js"></script> -->
+    <!--<script src="/js/top-nav.js"></script>-->
+    <script src="/plugin/echarts/echarts.min.js"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.13&key=7c42bd396475066a40de929712bbba7b"></script>
+    <script src="/plugin/amap/main1.3.js"></script>
+    <script src="/js/index-top.js"></script>
+    <script src="/js/top-nav.js"></script>
+    <script src="/plugins/layer/mobile/layer.js"></script>
+    <style>
+        .main {
+            top: 129px;
+            left: 0;
+            padding-top: 0px;
+        }
+        .main-title {
+            position: absolute;
+            top: 90px;
+            left: 0;
+            background: none;
+            max-width: 450px;
+            display: flex;
+            align-items: center;
+        }
+        #main-title-icon {
+            font-size: 20px;
+            color: #d3d3d3;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        #spanTitle {
+            color: #d3d3d3;
+            font-size: 15px;
+            cursor: default;
+        }
+        .wrapper{
+            padding: 0 0;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .main-padding {
+            padding-top: 0;
+        }
+
+        .navbar {
+            clear: both;
+            display: none;
+        }
+
+        .logo a {
+            color: white;
+        }
+
+        .logo span {
+            color: white;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background: none;
+        }
+
+        .table-hover > tbody > tr:hover {
+            background-color: grey;
+        }
+
+        .pagination li {
+            float: left;
+        }
+        .indexTopTitleDiv {
+            width: 100%;
+            height: 129px;
+        }
+        #indexTopTitleDiv {
+            background: #2E4A85;
+            /*background: url( /image/top-index-bg.png) no-repeat center center;*/
+            /*background-size: 100% 100%;*/
+        }
+
+        #topBgImg {
+            width: 100%;
+            height: 129px;
+        }
+
+        #indexTopContent {
+            width: 98%;
+            position: absolute;
+            top: 24px;
+            left: 1%;
+        }
+
+        #indexTopTitle {
+            z-index: 100;
+            /*min-width: 800px;*/
+            width: 34%;
+            display: inline-block;
+            font-size: 42px;
+            color: aqua;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #indexMenuItemDiv {
+            position: absolute;
+            top: 22px;
+            width: 100%;
+        }
+
+        .indexMenuUl {
+            width: 100%;
+            height: 25%;
+        }
+
+        .topMenuList {
+            display: inline;
+            width: 32%;
+            background: rgba(46, 74, 133, 0);
+        }
+
+        .topMenuList:first-child {
+            float: left;
+        }
+
+        .topMenuList:last-child {
+            float: right;
+        }
+
+        .indexMenuUl > li {
+            text-align: center;
+            list-style: none;
+            /*padding: 10px 18px;*/
+            background: url(/image/menu-bg1.png) no-repeat center center;
+            background-size: 100% 100%;
+            width: 28% !important;
+            max-height: 25px;
+            float: left;
+            display: inline-table;
+        }
+
+        .indexMenuUl > a {
+            font-size: 26px;
+        }
+
+        #indexMenuUlLeft > li {
+            /*margin-left: 80px;*/
+            float: left;
+        }
+
+        #indexMenuUlRight > li {
+            /*margin-right: 80px;*/
+            float: right;
+        }
+
+        .click {
+            cursor: pointer;
+        }
+
+        li > a {
+            color: white !important;
+            border: none !important;
+        }
+
+        nav {
+            display: inline-block;
+        }
+
+        .navbar {
+            clear: inherit;
+        }
+
+        .navbar-nav {
+            float: none;
+        }
+
+        nav.navbar.bootsnav ul.nav > li {
+            background: #2E4A85;
+            text-align: center;
+            list-style: none;
+            /*padding: 10px 18px;*/
+            background: url(/image/menu-bg1.png) no-repeat center center;
+            background-size: 100% 100%;
+            width: 28%;
+            max-height: 25px;
+        }
+
+        nav.navbar.bootsnav ul.nav > li:hover {
+            background: url(/image/menu-bg1.png) no-repeat center center;
+            background-size: 100% 100%;
+        }
+
+        nav.navbar.bootsnav {
+            background-color: transparent;
+            border: none;
+        }
+
+        nav.navbar.bootsnav ul.nav > li > a {
+            padding: 14px 18px;
+            font-size: 21px;
+            vertical-align: middle;
+            font-weight: 400;
+        }
+
+        nav.navbar.bootsnav ul.nav > li.dropdown > a.dropdown-toggle:after {
+            right: 9%;
+            top: 22%;
+        }
+
+        ul.dropdown-menu {
+            background-color: #2E4A85 !important;
+            border: none !important;
+        }
+
+        ul.dropdown-menu > li {
+            padding: 5px 0;
+        }
+
+        ul.dropdown-menu > a {
+            font-size: 16px;
+        }
+
+        ul.dropdown-menu > li:hover {
+            background-color: #556785;
+        }
+
+        ul#indexMenuUlRight li:first-child ul li ul {
+            left: -100% !important;
+        }
+
+        .navbar-default .navbar-nav > .open > a,
+        .navbar-default .navbar-nav > .open > a:focus,
+        .navbar-default .navbar-nav > .open > a:hover {
+            background-color: #556785!important;
+        }
+        .dropdown-menu{
+            background-color: #556785!important;
+        }
+        ul.fadeInDown li:active, ul.fadeInDown li a:active{
+            background-color: #556785!important;
+        }
+        li > a:active{
+            color: #000!important;
+        }
+        .dropdown-menu>li>a:focus,
+        .dropdown-menu>li>a:hover{
+            background-color: #556785;
+        }
+        .pagination > li > a, .pagination > li > span {
+            background-color: grey;
+        }
+
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            background-color: grey;
+        }
+
+        .pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
+            background-color: grey;
+        }
+        .info{
+            top: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            right: -195px;
+        }
+        .right-aqi {
+            position: absolute;
+            right: -280px;
+            top: 5px;
+            bottom: 20px;
+            z-index: 999;
+            width: 280px;
+            color: #fff;
+            border-radius: 6px;
+            background-color: rgba(24, 52, 76, 0.6);
+            box-shadow: 0 0 10px rgba(5, 230, 255, .5);
+        }
+        select {
+            color: white;
+            padding: 0 2px 3px;
+            background: rgba(24, 52, 76, .4);
+            margin-left: 5px;
+            border-radius: 5px;
+            outline: none;
+            border: 1px solid #999999;
+            height: 24px;
+            font-family: inherit;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            text-transform: none;
+        }
+        .top-right > a {
+            width: 60px;
+        }
+        .top-right{
+            right: 200px;
+            top: 83px;
+        }
+        .top-right #taskInfo {
+            background: url(/plugins/themes/default/images/top-time.png) no-repeat center 5px;
+            background-size: 83%;
+            width: 50px;
+            margin-left: 20px;
+        }
+        .top-image {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            right: 27%;
+            top: 3%;
+            z-index: 100;
+        }
+        #hoverShowAqi{
+            background: #4A7EF1 url(/image/desktop/aqi.svg) no-repeat center center;
+            background-size: 83%;
+            width: 60px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid #1992fc;
+            display: inline-block;
+        }
+        #leftAqi {
+            position: absolute;
+            max-height: 710px;
+            min-height: 420px;
+            height: 38%;
+            line-height: 24px;
+            font: 14px Helvetica Neue, Helvetica, PingFang SC, \5FAE\8F6F\96C5\9ED1, Tahoma, Arial, sans-serif;
+        }
+    </style>
+</head>
+<body style="overflow:hidden;">
+
+<div class="indexTopTitleDiv">
+    <div id="indexTopTitleDiv" class="indexTopTitleDiv">
+        <img id="topBgImg" src="/image/top-index-bg.png"/>
+    </div>
+    <div class="top-right" style="width: 334px;">
+        <a class="top-jinji" id="air" title="空气报警" href="javascript:void(0)" ; onClick="a()" style="display: none">
+            <div class="top-label bg-4" id="airCount"></div>
+        </a>
+        <a class="top-jinji" id="polluteData" title="涉气污染源报警" href="javascript:void(0)" onClick="b()" style="display: none">
+            <div class="top-label bg-4" id="polluteDataCount"></div>
+        </a>
+        <a class="top-jinji" id="polluteWater" title="污水报警" href="javascript:void(0);" onClick="c()" style="display: none">
+            <div class="top-label bg-4" id="polluteWaterCount"></div>
+        </a>
+        <a class="top-jinji" id="waterAuto" title="自动站报警" href="javascript:void(0)" onclick="d()" style="display: none">
+            <div class="top-label bg-4" id="waterCount"></div>
+        </a>
+        <a class="top-time" id="taskInfo" title="待办任务" href="javascript:void(0)" onclick="e()" style="position: relative">
+            <div class="top-label bg-4" id="taskInfoCount"></div>
+        </a>
+        <ul class="info">
+            <input id="roleId" value="${roleId}" type="hidden">
+            <li class="user">
+                <a onclick="return false" href="javascript:void(0);">
+                    <img src="/plugins/themes/default/images/icon-top-user.png"/> ${username}
+                </a>
+                <input id="userId" name="userId" value="${userId}" type="hidden">
+            </li>
+            <li class="logout">
+                <a href="/login" title="退出">
+                    <img src="/plugins/themes/default/images/icon-logout.png"/> 退出
+                </a>
+            </li>
+            <li>
+                <a id="fullId" style="padding: 0" href="javascript:void(0)" onclick="fullScreen()" title="全屏">
+                    <img style="width: 32px; height: 32px;" src="/plugins/themes/default/images/full.png"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div id="indexTopContent">
+        <nav class="topMenuList navbar navbar-default navbar-mobile bootsnav">
+            <div class="collapse navbar-collapse">
+                <ul id="indexMenuUlLeft" class="indexMenuUl nav navbar-nav" data-in="fadeInDown" data-out="fadeOutUp">
+                </ul>
+            </div>
+        </nav>
+        <div id="indexTopTitle" class="click" onclick="goHome()">${productName}</div>
+        <div class="top-image">
+            <div id="hoverShowAqi">
+            </div>
+        </div>
+        <nav class="topMenuList navbar navbar-default navbar-mobile bootsnav">
+            <div class="collapse navbar-collapse">
+                <ul id="indexMenuUlRight" class="indexMenuUl nav navbar-nav" data-in="fadeInDown" data-out="fadeOutUp">
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="right-aqi right-show" id="leftAqi">
+    <ul class="left-nav-tabs clearfix" id="tab-panel1">
+        <li class="active" style="width: 46%;">汨罗市空气质量</li>
+        <li style="text-align: left;font-size: 13px;width: 53%;" id="issueDate"></li>
+    </ul>
+    <select id="standardSelect">
+    </select>
+    <div style="height: 160px; left: -2px; top: 12px;" id="mlNewSingle">
+    </div>
+    <div style="height: 120px; left: -2px; top: 12px;" id="sixPollutant">
+        <label style="display: block; font-size: 15px; text-align: center;"
+               id="primary"></label> <label
+            style="display: block; font-size: 15px; text-align: center;">单位(μg/m³,CO
+        mg/m³)</label>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="text-right col-sm-7 control-label pollutant-font">PM10:</div>
+                <div class="col-sm-5 control-label pollutant-font" id="pm10Value"></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-right col-sm-7 control-label pollutant-font">PM2.5:</div>
+                <div class="col-sm-5 control-label pollutant-font" id="pm25Value"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="text-right col-sm-7 control-label pollutant-font">NO2:</div>
+                <div class="col-sm-5 control-label pollutant-font" id="no2Value"></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-right col-sm-7 control-label pollutant-font">SO2:</div>
+                <div class="col-sm-5 control-label pollutant-font" id="so2Value"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="text-right col-sm-7 control-label pollutant-font">CO:</div>
+                <div class="col-sm-5 control-label pollutant-font" id="coValue"></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-right col-sm-7 control-label pollutant-font">O3:</div>
+                <div class="col-sm-5 control-label pollutant-font" id="o3Value"></div>
+            </div>
+        </div>
+    </div>
+    <div id="weatherInfo" style="padding:0 5px 5px 8px;">
+
+    </div>
+    <!--折叠按钮-->
+    <!--<a class="right-expand" href="javascript:void(0);" onclick="rightShow(this)">&nbsp;</a>-->
+</div>
+<!--（3）这是点击之后所执行的展示的信息-->
+<div class="animated fadeInDown alm-dialog" id="jinjiDiv">
+    <div class="alm-dialog-body clearfix">
+        <p class="alm-dialog-title">
+            <img src="/plugins/themes/default/images/top-jinji.png"/>紧急报警
+        </p>
+        <div class="alm-dialog-content">
+            <table id="exampleTable">
+            </table>
+        </div>
+    </div>
+    <a class="zf-img-close alm-close" href="javascript:void(0);">×</a>
+</div>
+<div class="main-title">
+    <i title="首页" id="main-title-icon" onclick="goHome()" class="fa fa-home hidden" aria-hidden="true"></i>
+    <span id="spanTitle"></span>
+</div>
+<div class="main" id="mainScreen">
+    <iframe name="mainFrame" id="mainFrame" width="100%" height="100%" scrolling="true" frameborder="0"></iframe>
+</div>
+<% } %>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/plugins/menu/js/bootsnav.js"></script>
+<script type="text/javascript">
+
+    let roleId = $("#roleId").val();
+    $(function () {
+        if (roleId == 81) {$("#air").css('display', 'block');load();
+        } else if (roleId == 78) {$("#waterAuto").css('display', 'block');loadWater();
+        } else if (roleId == 79) {$("#polluteData").css('display', 'block');loadPolluteData();
+        } else if (roleId == 82) {$("#polluteWater").css('display', 'block');loadPolluteWater();
+        } else {$("#taskInfo").siblings().css('display', 'block');
+            load();
+            loadPolluteData();
+            loadPolluteWater();
+            loadWater();
+        }
+        taskInfo();
+        initWeather();
+        mlNewEcharts();
+        setInterval(function () {
+            initWeather();
+            mlNewEcharts();
+        }, 1000*60*10);
+        $("#hoverShowAqi,#leftAqi").hover(function () {
+            $("#leftAqi").stop().fadeIn(350)
+        }, function () {
+            $("#leftAqi").stop().fadeOut(350)
+        })
+    });
+    function e() {
+        $('#exampleTable').bootstrapTable('destroy');
+        document.getElementById("mainFrame").src="/task/agents/index"
+        $('#taskInfo').click(function () {$('#jinjiDiv').css('display', 'none');});
+        // $("#jinjiDiv").attr("style","display:none");
+        // document.getElementById("jinjiDiv").style.display="none";
+    }
+    function taskInfo() {
+        $('#exampleTable').bootstrapTable('destroy');
+        $('#exampleTable').bootstrapTable({
+            method: 'get', // 服务器数据的请求方式 get or post
+            url: "/task/agents/count",///index/getAir
+            // showRefresh : true,
+            // showToggle : true,
+            // showColumns : true,
+            iconSize: 'outline',
+            toolbar: '#exampleToolbar',
+            striped: true, // 设置为true会有隔行变色效果
+            dataType: "json", // 服务器返回的数据类型
+            pagination: true, // 设置为true会在底部显示分页条
+            pageSize: 5, // 如果设置了分页，每页数据条数
+            pageNumber: 1, // 如果设置了分布，首页页码
+            //queryParamsType : "limit",
+            // //设置为limit则会发送符合RESTFull格式的参数
+            //$('#exampleTable').bootstrapTable('prepend', data);
+            showHeader: true,//默认为true显示表头，设为false隐藏
+            // showFooter: true,
+            //singleSelect : false, // 设置为true将禁止多选
+            //contentType : "application/x-www-form-urlencoded",
+            // //发送到服务器的数据编码类型
+            //search : true, // 是否显示搜索框
+            //showColumns : true, // 是否显示内容下拉框（选择显示的列）
+            sidePagination: "server", // 设置在哪里进行分页，可选值为"client" 或者 "server"
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                return {
+                    pageSize: params.limit, // 每页要显示的数据条数
+                    pageNumber: (params.offset / params.limit) + 1,
+                    //types : types
+                    //offset: params.offset// 每页显示数据的开始行号
+                    //sort: params.sort// 要排序的字段
+                    //sortOrder: params.order, // 排序规则
+                };
+            },
+            //(1)是一个回调函数，可以获取查询数据的总条数
+            onLoadSuccess: function (res) {
+                warnNum = res.total;
+                //改变#count的文本内容
+                $("#taskInfoCount").text(res.total);
+            },
+            columns: [{
+                title: '站点',
+                field: 'name',
+            },]
+        })}
+    function a() {
+        load();
+    };
+    var warnNum;
+
+    function load() {
+        $('#exampleTable').bootstrapTable('destroy');
+        $('#exampleTable').bootstrapTable({
+            method: 'get', // 服务器数据的请求方式 get or post
+            url: "/index/getAir",///index/getAir
+            // showRefresh : true,
+            // showToggle : true,
+            // showColumns : true,
+            iconSize: 'outline',
+            toolbar: '#exampleToolbar',
+            striped: true, // 设置为true会有隔行变色效果
+            dataType: "json", // 服务器返回的数据类型
+            pagination: true, // 设置为true会在底部显示分页条
+            pageSize: 5, // 如果设置了分页，每页数据条数
+            pageNumber: 1, // 如果设置了分布，首页页码
+            //queryParamsType : "limit",
+            // //设置为limit则会发送符合RESTFull格式的参数
+            //$('#exampleTable').bootstrapTable('prepend', data);
+            showHeader: true,//默认为true显示表头，设为false隐藏
+            // showFooter: true,
+            //singleSelect : false, // 设置为true将禁止多选
+            //contentType : "application/x-www-form-urlencoded",
+            // //发送到服务器的数据编码类型
+            //search : true, // 是否显示搜索框
+            //showColumns : true, // 是否显示内容下拉框（选择显示的列）
+            sidePagination: "server", // 设置在哪里进行分页，可选值为"client" 或者 "server"
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                return {
+                    pageSize: params.limit, // 每页要显示的数据条数
+                    pageNumber: (params.offset / params.limit) + 1,
+                    page : 'index'
+                    //offset: params.offset// 每页显示数据的开始行号
+                    //sort: params.sort// 要排序的字段
+                    //sortOrder: params.order, // 排序规则
+                };
+            },
+            //(1)是一个回调函数，可以获取查询数据的总条数
+            onLoadSuccess: function (res) {
+                warnNum = res.total;
+                //改变#count的文本内容
+                $("#airCount").text(res.total);
+                if(roleId != 1 && roleId != 77){
+                    $('#exampleTable').bootstrapTable('hideColumn','id');
+                }
+            },
+            columns: [{
+                title: '站点',
+                field: 'siteName',
+            }, {
+                title: '报警信息',
+                field: 'pollutant',
+                formatter: function (value, row, index) {
+                    if (value == null) {
+                        return "-"
+                    } else {
+                        return value + "污染物浓度" + row.text;
+                    }
+                }
+            }, {
+                title: '检测值',
+                field: 'value',
+            }, {
+                title: '报警时间',
+                field: 'dataTime'
+            }, {
+                title: '状态',
+                field: 'status',
+                formatter:function(value, row, index) {
+                    if (value == 0) {
+                        return "未处理"
+                    } else if (value == 1) {
+                        return "已处理"
+                    } else if(value==2){
+                        return "任务已添加"
+                    }
+                }
+            }, {
+                title: '操作',
+                field: 'id',
+                width: '120px',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var e = '<a class="btn btn-primary btn-sm" style=" width: 59px;\n' +
+                        '    padding-left: 0px;\n' +
+                        '    margin-left: -4px;"href="#" mce_href="#" title="" onclick="airAdd(\''
+                        + row.id
+                        + '\')"><i class="fa fa-plus">添加任务</i></a> ';
+                    return e;
+                }
+            }]
+        });
+    }
+    function airAdd(id) {
+        layer.open({
+            type: 2,
+            title: '代办任务查看',
+            maxmin: true,
+            shadeClose: false,
+            area: ['1000px', '680px'],
+            content: '/index/add?&id=' + id  // iframe的url
+        });
+    }
+
+    function b() {
+        loadPolluteData();
+    };
+    var warnNum;
+
+    function loadPolluteData() {
+        $('#exampleTable').bootstrapTable('destroy');
+        $('#exampleTable').bootstrapTable({
+            method: 'get', // 服务器数据的请求方式 get or post
+            url: "/index/polluteFactory",///index/getAir
+            // showRefresh : true,
+            // showToggle : true,
+            // showColumns : true,
+            iconSize: 'outline',
+            toolbar: '#exampleToolbar',
+            striped: true, // 设置为true会有隔行变色效果
+            dataType: "json", // 服务器返回的数据类型
+            pagination: true, // 设置为true会在底部显示分页条
+            pageSize: 5, // 如果设置了分页，每页数据条数
+            pageNumber: 1, // 如果设置了分布，首页页码
+            //queryParamsType : "limit",
+            // //设置为limit则会发送符合RESTFull格式的参数
+            //$('#exampleTable').bootstrapTable('prepend', data);
+            showHeader: true,//默认为true显示表头，设为false隐藏
+            // showFooter: true,
+            //singleSelect : false, // 设置为true将禁止多选
+            //contentType : "application/x-www-form-urlencoded",
+            // //发送到服务器的数据编码类型
+            //search : true, // 是否显示搜索框
+            //showColumns : true, // 是否显示内容下拉框（选择显示的列）
+            sidePagination: "server", // 设置在哪里进行分页，可选值为"client" 或者 "server"
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                return {
+                    pageSize: params.limit, // 每页要显示的数据条数
+                    pageNumber: (params.offset / params.limit) + 1,
+                    page : 'index'
+                    //offset: params.offset// 每页显示数据的开始行号
+                    //sort: params.sort// 要排序的字段
+                    //sortOrder: params.order, // 排序规则
+                };
+            },
+            //(1)是一个回调函数，可以获取查询数据的总条数
+            onLoadSuccess: function (res) {
+                // alert(res.total)
+                warnNum = res.total;
+                //改变#count的文本内容
+                $("#polluteDataCount").text(res.total);
+                if(roleId != 1 && roleId != 77){
+                    $('#exampleTable').bootstrapTable('hideColumn','id');
+                }
+            },
+            columns: [{
+                title: '站点',
+                field: 'siteName',
+            }, {
+                title: '报警信息',
+                field: 'pollutant',
+                formatter: function (value, row, index) {
+                    if (value == null) {
+                        return "-"
+                    } else {
+                        return value + "污染物浓度" + row.text;
+                    }
+
+                }
+            }, {
+                title: '检测值',
+                field: 'value',
+            }, {
+                title: '报警时间',
+                field: 'dataTime'
+            }, {
+                title: '状态',
+                field: 'status',
+                formatter: function (value, row, index) {
+                    if (value == 0) {
+                        return "未处理"
+                    } else if (value == 1) {
+                        return "已处理"
+                    } else if (value == 2) {
+                        return "任务已下发"
+                    }
+                }
+            }, {
+                title: '操作',
+                field: 'id',
+                width: '120px',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var e = '<a class="btn btn-primary btn-sm" style=" width: 59px;\n' +
+                        '    padding-left: 0px;\n' +
+                        '    margin-left: -4px;"href="#" mce_href="#" title="" onclick="polluteDataAdd(\''
+                        + row.id
+                        + '\')"><i class="fa fa-plus">添加任务</i></a> ';
+                    return e;
+                }
+            }]
+        });
+    }
+    function polluteDataAdd(id) {
+        layer.open({
+            type: 2,
+            title: '代办任务查看',
+            /*  data: {"name":name,
+                  "siteCode":siteCode,
+                  "id":id
+              },*/
+            maxmin: true,
+            shadeClose: false,
+            area: ['1000px', '680px'],
+            content: '/index/polluteDataAdd/?id=' +id // iframe的url
+        });
+    }
+    function c() {
+        loadPolluteWater();
+    };
+    var warnNum;
+
+    function loadPolluteWater() {
+        $('#exampleTable').bootstrapTable('destroy');
+        $('#exampleTable').bootstrapTable({
+            method: 'get', // 服务器数据的请求方式 get or post
+            url: "/index/getPolluteWater",///index/getAir
+            // showRefresh : true,
+            // showToggle : true,
+            // showColumns : true,
+            iconSize: 'outline',
+            toolbar: '#exampleToolbar',
+            striped: true, // 设置为true会有隔行变色效果
+            dataType: "json", // 服务器返回的数据类型
+            pagination: true, // 设置为true会在底部显示分页条
+            pageSize: 5, // 如果设置了分页，每页数据条数
+            pageNumber: 1, // 如果设置了分布，首页页码
+            //queryParamsType : "limit",
+            // //设置为limit则会发送符合RESTFull格式的参数
+            //$('#exampleTable').bootstrapTable('prepend', data);
+            showHeader: true,//默认为true显示表头，设为false隐藏
+            // showFooter: true,
+            //singleSelect : false, // 设置为true将禁止多选
+            //contentType : "application/x-www-form-urlencoded",
+            // //发送到服务器的数据编码类型
+            //search : true, // 是否显示搜索框
+            //showColumns : true, // 是否显示内容下拉框（选择显示的列）
+            sidePagination: "server", // 设置在哪里进行分页，可选值为"client" 或者 "server"
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                return {
+                    pageSize: params.limit, // 每页要显示的数据条数
+                    pageNumber: (params.offset / params.limit) + 1,
+                    page : 'index'
+                    //offset: params.offset// 每页显示数据的开始行号
+                    //sort: params.sort// 要排序的字段
+                    //sortOrder: params.order, // 排序规则
+                };
+            },
+            //(1)是一个回调函数，可以获取查询数据的总条数
+            onLoadSuccess: function (res) {
+                // alert(res.total)
+                warnNum = res.total;
+                //改变#count的文本内容
+                $("#polluteWaterCount").text(res.total);
+                if(roleId != 1 && roleId != 77){
+                    $('#exampleTable').bootstrapTable('hideColumn','id');
+                }
+            },
+            columns: [{
+                title: '站点',
+                field: 'siteName',
+            }, {
+                title: '报警信息',
+                field: 'pollutant',
+                formatter: function (value, row, index) {
+                    if (value == null) {
+                        return "-"
+                    } else {
+                        return value + "污染物浓度超标";
+                    }
+                }
+            }, {
+                title: '检测值',
+                field: 'value',
+            }, {
+                title: '报警时间',
+                field: 'dataTime'
+            }, {
+                title: '状态',
+                field: 'status',
+                formatter:function(value, row, index) {
+                    if (value == 0) {
+                        return "未处理"
+                    } else if (value == 1) {
+                        return "已处理"
+                    } else if (value == 2) {
+                        return "任务已下发"
+                    }
+                }
+            }, {
+                title: '操作',
+                field: 'id',
+                width: '120px',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var e = '<a class="btn btn-primary btn-sm" style=" width: 59px;\n' +
+                        '    padding-left: 0px;\n' +
+                        '    margin-left: -4px;"href="#" mce_href="#" title="" onclick="polluteWaterAdd(\''
+                        + row.id
+                        + '\')"><i class="fa fa-plus">添加任务</i></a> ';
+                    return e;
+                }
+            }]
+        });
+    }
+    function polluteWaterAdd(id) {
+        layer.open({
+            type: 2,
+            title: '代办任务查看',
+            /*  data: {"name":name,
+                  "siteCode":siteCode,
+                  "id":id
+              },*/
+            maxmin: true,
+            shadeClose: false,
+            area: ['1000px', '680px'],
+            content: '/index/polluteWaterAdd/?id=' + id // iframe的url
+        });
+    }
+    function d() {
+        loadWater();
+    };
+    var warnNum;
+
+    function loadWater() {
+        $('#exampleTable').bootstrapTable('destroy');
+        $('#exampleTable').bootstrapTable({
+            method: 'get', // 服务器数据的请求方式 get or post
+            url: "/index/getWater",///index/getAir
+            // showRefresh : true,
+            // showToggle : true,
+            // showColumns : true,
+            iconSize: 'outline',
+            toolbar: '#exampleToolbar',
+            striped: true, // 设置为true会有隔行变色效果
+            dataType: "json", // 服务器返回的数据类型
+            pagination: true, // 设置为true会在底部显示分页条
+            pageSize: 5, // 如果设置了分页，每页数据条数
+            pageNumber: 1, // 如果设置了分布，首页页码
+            //queryParamsType : "limit",
+            // //设置为limit则会发送符合RESTFull格式的参数
+            //$('#exampleTable').bootstrapTable('prepend', data);
+            showHeader: true,//默认为true显示表头，设为false隐藏
+            // showFooter: true,
+            //singleSelect : false, // 设置为true将禁止多选
+            //contentType : "application/x-www-form-urlencoded",
+            // //发送到服务器的数据编码类型
+            //search : true, // 是否显示搜索框
+            //showColumns : true, // 是否显示内容下拉框（选择显示的列）
+            sidePagination: "server", // 设置在哪里进行分页，可选值为"client" 或者 "server"
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                return {
+                    pageSize: params.limit, // 每页要显示的数据条数
+                    pageNumber: (params.offset / params.limit) + 1,
+                    page : 'index'
+                    //offset: params.offset// 每页显示数据的开始行号
+                    //sort: params.sort// 要排序的字段
+                    //sortOrder: params.order, // 排序规则
+                };
+            },
+            //(1)是一个回调函数，可以获取查询数据的总条数
+            onLoadSuccess: function (res) {
+                // alert(res.total)
+                warnNum = res.total;
+                //改变#count的文本内容
+                $("#waterCount").text(res.total);
+                if(roleId != 1 && roleId != 77){
+                    $('#exampleTable').bootstrapTable('hideColumn','id');
+                }
+            },
+            columns: [{
+                title: '站点',
+                field: 'siteName',
+            }, {
+                title: '报警信息',
+                field: 'pollutant',
+                formatter: function (value, row, index) {
+                    if (value == null) {
+                        return "-"
+                    } else {
+                        return value + "污染物浓度超标";
+                    }
+
+                }
+            }, {
+                title: '检测值',
+                field: 'value',
+            }, {
+                title: '报警时间',
+                field: 'dataTime'
+            }, {
+                title: '状态',
+                field: 'status',
+                formatter:function(value, row, index) {
+                    if (value == 0) {
+                        return "未处理"
+                    } else if (value == 1) {
+                        return "已处理"
+                    } else if (value == 2) {
+                        return "任务已下发"
+                    }
+                }
+            }, {
+                title: '操作',
+                field: 'id',
+                width: '120px',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var e = '<a class="btn btn-primary btn-sm" style=" width: 59px;\n' +
+                        '    padding-left: 0px;\n' +
+                        '    margin-left: -4px;"href="#" mce_href="#" title="" onclick="waterAutoAdd(\''
+                        + row.id
+                        + '\')"><i class="fa fa-plus">添加任务</i></a> ';
+                    return e;
+                }
+            }]
+        });
+    }
+    function waterAutoAdd(id) {
+        layer.open({
+            type: 2,
+            title: '代办任务查看',
+            maxmin: true,
+            shadeClose: false,
+            area: ['1000px', '680px'],
+            content: '/index/waterAutoAdd/?id=' + id // iframe的url
+        });
+    }
+
+    //设置屏幕缩放80%;
+    var size = 0.8;
+    document.body.style.zoom = size;
+    document.body.style.cssText += '; -moz-transform: scale(' + size + ');-moz-transform-origin: 0 0; ';     //
+
+    var menus = [], homeLink = '';
+    var main = $(".main"), mainTitle = $(".main-title"), mainFrame = $("#mainFrame");
+    var height = $(window).height() - $('.container>.top').height();
+
+    function removeMainBlock() {
+        $("#main-block-div").remove();
+    }
+
+    function showBlock(text) {
+        if (!document.getElementById("main-block-div")) {
+            main.append('<div id="main-block-div"  class="actiing">'
+                + '<div class="actingCon">'
+                + '<div class="imitate cutcircle">'
+                + '<div class="imitateImg">text</div>'
+                + '</div>'
+                + '<p class="actingConp"> 加载中 ...</p>'
+                + '</div>'
+                + '</div>');
+        }
+    }
+
+    function adjustMargin(url) {
+        if (url === "desktop" || url === "/Grid/AreaAirQuantity") {
+            main.addClass('main-padding full-width');
+            mainTitle.hide();
+        }
+        else {
+            main.removeClass('main-padding full-width');
+            mainTitle.show();
+        }
+    }
+
+    function onClick(name, url, moduleId, pageId) {
+        // adjustMargin(url);
+        if (name.length > 0) {
+            var link = '<a href="javascript:void(0);" onclick="onClick(\'\',\' '+url+' \')"> > ' + name + '</a>';
+            $("#home-link").siblings().remove().end().after(link);
+        }
+        var params = {};
+        var urlItems = url.split("?");
+        if (moduleId != undefined && pageId != undefined) {
+            params["ModuleId"] = moduleId;
+            params["PageId"] = pageId;
+            params["tree_node_id"] = moduleId;
+            params["tree_node_name"] = name;
+            params["tree_node_pId"] = moduleId;
+            if (urlItems.length > 1) {
+                url = urlItems[0];
+                params = getUrlParam(urlItems[1], params);
+            }
+            mainFrame.attr("src", summerFresh.buildUrl(url, params));
+        }
+        else {
+            mainFrame.attr("src", url);
+        }
+        // showBlock(name);
+    }
+
+    function getUrlParam(queryString, params) {
+        var q = queryString.split("&");
+        for (var i = 0; i < q.length; i++) {
+            var temp = q[i].split("=");
+            params[temp[0]] = temp[1];
+        }
+        return params;
+    }
+
+    function setIframeHeight() {
+        var totalHeight = height;
+        var siblings = mainFrame.siblings();
+        for (var i = 0; i < siblings.length; i++) {
+            totalHeight -= $(siblings[i]).height();
+        }
+        if (!main.hasClass('main-padding')) {
+            totalHeight -= parseInt(main.css('padding-top'));
+        }
+        mainFrame.css("min-height", totalHeight + "px");
+    }
+
+    $(document).ready(function () {
+        goHome();
+        $('#menu').on('click', 'li', function () {
+            $("#menu li").removeClass('active');
+            $(this).addClass('active');
+        });
+
+        $('#btnLogin').on('click', function () {
+            window.location.href = '/Home/Logon';
+        });
+        $.ajax({
+            url: "/sys/menu/menuJsonByRoleId",
+            data: {},
+            type: "get",
+            success: function (res) {
+                initMenu(res);
+                menus = res;
+                var firstTemp = "<li id=\"{menuId}\" pid=\"{parentId}\" class=\"drop\"><a href=\"javascript:void(0);\"><span><i class=\"{icon}\" /></i><span>  {name}</a><ul class=\"sub_menu\"></ul></li>";
+                var secondTemp = "<li><a role='menuitem' tabindex='-1' href=\"#\" onclick=\"onClick('{name}','{url}')\">{name}</a></li>";
+                $.each(res, function () {
+                    if (this.parentId == '0') {
+                        $("ul.top-dropdown").append(summerFresh.modelViewBinder(this, firstTemp));
+                    }
+                });
+                $.each(res, function () {
+                    if (this.parentId != '') {
+                        $("#" + this.parentId + ">ul").append(summerFresh.modelViewBinder(this, secondTemp));
+                    }
+                });
+                // initNavBar();
+            },
+        });
+
+    });
+
+    var leftHtml = "";
+    var rightHtml = "";
+    //菜单是否遍历完毕
+    let menuIdFlag = false;
+    //显示菜单文字定时器
+    var showMenuTextTask = 0;
+    function initMenu(res) {
+        leftHtml = "";
+        rightHtml = "";
+        if (res && res.length <= 6) {
+            singleMenu([res[0], res[1], res[2]], 1);
+            singleMenu([res[3], res[4], res[5]], 2);
+            $("#indexMenuUlLeft").html(leftHtml);
+            $("#indexMenuUlRight").html(rightHtml);
+            bootsnav.initialize();
+            menuIdFlag = true;
+        }
+    }
+
+    //lr 1左  2右
+    function singleMenu(item, lr) {
+        $.each(item, function (idx, item) {
+            if (!item) {
+                return;
+            }
+            if (item.childMenu && item.childMenu.length > 0) {
+                if (lr === 1) {
+                    leftHtml += '<li class="dropdown">' +
+                        '<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">' + item.name + '</a>' +
+                        '<ul class="dropdown-menu">';
+                    singleMenu(item.childMenu, lr);
+                    leftHtml += '</ul></li>';
+                } else {
+                    rightHtml += '<li class="dropdown">' +
+                        '<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">' + item.name + '</a>' +
+                        '<ul class="dropdown-menu">';
+                    singleMenu(item.childMenu, lr);
+                    rightHtml += '</ul></li>';
+
+                }
+            } else {
+                if (lr === 1) {
+                    leftHtml += '<li><a href="javascript:void(0);" onclick="goPage(\'' + item.url + '\', this)">' + item.name + '</a></li>';
+                    // let urlArr = item.url.split("@@");
+                    // if(urlArr.length>1){
+                    //     leftHtml += '<li><a href="'+urlArr[0]+'" target="_blank">' + item.name + '</a></li>';
+                    // }else{
+                    //     leftHtml += '<li><a href="javascript:void(0);" onclick="goPage(\'' + item.url + '\', this)">' + item.name + '</a></li>';
+                    // }
+                } else {
+                    rightHtml += '<li><a href="javascript:void(0);" onclick="goPage(\'' + item.url + '\', this)">' + item.name + '</a></li>';
+                }
+            }
+        })
+    }
+
+    function goPage(url, e) {
+        showMenuText(url, e);
+        // $(e).css({background: '#2E4A85;!important'})
+        if (url && url.length > 0) {
+            mainFrame.attr("src", url);
+        }
+    }
+
+    function showMenuText(url, e) {
+        if (menuIdFlag) {
+            if(e){
+                var currE = $(e);
+                var curr = currE.text();
+                var pre = currE.parent().parent().prev().text();
+                var oneMenu = currE.parent().parent().prev().parent().parent().prev().text();
+                if (pre) {
+                    var title = (oneMenu ? " > " + (oneMenu.substr(0, 2)) + " " : "") + "> " + pre + " > " + curr;
+                    $("#spanTitle").text(title);
+                    if ($("#main-title-icon").hasClass("hidden")) {
+                        $("#main-title-icon").removeClass("hidden");
+                    }
+                }
+            }
+        } else {
+            showMenuTextTask = setTimeout(function () {
+                showMenuText(url, e);
+            });
+        }
+
+    }
+
+    function goHome() {
+        if (!$("#main-title-icon").hasClass("hidden")) {
+            $("#main-title-icon").addClass("hidden");
+        }
+        $("#spanTitle").text("");
+        onClick("", "desktop");
+    }
+
+    //点击弹出顶部告警信息，临时使用，届时可删除
+    $(".top-right .top-jinji").click(function () {
+        $(".alm-dialog").show(500);
+    });
+
+    $(".alm-close").click(function () {
+        $(".alm-dialog").fadeOut("fast");
+    });
+
+
+
+    // 全屏
+    let isFull = false;
+    function fullScreen() {
+        launchInfoFullScreen();
+    }
+
+    function launchInfoFullScreen() {
+        if (isFull) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (el.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (el.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            } else if (el.msExitFullScreen) {
+                document.msExitFullScreen();
+            }
+            $("#fullId img").attr('src', "/plugins/themes/default/images/full.png");
+            $("#fullId").attr('title', '全屏');
+            isFull = false;
+        } else {
+            let el = document.documentElement;
+            if (el.requestFullscreen) {
+                el.requestFullscreen();
+            } else if (el.mozRequestFullScreen) {
+                el.mozRequestFullScreen();
+            } else if (el.webkitRequestFullScreen) {
+                el.webkitRequestFullScreen();
+            } else if (el.msRequestFullScreen) {
+                el.msRequestFullScreen();
+            }
+            $("#fullId img").attr('src', "/plugins/themes/default/images/exit-full.png");
+            $("#fullId").attr('title', '退出全屏');
+            isFull = true;
+        }
+
+    }
+</script>

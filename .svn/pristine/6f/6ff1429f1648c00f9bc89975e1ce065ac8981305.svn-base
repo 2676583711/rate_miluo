@@ -1,0 +1,25 @@
+<div class="search" id="minuteForm">
+    <span class="sp2">时间：
+        <input type="text" class="dateRange pt border-all-3" style="width: 265px">
+    </span>
+    <script>
+        initDateInput({
+            elem: '#minuteForm .dateRange'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+            , range: '~'
+            , value: defaultDateMinuteTime(1)
+        });
+    </script>
+    <div class="sp2">
+        <a id="minuteSearch" class="a-search border-all-3" href="#">
+            <i class="fa fa-search" aria-hidden="true"></i> 分析
+        </a>
+        <a id="minuteRefresh" class="a-search border-all-3" href="#">
+            <i class="fa fa-refresh" aria-hidden="true"></i> 刷新
+        </a>
+    </div>
+    <div style="clear: both"></div>
+</div>
+<div id="minuteChartsContents" class="chartsContents">
+</div>

@@ -1,0 +1,24 @@
+<div class="search" id="pmForm">
+    <!-- <span class="sp2">站点：
+        <input class="stationCode pt border-all-3" type="hidden" value="">
+        <input class="stationName pt border-all-3 selectStation sel valid"
+               type="text"
+               value="" readonly="readonly" style="width: 200px">
+    </span>
+    <div class="wid">
+    </div> -->
+    <span class="sp2">时间：
+        <input type="text" class="dateRange pt border-all-3" style="width: 265px">
+    </span>
+    <div class="sp2">
+        <a id="pmSearch" class="a-search border-all-3" href="#">
+            <i class="fa fa-search" aria-hidden="true"></i> 分析
+        </a>
+        <a id="pmRefresh" class="a-search border-all-3" href="#">
+            <i class="fa fa-refresh" aria-hidden="true"></i> 刷新
+        </a>
+    </div>
+    <div style="clear: both"></div>
+</div>
+<div id="pmChartsContents" class="chartsContents">
+</div>

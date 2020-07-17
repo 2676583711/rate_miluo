@@ -1,0 +1,62 @@
+<%layout('/include/default.html',{libs:["table","layer","layui","tree"]}){%>
+<link rel="stylesheet" href="/js/pic/viewer.css">
+<link href="/plugin/siteTree/siteTree.css" rel="stylesheet"/>
+<div class="row">
+    <div class="col-md-3">
+        <div id="siteTree" class="stationCode" style="width: 90%">
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <div class="form-group" style="padding: 6px">
+                            <label for="dateCondition">截图日期:</label>
+                            <input type="text" class="form-control" id="dateCondition" autocomplete="off">
+                        </div>
+                        <button class="btn btn-success" onclick="reLoad()"><i class="fa fa-search"></i>查询</button>
+                        <button class="btn btn-primary" onclick="reFresh()"><i class="fa fa-refresh"></i>刷新</button>
+                        <% if(shiro.hasPermission('module:pic:remove')){ %>
+                        <button type="button" class="btn  btn-warning"
+                                onclick="selectAll()">
+                            <i class="fa fa-trash" aria-hidden="true"></i>全选
+                        </button>
+                        <button type="button" class="btn  btn-danger"
+                                onclick="batchRemove()">
+                            <i class="fa fa-trash" aria-hidden="true"></i>删除
+                        </button>
+                        <%}%>
+                    </div>
+                </div>
+                <div id="pics">
+
+                </div>
+                <div id="pageTool">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<script src="/plugin/siteTree/siteTree.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/pic/viewer.js"></script>
+<script type="text/javascript" src="/js/pic/list.js"></script>
+<script>
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#dateCondition',
+            type: 'datetime',
+            range: true
+        });
+    });
+
+    var siteCodes;
+    $.siteTree.build(false);
+    $.siteTree.treeClickEvent = function (e, data) {
+        siteCodes = $.siteTree.siteCodes().join(",");
+        // console.log(siteCodes[0]);
+    }
+</script>

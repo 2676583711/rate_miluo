@@ -1,0 +1,107 @@
+<% layout('/include/default.html', {libs:["table","layer"]}){ %>
+	<div class="wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<input id="id" name="id" value="${airParam.id}" type="hidden">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">污染物项目名：</label>
+								<div class="col-sm-8">
+									<input id="pluName" name="pluName" class="form-control" value="${airParam.pluName}" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">平均时间：</label>
+								<div class="col-sm-8">
+										<select name="avgTime" name="avgTime" class="form-control valid" aria-required="true" aria-invalid="fasle">
+										<option value="年平均"  ${airParam.avgTime=="年平均"?'selected':''}>年平均</option>
+										<option value="24小时平均"  ${airParam.avgTime=="24小时平均"?'selected':''}>24小时平均</option>
+										<option value="1小时平均" ${airParam.avgTime=="1小时平均"?'selected':''}>1小时平均</option>
+										<option value="日最大8小时平均"  ${airParam.avgTime=="日最大8小时平均"?'selected':''}>日最大8小时平均</option>
+								</select>
+									
+								</div>
+							</div>
+								<div class="form-group">
+								<label class="col-sm-3 control-label">是否需要报警:</label>
+								<div class="col-sm-8">
+								<select name="isAlarm" class="form-control" readonly="readonly">
+										<option value="1"  ${airParam.isAlarm=="1"?'selected':''}>一级</option>
+										<option value="2"  ${airParam.isAlarm=="2"?'selected':''}>二级</option>
+										<option value="3" ${airParam.isAlarm=="3"?'selected':''}>三级</option>
+										<option value="4"  ${airParam.isAlarm=="4"?'selected':''}>四级</option>
+										<option value="5"  ${airParam.isAlarm=="5"?'selected':''}>五级</option>
+										<option value="6"  ${airParam.isAlarm=="6"?'selected':''}>六级</option>
+										<option value="7"  ${airParam.isAlarm=="7"?'selected':''}>七级</option>
+										<option value="8"  ${airParam.isAlarm=="8"?'selected':''}>无</option>
+								</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">浓度限值（一级）：</label>
+								<div class="col-sm-8">
+									<input id="conLimit1" name="conLimit1" class="form-control" type="text" value="${airParam.conLimit1}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">浓度限值（二级）：</label>
+								<div class="col-sm-8">
+									<input id="conLimit2" name="conLimit2" class="form-control" type="text" value="${airParam.conLimit2}"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">浓度限值（三级）：</label>
+								<div class="col-sm-8">
+									<input id="conLimit3" name="conLimit3" class="form-control" type="text" value="${airParam.conLimit3}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">浓度限值（四级）：</label>
+								<div class="col-sm-8">
+									<input id="conLimit4" name="conLimit4" class="form-control" type="text" value="${airParam.conLimit4}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">浓度限值（五级）：</label>
+								<div class="col-sm-8">
+									<input id="conLimit5" name="conLimit5" class="form-control" type="text" value="${airParam.conLimit5}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">浓度限值（六级）：</label>
+								<div class="col-sm-8">
+									<input id="conLimit6" name="conLimit6" class="form-control" type="text" value="${airParam.conLimit6}"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">浓度限值（七级）：</label>
+								<div class="col-sm-8">
+									<input id="conLimit7" name="conLimit7" class="form-control" type="text" value="${airParam.conLimit7}" />
+									<input  name="status" class="form-control" type="hidden" value="0" />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label">单位：</label>
+								<div class="col-sm-8">
+									<select id="unit" name="unit" class="form-control valid">
+										<option value="μg/m3">μg/m3</option>
+										<option value="mg/m3">mg/m3</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary" style="margin-left: 41%;">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% } %>
+	<script type="text/javascript" src="/js/airparam/edit.js"></script>

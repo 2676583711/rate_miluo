@@ -1,0 +1,128 @@
+<% layout('/include/default.html',{libs:["layui","layer"]}){ %>
+<div class="wrapper-content" style="font-size: 13px;">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<input type="hidden" id="equId" value="${equId}">
+				<%if(has(paramList)){%>
+					<input type="hidden" id="size" value="${paramList.~size}">
+					<%for(param in paramList){%>
+					<form class="form-horizontal m-t" id="factorValueSetForm-${paramLP.index}">
+						<input type="hidden" name="id" value="${param.id}">
+						<input type="hidden" name="paramId" value="${param.paramId}">
+						<input type="hidden" name="videoId" value="${param.videoId}">
+						<div class="form-group">
+							<label style="text-align: right" class="col-sm-2 control-label">监测因子：</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="name" value="${param.name}"
+									   style="color: blue" disabled>
+							</div>
+							<label class="col-sm-1 control-label">单位：</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="unit" value="${param.unit!'无'}" disabled>
+							</div>
+							<label class="col-sm-1 control-label">是否报警：</label>
+							<div class="col-sm-2">
+								<label  class="radio-inline checkbox-inline">
+									<input type="radio" name="needAlarm" class="radio-inline" value="1"
+										   ${param.needAlarm ==1?'checked':''}>是
+								</label>
+								<label  class="radio-inline checkbox-inline">
+									<input type="radio" name="needAlarm" class="radio-inline" value="0"
+										   ${param.needAlarm==0?'checked':param.needAlarm==1?'':'checked'}>否
+								</label>
+							</div>
+						</div>
+						<div class="input-limit ${param.needAlarm!=1?'hidden':''}">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">上限报警值：</label>
+								<label class="col-sm-1 control-label">一级：</label>
+								<div class="col-sm-1">
+									<input type="text" id="limitTop1" name="limitTop1" class="form-control" value="${param.limitTop1}" oninput="clearNoNum(this)" autocomplete="off">
+								</div>
+								<label class="col-sm-1 control-label">二级：</label>
+								<div class="col-sm-1">
+									<input type="text" id="limitTop2" name="limitTop2" class="form-control" value="${param.limitTop2}" oninput="clearNoNum(this)" autocomplete="off">
+								</div>
+								<label class="col-sm-1 control-label">三级：</label>
+								<div class="col-sm-1">
+									<input type="text" id="limitTop3" name="limitTop3" class="form-control" value="${param.limitTop3}" oninput="clearNoNum(this)" autocomplete="off">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">上限消息推送级别：</label>
+								<label class="col-sm-1 control-label">推送给负责人：</label>
+								<div class="col-sm-1">
+									<select id="alarmLevelTopToFzr" name="alarmLevelTopToFzr" class="form-control">
+										<option value="">不推送</option>
+										<option value=1 ${param.alarmLevelTopToFzr==1?'selected':''}>一级</option>
+										<option value=2 ${param.alarmLevelTopToFzr==2?'selected':''}>二级</option>
+										<option value=3 ${param.alarmLevelTopToFzr==3?'selected':''}>三级</option>
+									</select>
+								</div>
+								<label class="col-sm-1 control-label">推送给负责人和环保局：</label>
+								<div class="col-sm-1">
+									<select id="alarmLevelTopToHbj" name="alarmLevelTopToHbj" class="form-control">
+										<option value="">不推送</option>
+										<option value=1 ${param.alarmLevelTopToHbj==1?'selected':''}>一级</option>
+										<option value=2 ${param.alarmLevelTopToHbj==2?'selected':''}>二级</option>
+										<option value=3 ${param.alarmLevelTopToHbj==3?'selected':''}>三级</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">下限报警值：</label>
+								<label class="col-sm-1 control-label">一级：</label>
+								<div class="col-sm-1">
+									<input type="text" id="limitBottom1" name="limitBottom1" class="form-control" value="${param.limitBottom1}" oninput="clearNoNum(this)" autocomplete="off">
+								</div>
+								<label class="col-sm-1 control-label">二级：</label>
+								<div class="col-sm-1">
+									<input type="text" id="limitBottom2" name="limitBottom2" class="form-control" value="${param.limitBottom2}" oninput="clearNoNum(this)" autocomplete="off">
+								</div>
+								<label class="col-sm-1 control-label">三级：</label>
+								<div class="col-sm-1">
+									<input type="text" id="limitBottom3" name="limitBottom3" class="form-control" value="${param.limitBottom3}" oninput="clearNoNum(this)" autocomplete="off">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">下限消息推送级别：</label>
+								<label class="col-sm-1 control-label">推送给负责人：</label>
+								<div class="col-sm-1">
+									<select id="alarmLevelBottomToFzr" name="alarmLevelBottomToFzr" class="form-control">
+										<option value="">不推送</option>
+										<option value=1 ${param.alarmLevelBottomToFzr==1?'selected':''}>一级</option>
+										<option value=2 ${param.alarmLevelBottomToFzr==2?'selected':''}>二级</option>
+										<option value=3 ${param.alarmLevelBottomToFzr==3?'selected':''}>三级</option>
+									</select>
+								</div>
+								<label class="col-sm-1 control-label">推送给负责人和环保局：</label>
+								<div class="col-sm-1">
+									<select id="alarmLevelBottomToHbj" name="alarmLevelBottomToHbj" class="form-control">
+										<option value="">不推送</option>
+										<option value=1 ${param.alarmLevelBottomToHbj==1?'selected':''}>一级</option>
+										<option value=2 ${param.alarmLevelBottomToHbj==2?'selected':''}>二级</option>
+										<option value=3 ${param.alarmLevelBottomToHbj==3?'selected':''}>三级</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</form>
+					<br/><hr/>
+					<%}%>
+					<div class="form-group">
+						<div class="col-sm-12 col-sm-offset-5">
+							<button type="button" onclick="factorValueSetForm()" class="btn btn-primary">提交</button>
+						</div>
+					</div>
+				<%}else{%>
+					<h2 style="text-align: center; color: red">该类型设备未配置参数，请联系管理员！</h2>
+				<%}%>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script type="text/javascript" src="/js/airSite/factorValueSet.js"></script>

@@ -1,0 +1,187 @@
+<% layout('/include/default.html', {libs:["layer","layui"]}){ %>
+<link href="/css/common.css" rel="stylesheet">
+<link href="/content/css/default.css" rel="stylesheet">
+<link href="/content/css/style.css" rel="stylesheet">
+<style type="text/css">
+.blue {
+	color: blue;
+}
+
+.bot-shebei-wrap {
+	position: absolute;
+	top: 52px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: auto;
+	height: auto;
+}
+
+.bot-shebei-box-add {
+	width: 252px;
+	height: 215px;
+}
+</style>
+<div>
+	<div class="search pt10 pl10">
+		<form method="post" class="form-inline">
+			<div class="input-control">
+				<div class="form-group">
+					<label for="vidiconName">摄像机名称：</label> <input class="form-control"
+						id="vidiconName" name="vidiconName" type="text"> <input
+						type="hidden" id="curPage" value="${curPage}" />
+				</div>
+			</div>
+			<div class="search-control">
+				<div class="form-group">
+					<input class="btn btn-primary search-button" value="查询"
+						onclick="btnSearchSubmit()" type="button">
+				</div>
+				<div class="form-group">
+					<input class="btn btn-default" value="返回" onclick="goback();"
+						type="button">
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div id="StationDevicesRepeater">
+		<div class="bot-shebei-wrap bot-shebei-wrap-w clearfix">
+			<% print("总共"+siteVidicons.~size+"台摄像头"+"<br>");
+			if(siteVidicons!=null){ for(vidicon in siteVidicons){ %>
+			<div class="bot-shebei-box bot-shebei-box-w">
+				<a href="javascript:remove('${vidicon.id}')"
+					class="bot-shebei-box-delete" title="下架"></a>
+				<p>
+					<span> </span>
+				</p>
+				<p>
+					<span> </span>
+				</p>
+				<p>
+					摄像头名称：<span>${vidicon.vidiconName}</span>
+				</p>
+				<p>
+					摄像头设备序列号：<span>${vidicon.seriesNumber}</span>
+				</p>
+
+				<p>
+					摄像头品牌：<span>${vidicon.supplier}</span>
+				</p>
+				<p>
+					摄像头位置：<span><%
+						if(vidicon.vidiconLocation=='1'){%>监测点位置<%}else
+						if(vidicon.vidiconLocation=='2'){%>水排放口<%}else
+						if(vidicon.vidiconLocation=='3'){%>进水口<%}else
+						if(vidicon.vidiconLocation=='4'){%>气排放口<%}else
+						if(vidicon.vidiconLocation=='5'){%>站房内<%}else
+						if(vidicon.vidiconLocation=='6'){%>站房外<%}else
+						if(vidicon.vidiconLocation=='7'){%>生产车间<%}%></span>
+				</p>
+				<p>
+					安装时间：<span>${vidicon.installationDate,dateFormat="yyyy-MM-dd"}</span>
+				</p>
+				<p style="display: inline-block; height: 36px;">
+					查看实时录像：<input class="btn btn-primary" value="查看"
+						onclick="vidiconVideo('${vidicon.id}')" type="button">&nbsp;&nbsp;&nbsp;
+					<input class="btn btn-primary" value="修改"
+						   onclick="editVidiconVideo('${vidicon.id}')" type="button">
+				</p>
+				<p style="height: 36px;">查看录像回放：<input class="btn btn-primary" value="查看"
+						onclick="vidiconRecVideo('${vidicon.id}')" type="button"></p>
+			</div>
+			<%}}%>
+			<div class="bot-shebei-box-add" title="新增摄像头" onclick="addVidicon()">
+				<input id="siteId" value="${siteId}" type="hidden">
+			</div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script type="text/javascript">
+	//添加设备
+	function addVidicon() {
+		var siteId = $("#siteId").val();
+		layer.open({
+			type : 2,
+			title : '添加站点摄像机',
+			maxmin : true,
+			shadeClose : false, // 点击遮罩关闭层
+			area : [ '100%', '100%' ],
+			content : '/vidicon/addVidicon?siteId=' + siteId// iframe的url
+		});
+	}
+	//搜索
+	function btnSearchSubmit() {
+		var vidiconName = $("#vidiconName").val();
+		var siteId = $("#siteId").val();
+		location.href = "/vidicon/showVidicon/" + siteId + "?vidiconName="
+				+ vidiconName + "&curPage=" + $("#curPage").val();
+	}
+	//刷新
+	function reFresh() {
+		location.href = "/vidicon/showVidicon/" + $("#siteId").val() + '/'
+				+ $("#curPage").val();
+	}
+	function remove(vidiconId) {
+		layer.confirm('确定要删除选中的记录？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			$.ajax({
+				url : "/vidicon/removeVidicon",
+				type : "post",
+				data : {
+					'vidiconId' : vidiconId
+				},
+				success : function(r) {
+					if (r.code == 0) {
+						layer.msg(r.msg);
+						reFresh();
+					} else {
+						layer.msg(r.msg);
+					}
+				}
+			});
+		})
+	}
+	//返回
+	function goback() {
+		var curPage = $("#curPage").val();
+		window.location.href = "/airSite/list?curPage=" + curPage;
+	}
+	//查看实时录像
+	function vidiconVideo(vidiconId) {
+		layer.open({
+			type : 2,
+			title : '摄像头实时录像',
+			maxmin : true,
+			shadeClose : false, // 点击遮罩关闭层
+			area : [ '1000px', '600px' ],
+			content : '/vidicon/vidiconVideo?vidiconId=' + vidiconId// iframe的url
+		});
+	}
+
+    //查看录像回放
+    function vidiconRecVideo(vidiconId) {
+        layer.open({
+            type : 2,
+            title : '录像回放',
+            maxmin : true,
+            shadeClose : false, // 点击遮罩关闭层
+            area : [ '1000px', '500px' ],
+            content : '/vidicon/vidiconRecVideo?vidiconId=' + vidiconId// iframe的url
+        });
+    }
+
+    //摄像机编辑
+    function editVidiconVideo(vidiconId) {
+        layer.open({
+            type : 2,
+            title : '修改站点摄像机',
+            maxmin : true,
+            shadeClose : false, // 点击遮罩关闭层
+            area : [ '100%', '100%' ],
+            content : '/vidicon/editVidicon?vidiconId=' + vidiconId// iframe的url
+        });
+    }
+</script>

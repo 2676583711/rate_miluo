@@ -1,0 +1,120 @@
+<% layout('/include/default.html', {libs:["tree","table","layer","layui"]}){ %>
+<link href="/plugin/siteTree/siteTree.css" rel="stylesheet"/>
+<link href="/css/common.css" rel="stylesheet"/>
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <input id="roleId" name="roleId" type="hidden"
+                               value="${role.roleId}">
+                        <input id="siteCodes" name="siteCodes" type="hidden">
+                        <input id="siteCodeList" value="${siteCodeList}" type="hidden">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">角色名：</label>
+                            <div class="col-sm-8">
+                                <input id="roleName" name="roleName" class="form-control"
+                                       type="text" value="${role.roleName}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">站点权限：</label>
+                            <div class="col-sm-8">
+                                <div id="siteTree"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<script src="/plugin/siteTree/siteTree.js" type="text/javascript"></script>
+<script>
+    // $.siteTree.setUrlData({type: '1'});
+    $.siteTree.build(false);
+    // var siteCodes=$.siteTree.allSiteCodes();
+    $(function () {
+        validateRule();
+    });
+    $.validator.setDefaults({
+        submitHandler: function () {
+            update();
+            // console.log($.siteTree.allSiteCodes());
+        }
+    });
+
+
+    function update() {
+        $('#siteCodes').val($.siteTree.allSiteCodes());
+        var role = $('#signupForm').serialize();
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: "/sys/role/updateSitePower",
+            data: role, // 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (r) {
+                if (r.code == 0) {
+                    parent.layer.msg(r.msg);
+                    parent.reLoad();
+                    var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(index);
+
+                } else {
+                    parent.layer.msg(r.msg);
+                }
+
+            }
+        });
+    }
+
+    function validateRule() {
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                roleName: {
+                    required: true
+                }
+            },
+            messages: {
+                roleName: {
+                    required: icon + "请输入角色名"
+                }
+            }
+        });
+    }
+
+    $.siteTree.treeSingleLoadedEvent = function (e, data) {
+        //接受的是字符串
+        var siteCodeList = $("#siteCodeList").val();
+        //将字符串转为数组
+        var codesArr = siteCodeList.substring(1,siteCodeList.length-1).split(", ");
+
+        console.log(codesArr);
+        /*for (var num in siteCodeList) {
+            $("a[id^=\'" + siteCodeList[num] + "\']").addClass("jstree-clicked");
+        }
+        console.log($.siteTree.allSiteCodes());*/
+        //遍历数组
+        for (var num in codesArr) {
+            // $("a[id^=\'" + siteCodeList[num] + "\']").addClass("jstree-clicked");
+            let id = codesArr[num].trim();
+            //选中
+            data.instance.select_node($("a[id^=\'" + id + "\']"));
+        }
+        console.log($.siteTree.allSiteCodes());
+
+    }
+</script>

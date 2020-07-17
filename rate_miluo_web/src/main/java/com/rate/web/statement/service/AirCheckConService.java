@@ -1,0 +1,22 @@
+package com.rate.web.statement.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.beetl.sql.core.engine.PageQuery;
+
+import com.rate.web.statement.entity.AirMinuteStatement;
+import com.rate.web.statement.vo.AirDailyVO;
+import com.rate.web.statement.vo.AirHourVO;
+
+public interface AirCheckConService {
+
+	PageQuery<AirMinuteStatement> minuteList(PageQuery<AirMinuteStatement> pageQuery);
+
+	List<AirHourVO> hourList(Map<String, Object> params);
+
+	List<AirDailyVO> dailyList(Map<String, Object> params);
+
+	List<AirHourVO> monthList(Map<String, Object> params);
+
+}

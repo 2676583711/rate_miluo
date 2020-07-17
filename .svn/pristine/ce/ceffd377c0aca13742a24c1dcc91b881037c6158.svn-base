@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="/plugins/layer/theme/default/layer.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/fileinput.css" />
+<!-- <head th:include="include :: header"></head> -->
+<style>
+    .table {
+        table-layout: fixed;
+    }
+</style>
+<body class="gray-bg">
+	<div id="myModal" tabindex="-1" role="dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<p class="text-danger text-center">请先下载Excel模板，然后将需要导入的数据拷贝到模板Excel里面或者将你的Excel文件按照模板排版后上传</p>
+				<p class="text-center">
+					<strong>模板下载地址:<a
+						href="/sys/user/import/template">点击下载</a>
+					</strong>
+				</p>
+				<input type="file" name="file" id="file"  multiple accept=".xls,.xlsx"
+					class="file-loading" />
+			</div>
+		</div>
+	</div>
+	<div id="from" class="wrapper-content ">
+		<table id="exampleTable" data-mobile-responsive="true"></table>
+		<div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeTable();">取消</button>
+              <button type="button" class="btn btn-success"  onclick="saveTable();">保存</button>
+        </div>
+	</div>
+<!-- 	<div th:include="include::footer"></div> -->
+<!--  	<script src="/plugins/jquery/jquery-3.3.1.min.js"></script> -->
+	<script src="/plugins/jquery/jquery-1.12.4.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+	<script src="/plugins/bootstrap-fileinput/fileinput.js"></script>
+	<script src="/plugins/bootstrap-fileinput/locales/zh.js"></script>
+	<script src="/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+	<script src="/plugins/layer/layer.min.js"></script>
+
+	<script type="text/javascript" src="/js/appjs/sys/user/import.js"></script>
+</body>
+</html>

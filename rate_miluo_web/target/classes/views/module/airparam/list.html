@@ -1,0 +1,63 @@
+<% layout('/include/default.html', {libs:["table","layer","layui","tree"]}){ %>
+<style>
+	.fixed-table-body{
+		overflow: hidden;
+	}
+</style>
+	<div class="wrapper-content">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button type="button" class="btn  btn-danger" onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+						</div>
+						<div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">
+								<i class="fa fa-search" style="margin-right: 5px"></i>查询
+							</button>
+							<button class="btn btn-primary" onclick="reFresh()">
+								<i class="fa fa-refresh" style="margin-right: 5px"></i>刷新
+							</button>
+						</div>
+						<div class="columns pull-right col-md-2">
+							<input id="searchName" type="text" class="form-control"
+								placeholder="污染物名称">
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:con:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:con:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:con:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	<%	} %>
+	<script type="text/javascript" src="/js/airparam/list.js"></script>

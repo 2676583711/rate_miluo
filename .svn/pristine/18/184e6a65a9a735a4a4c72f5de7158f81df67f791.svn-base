@@ -1,0 +1,24 @@
+<% layout('/include/default.html', {libs:["tree","table","layer"]}){ %>
+	<div class="wrapper-content animated fadeInRight">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-right" role="group">
+							<button class="btn btn-success" onclick="reLoad()">
+								<i class="fa fa-search" aria-hidden="true"></i>查询
+							</button>
+						</div>
+						<div class="pull-right search col-md-2 nopadding">
+							<input id="pluNameAdd" type="text" class="form-control" name="pluName" placeholder="通过因子名称查询">
+							<input id="videoId"  value="${equId}" type="hidden" class="form-control" />
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<%	} %>
+<script type="text/javascript" src="/js/airSite/airList.js"></script>

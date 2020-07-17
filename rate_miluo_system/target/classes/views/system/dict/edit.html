@@ -1,0 +1,53 @@
+<% layout('/include/default.html', {libs:["layer"]}){ %>
+	<div class="wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox-content">
+					<form class="form-horizontal m-t" id="editDict">
+						<input id="id" name="id" value="${dict.id}"
+							type="hidden">
+						<input id="updateBy" name="updateBy" value="${userId}"
+							type="hidden">
+						<div class="form-group">
+							<label class="col-sm-3 control-label">名称：</label>
+							<div class="col-sm-8">
+								<input id="name" name="name" class="form-control" type="text"
+									value="${dict.name}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">数据值：</label>
+							<div class="col-sm-8">
+								<input id="value" name="value" class="form-control"
+									type="text" value="${dict.value}" >
+							</div>
+						</div>
+						<div class="form-group">
+								<label class="col-sm-3 control-label">类型：</label>
+								<div class="col-sm-8">
+									 <input id="type" name="type"
+										class="form-control" type="text" 
+										 value="${dict.type}">
+								</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">类型描述：</label>
+							<div class="col-sm-8">
+								<input id="description" name="description" class="form-control"
+									type="text" value="${dict.description}" >
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-8 col-sm-offset-3">
+								<button type="submit" class="btn btn-primary" id="editSubmit">提交</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+<%	} %>
+	<script type="text/javascript" src="/js/appjs/sys/dict/edit.js"></script>

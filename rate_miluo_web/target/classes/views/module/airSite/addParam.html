@@ -1,0 +1,70 @@
+<% layout('/include/default.html',{libs:["layui"]}){ %>
+<link href="/content/css/bootstrap-select.min.css" rel="stylesheet">
+<div class="wrapper-content">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<form class="form-horizontal m-t" id="addFactorForm">
+						<div class="form-group">
+							<label class="col-sm-1 control-label">因子：</label>
+							<div class="col-sm-2">
+								<select id="paramId" name="paramId" class="selectpicker show-tick form-control" data-live-search="true">
+								</select>
+								<input id="equIdAdd" name="videoId" class="form-control" type="hidden" value="${equId}">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-12 col-sm-offset-5">
+								<button type="button" onclick="addFactor()" class="btn btn-primary" style="margin-left: 38%;margin-top: 14%;">提交</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+<script type="text/javascript">
+$().ready(function() {
+	initFactor();
+});
+function initFactor(){
+	$.ajax({
+		type : "GET",
+		dataType : "json",
+		url : "/module/airparam/findAllList",
+		data : {},
+		success : function(data) {
+			var str ='';
+			for(var d of data){
+				str += '<option value="'+d.id+'">'+d.pluName+'('+d.avgTime+')</option>';
+			}
+			$("#paramId").html(str);
+			$("#paramId").selectpicker('refresh');
+		}
+	});
+}
+function addFactor() {
+	if($("#equIdAdd").val()==""){
+		return;
+	}
+	$.ajax({
+		type : "POST",
+		url : "/module/airparam/addParam",
+		data : $('#addFactorForm').serialize(),// 你的formid
+		error : function(request) {
+			parent.layer.alert("Connection error");
+		},
+		success : function(data) {
+			parent.layer.msg("操作成功");
+			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+            parent.btnSearchSubmit();
+            parent.layer.close(index);
+		}
+	});
+}
+</script>

@@ -1,0 +1,43 @@
+.closeIcon {
+    font-size: 0;
+    position: relative;
+    right: 40px;
+    bottom: 12px;
+    cursor: pointer;
+}
+.closeDiv {
+    height: 0;
+    background: #bfbfbf;
+    background: -webkit-linear-gradient(top, #a6a6a6, rgba(255, 255, 255, 0));
+    position: absolute;
+    width: calc(100% - 14px);
+    padding: 0 4px;
+    margin: auto;
+    cursor: pointer;
+    line-height: 35px;
+    text-align: center;
+    overflow: hidden;
+}
+.closeDiv button:focus {
+    outline: none;
+}
+.closeDiv button {
+    margin-top: 8px;
+}
+.animDelete:hover .closeDiv {
+    animation: aaa .5s;
+    height: 50px;
+}
+.animDelete {
+    max-width: 100%;
+}
+li.animDelete {
+    text-align: center;
+}
+li.col-md-4 {
+    padding: 0 7px;
+}
+@keyframes aaa {
+    from {height: 0;}
+    to {height: 50px;}
+}

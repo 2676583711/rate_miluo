@@ -1,0 +1,261 @@
+<% layout('/include/newDefault.html', {libs:["layer","layui","tree"]}){ %>
+<link href="/plugins/themes/default/default.css" rel="stylesheet" />
+<link href="/plugin/loading/rect-loading.css" rel="stylesheet" />
+<link href="/css/load/load.css" rel="stylesheet" />
+<link href="/plugin/leaflet/L.Icon.Pulse.css" rel="stylesheet" />
+<link href="/css/vidicon/video-ctrl.css" rel="stylesheet" />
+
+<script type="text/javascript" src="/plugin/windy/themeParam.js"></script>
+<link rel="stylesheet" type="text/css" href="/plugin/windy/icon.css">
+<link rel="stylesheet" type="text/css" href="/plugin/windy/homePage.css">
+<link rel="stylesheet" type="text/css" href="/plugin/windy/iconfont.css">
+
+<script type="text/javascript" src="/plugin/windy/highcharts.js"></script>
+<script type="text/javascript" src="/plugin/windy/highcharts-more.js"></script>
+<script type="text/javascript" src="/plugin/windy/data.js"></script>
+<script type="text/javascript" src="/plugin/windy/heatmap.js"></script>
+<script type="text/javascript" src="/plugin/windy/exporting.js"></script>
+<script type="text/javascript" src="/plugin/windy/solid-gauge.js"></script>
+<script type="text/javascript" src="/plugin/windy/select2.min.js"></script>
+<script type="text/javascript" src="/plugin/windy/windyAction.js"></script>
+<script type="text/javascript" src="/plugin/windy/shp.min.js"></script>
+
+<!--<link rel="stylesheet" href="/plugin/windy/windytv.css">-->
+<script type="text/javascript" async="" src="/plugin/windy/minifest.js"></script>
+<script type="text/javascript" async="" src="/plugin/windy/analytics.js"></script>
+
+
+<link rel="stylesheet" href="/plugin/newWindy/lib.css">
+<script type="text/javascript"  src="/plugin/newWindy/leaflet.js"></script>
+<script type="text/javascript"  src="/plugin/newWindy/libBoot.js"></script>
+<script type="text/javascript"  src="/plugin/newWindy/lib.js"></script>
+<link href="/plugin/pic/viewer.css" rel="stylesheet" />
+<link href="/css/desktop/desktop.css" rel="stylesheet" />
+<style>
+body {
+	margin: 0;
+	background: white;
+}
+
+#windy {
+	width: 100%;
+	height: 100%;
+}
+#siteLegend {
+	position: absolute;
+	bottom: 16px;
+	right: 240px;
+	z-index: 401;
+	width: 110px;
+	border: 1px solid #BDCEDD;
+	border-radius: 8px;
+}
+
+#siteLegend p {
+	font-size: 12px;
+	padding: 1px 4px;
+	cursor: default;
+	color: #fff;
+}
+
+#siteLegend p:first-child {
+	margin-top: 10px;
+}
+
+#siteLegend p:last-child {
+}
+
+#siteLegend p img {
+	width: 24px;
+	height: 28px;0
+}
+
+#siteTreeContainer .jstree-container-ul>li>i {
+	display: none;
+	pointer-events: none;
+}
+
+#siteTreeContainer .jstree-container-ul>li>a {
+	display: none;
+	pointer-events: none;
+}
+
+.jstree-default .jstree-node {
+	margin-left: 0px;
+}
+
+.jstree-default .jstree-hovered {
+	background-color: #1BB3FF;
+}
+
+.jstree-default .jstree-leaf>.jstree-ocl {
+	display: none;
+}
+.build-info{
+	display: none;
+}
+.menu-block{
+	background: #2d5778 !important;
+}
+.menu-block{
+	position: absolute;
+	top: 79px;
+	-webkit-transform: rotate(-90deg);
+	margin-left: 50px;
+}
+.menu-subtitle{
+	-webkit-transform: rotate(90deg);
+	position: absolute;
+	margin-top: 13px;
+	margin-left: -12px;
+}
+.#plugin-menu .plugin-content #layers-levels input[type='range']{
+	-webkit-appearance: none;
+	margin: 12.5px 13px;
+	width: calc(100% - 11px);
+	margin-left: 15px;
+	margin-right: 74px;
+	z-index: 10;
+	position: relative;
+}
+#siteLegend {
+	position: absolute;
+	bottom: 65px;
+	right: 237px;
+	z-index: 401;
+	width: 110px;
+	border: 1px solid #BDCEDD;
+	border-radius: 8px;
+}
+</style>
+<input type="hidden" id="mapType" value="${mapType!}" />
+<div id="windy"></div>
+<div id="air-site-container" class="hidden">timeValueFormat
+	<div class="legend-div" site-type="siteCategory,22"
+		onclick="markerClassify(this)">
+		<img title="空气标准站" src="/image/desktop/legend/img/standard_legend.png" />
+	</div>
+	<div class="legend-div" site-type="siteCategory,21"
+		onclick="markerClassify(this)">
+		<img title="空气微型站"
+			src="/image/desktop/legend/img/micro_site_legend.png" />
+	</div>
+</div>
+<div class="map-left left-show" id="leftLegend">
+	<div id="legendContainer">
+		<!--onclick="airSiteChoice(this)">-->
+		<div id="air-site-parent" class="legend-div"
+			onclick="changeSiteTreeTab(2, this)">
+			<img title="空气站" src="/image/desktop/legend/img/air_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,1"
+			onclick="changeSiteTreeTab(1, this)">
+			<img title="水质监测站"
+				src="/image/desktop/legend/img/water_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,3"
+			onclick="changeSiteTreeTab(3, this)">
+			<img title="涉气污染源"
+				src="/image/desktop/enterprise_pollute_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,4"
+			onclick="changeSiteTreeTab(4, this)">
+			<img title="涉水污染源"
+				src="/image/desktop/pollute_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="汽车尾气站"
+				src="/image/desktop/legend/img/car_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="生物毒性"
+				src="/image/desktop/legend/img/biotoxicity_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="工地扬尘"
+				src="/image/desktop/gongdi.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="油烟监测"
+				src="/image/desktop/legend/img/lampblack_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)"  >
+			<img title="土壤污染"
+				src="/image/desktop/legend/img/soil_pollute_legend2.png" />
+		</div>
+        <div class="legend-div" site-type="siteType,99"
+             onclick="markerClassify(this)">
+            <img title="放射源"
+                 src="/image/desktop/legend/img/soil_pollute_legend3.png" />
+        </div>
+	</div>
+	<div id="siteTreeContainer"></div>
+	<!--折叠按钮-->
+	<a class="left-expand" href="javascript:void(0);"
+		onclick="leftShow(this)">&nbsp;</a>
+</div>
+<div id="parentLoadVideoDiv" class="hidden">
+	<div class="spinner center">
+		<div class="spinner-container container1">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container2">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container3">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+	</div>
+</div>
+<%if(showLegend){%>
+<div id="siteLegend">
+	<p data-type="" style="background-color: #9D0300">
+		<img src="image/desktop/all.png"> &nbsp;<span>全部站点</span>
+	</p>
+	<p data-type="2">
+		<img src="image/desktop/offline.png"> &nbsp;<span>空气站</span>
+	</p>
+	<p data-type="1">
+		<img src="image/desktop/autosite.png"> &nbsp;<span>水质自动站</span>
+	</p>
+	<p data-type="4">
+		<img src="image/desktop/water-plant.png"> &nbsp;<span>涉水污染源</span>
+	</p>
+	<p data-type="3">
+		<img src="image/desktop/pollute.png"> &nbsp;<span>涉气污染源</span>
+	</p>
+</div>
+<%}%>
+<div
+	style="position: absolute; bottom: 65px; right: 365px; z-index: 401;">
+	<div title="站点在线颜色图示" class="legend-color online-color">在线</div>
+	<div title="站点报警颜色图示" class="legend-color warning-color">报警</div>
+	<div title="站点离线颜色图示" class="legend-color offline-color">离线</div>
+</div>
+<% } %>
+<script src="/plugin/leaflet/leaflet.ChineseTmsProviders.js"></script>
+<script src="/plugin/pic/viewer.js"></script>
+<script src="/plugin/siteTree/siteTree.js"></script>
+<script src="/js/desktop/map-boot.js"></script>
+<script src="/js/desktop/other.js"></script>
+<script src="/plugin/leaflet/ml.js"></script>
+<script src="/js/desktop/desktop.js"></script>
+<script src="/js/desktop/desktop-windy.js"></script>
+<script src="/plugin/echarts/echarts.min.js"></script>
+<script src="/js/vidicon/ezuikit.js"></script>
+<script src="/js/vidicon/hls.min.js"></script>
+<script src="/js/vidicon/common.js"></script>

@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: dev
+  main:
+    banner-mode: "off"
+#mybatis: 
+#  configuration:
+#    map-underscore-to-camel-case: true
+#  mapper-locations: mappings/**/*.xml
+#  typeAliasesPackage: com.rate.**.entity
+    # Mapper文件刷新线程
+#  mapper:
+#    refresh:
+#      enabled: true
+#      delaySeconds: 60
+#      sleepSeconds: 3
+#      mappingPath: mappings
+server:
+  session-timeout: 1800
+#    tomcat:
+#        max-threads: 1000
+#        min-spare-threads: 30
+  port: 8306
+  context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+beetl:
+  templatesPath: views
+beetlsql:
+  basePackage: com
+  daoSuffix: Dao
+  sqlPath: mappings
+
+

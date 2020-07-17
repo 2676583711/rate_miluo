@@ -1,0 +1,126 @@
+<% layout('/include/newDefault.html', {libs:["layer","layui","tree"]}){ %>
+<link href="/plugins/themes/default/default.css" rel="stylesheet" />
+<link href="/plugin/loading/rect-loading.css" rel="stylesheet" />
+<link href="/css/load/load.css" rel="stylesheet" />
+<link href="/plugin/leaflet/L.Icon.Pulse.css" rel="stylesheet" />
+<link href="/css/vidicon/video-ctrl.css" rel="stylesheet" />
+
+<script type="text/javascript" src="/plugin/windy/themeParam.js"></script>
+<link rel="stylesheet" type="text/css" href="/plugin/windy/icon.css">
+<link rel="stylesheet" type="text/css" href="/plugin/windy/homePage.css">
+<link rel="stylesheet" type="text/css" href="/plugin/windy/iconfont.css">
+
+<script type="text/javascript" src="/plugin/windy/highcharts.js"></script>
+<script type="text/javascript" src="/plugin/windy/highcharts-more.js"></script>
+<script type="text/javascript" src="/plugin/windy/data.js"></script>
+<script type="text/javascript" src="/plugin/windy/heatmap.js"></script>
+<script type="text/javascript" src="/plugin/windy/exporting.js"></script>
+<script type="text/javascript" src="/plugin/windy/solid-gauge.js"></script>
+<script type="text/javascript" src="/plugin/windy/select2.min.js"></script>
+<script type="text/javascript" src="/plugin/windy/windyAction.js"></script>
+<script type="text/javascript" src="/plugin/windy/shp.min.js"></script>
+
+<!--<link rel="stylesheet" href="/plugin/windy/windytv.css">-->
+<script type="text/javascript" async="" src="/plugin/windy/minifest.js"></script>
+<script type="text/javascript" async="" src="/plugin/windy/analytics.js"></script>
+
+
+<link rel="stylesheet" href="/plugin/newWindy/lib.css">
+<script type="text/javascript"  src="/plugin/newWindy/leaflet.js"></script>
+<script type="text/javascript"  src="/plugin/newWindy/libBoot.js"></script>
+<script type="text/javascript"  src="/plugin/newWindy/lib.js"></script>
+<link href="/plugin/pic/viewer.css" rel="stylesheet" />
+<link href="/css/desktop/desktop.css" rel="stylesheet" />
+<style>
+	body {
+		margin: 0;
+		background: white;
+	}
+	#windy {
+		width: 100%;
+		height: 100%;
+	}
+	.legend-color {
+		cursor: default;
+		color: #191717;
+		text-align: center;
+		line-height: 25px;
+		z-index: 401;
+		display: inline-block;
+		height: 25px;
+		width: 65px;
+		margin-left: 10px;
+	}
+	.topContent{
+		position: fixed;
+		right: 10px;
+		bottom: 0;
+		width: 180px;
+		z-index: 1000;
+	}
+	.build-info{
+		display: none;
+	}
+	.menu-block{
+		background: #2d5778 !important;
+	}
+	.menu-block{
+		position: absolute;
+		top: 79px;
+		-webkit-transform: rotate(-90deg);
+		margin-left: 50px;
+	}
+	.menu-subtitle{
+		-webkit-transform: rotate(90deg);
+		position: absolute;
+		margin-top: 13px;
+		margin-left: -12px;
+	}
+	.#plugin-menu .plugin-content #layers-levels input[type='range']{
+		-webkit-appearance: none;
+		margin: 12.5px 13px;
+		width: calc(100% - 11px);
+		margin-left: 15px;
+		margin-right: 74px;
+		z-index: 10;
+		position: relative;
+	}
+	#condition{
+	top: 15px;
+	left: 90px;
+	display: inline-block;
+	position: absolute;
+	}
+</style>
+<div id="windy"></div>
+<div id="condition" style="padding-top: 0px;margin-left: 0px;color: aliceblue">
+	<label class="label-serch">预警时间：</label>
+	<input type="text"
+		   placeholder="" autocomplete="off" id="dateTime"
+		   name="dateTime" class="form-control"
+		   style="display: inline-block; width: 130px; vertical-align: middle;">
+	<button class="btn" style="color: #fff;background-color: #286090;border-color: #204d74;" type="button" id="queryzbW">查询</button>
+</div>
+<div class="topContent" style="bottom: 473px;border: 1px solid #4484a7;background: #4381a7;box-shadow: darkgrey 10px 10px 30px;">
+	<table class="table" style="margin-bottom:0px;">
+		<tbody><tr style="text-align: center;">
+			<td><span style="background-color: #ff0000">一级：</span>断面当月水质类别和累计水质类别均较同期下降2个类别及以上，并且下降为Ⅲ类以下的。</td>
+		</tr>
+		<tr>
+			<td><span style="background-color: #ffff00">二级：</span>断面当月水质类别和累计水质类别均较同期下降1个类别及以上，并且下降为Ⅲ类以下的。</td>
+		</tr>
+		</tbody></table>
+</div>
+<div
+		style="position: absolute; bottom: 64px; right: 365px; z-index: 401;">
+	<div title="断面当月水质类别和累计水质类别均较同期下降2个类别及以上，并且下降为Ⅲ类以下的。" class="legend-color online-color" style="background: #ff0000;cursor: pointer;">一级</div>
+	<div title="断面当月水质类别和累计水质类别均较同期下降1个类别及以上，并且下降为Ⅲ类以下的。" class="legend-color warning-color" style="background: #ffff00;cursor: pointer;">二级</div>
+</div>
+<% } %>
+<script src="/plugin/leaflet/leaflet.ChineseTmsProviders.js"></script>
+<script src="/plugin/pic/viewer.js"></script>
+<script src="/plugin/leaflet/ml.js"></script>
+<script src="/plugin/echarts/echarts.min.js"></script>
+<script src="/js/vidicon/ezuikit.js"></script>
+<script src="/js/vidicon/hls.min.js"></script>
+<script src="/js/statistic/warm/index.js"></script>

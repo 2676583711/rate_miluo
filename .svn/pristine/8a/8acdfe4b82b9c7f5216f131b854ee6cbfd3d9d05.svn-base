@@ -1,0 +1,71 @@
+<div class="search" id="dayForm">
+    <!--<span class="sp2">统计形式：-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="statisticsType" value="Station" onclick="showStation()" checked="checked">站点-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="statisticsType" value="City" onclick="hideStation()">区域-->
+    <!--</label>-->
+    <!--</span>-->
+    <!-- <span class="sp2">站点：
+            <input class="stationCode pt border-all-3" type="hidden" value="">
+            <input class="stationName pt border-all-3 selectStation sel valid"
+                   type="text"
+                   value="" readonly="readonly" style="width: 200px">
+        </span>
+        <div class="wid">
+        </div> -->
+    <span class="sp2">时间：
+        <input type="text" class="dateRange pt border-all-3" style="width: 170px">
+    </span>
+    <script>
+        initDateInput({
+            elem: '#dayForm .dateRange'
+            , type: 'date'
+            , range: '~'
+            , value: defaultDate()
+        });
+    </script>
+    <!--<span class="sp2">数&nbsp; 据&nbsp;源：-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="sourceType" checked="checked" value="App">审核-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="sourceType" value="Src" checked="checked">原始-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="sourceType" value="Sand">剔除沙尘-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="sourceType" value="Mix">混合-->
+    <!--</label>-->
+    <!--</span>-->
+    <!--<span class="sp2" style="clear: left">数据类型:-->
+    <!--<label style="margin-left: 9px;">-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="dayDataType"-->
+    <!--checked="checked" value="starndard">标况-->
+    <!--</label>-->
+    <!--<label>-->
+    <!--<input class=" margin20-l" style="margin-top: 0;" type="radio" name="dayDataType"-->
+    <!--value="real">实况-->
+    <!--</label>-->
+    <!--</span>-->
+    <div class="sp2">
+        <a id="daySearch" class="a-search border-all-3" href="#">
+            <i class="fa fa-search" aria-hidden="true"></i> 分析
+        </a>
+        <a id="dayRefresh" class="a-search border-all-3" href="#">
+            <i class="fa fa-refresh" aria-hidden="true"></i> 刷新
+        </a>
+    </div>
+    <div style="clear: both"></div>
+</div>
+<!--<div id="daySelDiv" class="form-group selDiv">-->
+<!--<label for="dayType">图表展示类型</label>-->
+<!--<select class="form-control" id="dayType">-->
+<!--<option value="dayOp1">AQI日均值展示</option>-->
+<!--<option value="dayOp2">API日均值展示</option>-->
+<!--</select>-->
+<!--</div>-->
+<div id="dayChartsContents" class="chartsContents">
+</div>

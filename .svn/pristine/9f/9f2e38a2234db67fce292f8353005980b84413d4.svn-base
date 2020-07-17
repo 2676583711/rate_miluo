@@ -1,0 +1,327 @@
+<% layout('/include/default.html', {libs:["layer","layui","tree"]}){ %>
+<link href="/plugins/themes/default/default.css" rel="stylesheet" />
+<link href="/plugin/loading/rect-loading.css" rel="stylesheet" />
+<link href="/css/load/load.css" rel="stylesheet" />
+<link href="/plugin/leaflet/L.Icon.Pulse.css" rel="stylesheet" />
+<link href="/plugin/leaflet/leaflet.css" rel="stylesheet" />
+<link href="/plugin/leaflet/wind-js-leaflet.css" rel="stylesheet" />
+<link href="/css/vidicon/video-ctrl.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="/plugin/windy/style.css">
+<script type="text/javascript" src="/plugin/windy/themeParam.js"></script>
+<!--<link rel="stylesheet" type="text/css" href="../../Wind/files/easyui.css">-->
+<link rel="stylesheet" type="text/css" href="/plugin/windy/icon.css">
+<link rel="stylesheet" type="text/css" href="/plugin/windy/homePage.css">
+<link rel="stylesheet" type="text/css" href="/plugin/windy/iconfont.css">
+<!--<link rel="stylesheet" type="text/css" href="../../Wind/files/select2.min.css">-->
+<!--<link href="/Content/themes/default/default.css" rel="stylesheet" />-->
+
+<!--<script type="text/javascript" src="../../Wind/files/jquery.min.js"></script>-->
+<!--<script type="text/javascript" src="../../Wind/files/jquery.easyui.min.js"></script>-->
+<!--<script type="text/javascript" src="../../Wind/files/easyui-lang-zh_CN.js"></script>-->
+<script type="text/javascript" src="/plugin/windy/leaflet-src-0.7.7.js"></script>
+
+<script type="text/javascript" src="/plugin/windy/windytv-boot.js"></script>
+<script type="text/javascript" src="/plugin/windy/highcharts.js"></script>
+<script type="text/javascript" src="/plugin/windy/highcharts-more.js"></script>
+<script type="text/javascript" src="/plugin/windy/data.js"></script>
+<script type="text/javascript" src="/plugin/windy/heatmap.js"></script>
+<script type="text/javascript" src="/plugin/windy/exporting.js"></script>
+<script type="text/javascript" src="/plugin/windy/solid-gauge.js"></script>
+<script type="text/javascript" src="/plugin/windy/select2.min.js"></script>
+<script type="text/javascript" src="/plugin/windy/windyAction.js"></script>
+<script type="text/javascript" src="/plugin/windy/shp.min.js"></script>
+
+<link rel="stylesheet" href="/plugin/windy/windytv.css">
+<script type="text/javascript" async="" src="/plugin/windy/minifest.js"></script>
+<script type="text/javascript" async="" src="/plugin/windy/windytv.js"></script>
+<script type="text/javascript" async="" src="/plugin/windy/analytics.js"></script>
+
+
+<link href="/plugin/pic/viewer.css" rel="stylesheet" />
+<link href="/css/desktop/desktop.css" rel="stylesheet" />
+<style>
+body {
+	margin: 0;
+	/* background: #1a5772; */
+	background: white;
+}
+
+#container {
+	width: 100%;
+	height: 100%;
+}
+
+#siteLegend {
+	position: absolute;
+	bottom: 16px;
+	right: 240px;
+	z-index: 401;
+	width: 110px;
+	border: 1px solid #BDCEDD;
+	border-radius: 8px;
+	/*background-color: #B6B6B6;*/
+}
+
+#siteLegend p {
+	font-size: 12px;
+	padding: 1px 4px;
+	cursor: default;
+	color: #fff;
+}
+
+#siteLegend p:first-child {
+	margin-top: 10px;
+}
+
+#siteLegend p:last-child {
+	/*margin-bottom: 10px;*/
+	
+}
+
+#siteLegend p img {
+	width: 24px;
+	height: 28px;
+}
+
+#siteTreeContainer .jstree-container-ul>li>i {
+	display: none;
+	pointer-events: none;
+}
+
+#siteTreeContainer .jstree-container-ul>li>a {
+	display: none;
+	pointer-events: none;
+}
+
+.jstree-default .jstree-node {
+	margin-left: 0px;
+}
+
+.jstree-default .jstree-hovered {
+	background-color: #1BB3FF;
+}
+
+.jstree-default .jstree-leaf>.jstree-ocl {
+	display: none;
+}
+</style>
+<input type="hidden" id="mapType" value="${mapType!}" />
+<div id="container"></div>
+<div id="air-site-container" class="hidden">
+	<div class="legend-div" site-type="siteCategory,22"
+		onclick="markerClassify(this)">
+		<img title="空气标准站" src="/image/desktop/legend/img/standard_legend.png" />
+	</div>
+	<div class="legend-div" site-type="siteCategory,21"
+		onclick="markerClassify(this)">
+		<img title="空气微型站"
+			src="/image/desktop/legend/img/micro_site_legend.png" />
+	</div>
+</div>
+<div class="map-left left-show" id="leftLegend">
+	<div id="legendContainer">
+		<!--onclick="airSiteChoice(this)">-->
+		<div id="air-site-parent" class="legend-div"
+			onclick="changeSiteTreeTab(2, this)">
+			<img title="空气站" src="/image/desktop/legend/img/air_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,1"
+			onclick="changeSiteTreeTab(1, this)">
+			<img title="水质监测站"
+				src="/image/desktop/legend/img/water_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,3"
+			onclick="changeSiteTreeTab(3, this)">
+			<img title="涉气污染源"
+				src="/image/desktop/enterprise_pollute_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,4"
+			onclick="changeSiteTreeTab(4, this)">
+			<img title="涉水污染源"
+				src="/image/desktop/pollute_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="汽车尾气站"
+				src="/image/desktop/legend/img/car_site_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="生物毒性"
+				src="/image/desktop/legend/img/biotoxicity_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="工地扬尘"
+				src="/image/desktop/gongdi.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)">
+			<img title="油烟监测"
+				src="/image/desktop/legend/img/lampblack_legend.png" />
+		</div>
+		<div class="legend-div" site-type="siteType,99"
+			onclick="markerClassify(this)"  >
+			<img title="土壤污染"
+				src="/image/desktop/legend/img/soil_pollute_legend2.png" />
+		</div>
+        <div class="legend-div" site-type="siteType,99"
+             onclick="markerClassify(this)">
+            <img title="放射源"
+                 src="/image/desktop/legend/img/soil_pollute_legend3.png" />
+        </div>
+	</div>
+	<div id="siteTreeContainer"></div>
+	<!--折叠按钮-->
+	<a class="left-expand" href="javascript:void(0);"
+		onclick="leftShow(this)">&nbsp;</a>
+</div>
+<div id="parentLoadVideoDiv" class="hidden">
+	<div class="spinner center">
+		<div class="spinner-container container1">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container2">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container3">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+	</div>
+</div>
+<%if(showLegend){%>
+<div id="siteLegend">
+	<p data-type="" style="background-color: #9D0300">
+		<img src="image/desktop/all.png"> &nbsp;<span>全部站点</span>
+	</p>
+	<p data-type="2">
+		<img src="image/desktop/offline.png"> &nbsp;<span>空气站</span>
+	</p>
+	<p data-type="1">
+		<img src="image/desktop/autosite.png"> &nbsp;<span>水质自动站</span>
+	</p>
+	<p data-type="4">
+		<img src="image/desktop/water-plant.png"> &nbsp;<span>涉水污染源</span>
+	</p>
+	<p data-type="3">
+		<img src="image/desktop/pollute.png"> &nbsp;<span>涉气污染源</span>
+	</p>
+</div>
+<%}%>
+<div
+	style="position: absolute; bottom: 20px; right: 365px; z-index: 401;">
+	<div title="站点在线颜色图示" class="legend-color online-color">在线</div>
+	<div title="站点报警颜色图示" class="legend-color warning-color">报警</div>
+	<div title="站点离线颜色图示" class="legend-color offline-color">离线</div>
+</div>
+<div id="windytyContainer">
+	<div id="windyty">
+		<div id="map_container" class="leaflet-container leaflet-fade-anim">
+
+		</div>
+
+
+	</div>
+</div>
+<!--<div id="hoverShowAqi">-->
+
+<!--</div>-->
+<!--<div class="right-aqi right-show" id="leftAqi">-->
+<!--<ul class="left-nav-tabs clearfix" id="tab-panel1">-->
+<!--<li class="active">汨罗市空气质量</li>-->
+<!--<li style="text-align: center;" id="issueDate"></li>-->
+<!--</ul>-->
+<!--<select id="standardSelect">-->
+<!--</select>-->
+<!--<div style="height: 160px; left: -2px; top: 12px;" id="mlNewSingle">-->
+<!--</div>-->
+<!--<div style="height: 120px; left: -2px; top: 12px;" id="sixPollutant">-->
+<!--<label style="display: block; font-size: 15px; text-align: center;"-->
+<!--id="primary"></label> <label-->
+<!--style="display: block; font-size: 15px; text-align: center;">单位(μg/m³,CO-->
+<!--mg/m³)</label>-->
+<!--<div class="row">-->
+<!--<div class="col-sm-6">-->
+<!--<div class="text-right col-sm-7 control-label pollutant-font">PM10:</div>-->
+<!--<div class="col-sm-5 control-label pollutant-font" id="pm10Value"></div>-->
+<!--</div>-->
+<!--<div class="col-sm-6">-->
+<!--<div class="text-right col-sm-7 control-label pollutant-font">PM2.5:</div>-->
+<!--<div class="col-sm-5 control-label pollutant-font" id="pm25Value"></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="col-sm-6">-->
+<!--<div class="text-right col-sm-7 control-label pollutant-font">NO2:</div>-->
+<!--<div class="col-sm-5 control-label pollutant-font" id="no2Value"></div>-->
+<!--</div>-->
+<!--<div class="col-sm-6">-->
+<!--<div class="text-right col-sm-7 control-label pollutant-font">SO2:</div>-->
+<!--<div class="col-sm-5 control-label pollutant-font" id="so2Value"></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="col-sm-6">-->
+<!--<div class="text-right col-sm-7 control-label pollutant-font">CO:</div>-->
+<!--<div class="col-sm-5 control-label pollutant-font" id="coValue"></div>-->
+<!--</div>-->
+<!--<div class="col-sm-6">-->
+<!--<div class="text-right col-sm-7 control-label pollutant-font">O3:</div>-->
+<!--<div class="col-sm-5 control-label pollutant-font" id="o3Value"></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div id="weatherInfo" style="padding:0 5px 5px 8px;">-->
+
+<!--</div>-->
+<!--&lt;!&ndash;折叠按钮&ndash;&gt;-->
+<!--&lt;!&ndash;<a class="right-expand" href="javascript:void(0);" onclick="rightShow(this)">&nbsp;</a>&ndash;&gt;-->
+<!--</div>-->
+<% } %>
+<!--<script src="https://webapi.amap.com/maps?v=1.4.13&key=7c42bd396475066a40de929712bbba7b"></script>-->
+<!--<script src="http://webapi.amap.com/ui/1.0/main.js"></script>-->
+<!--<script src="/plugin/amap/main1.3.js"></script>-->
+<!--<script src="/plugin/leaflet/leaflet.js"></script>-->
+<!--<script src="/plugin/leaflet/L.Icon.Pulse.js"></script>-->
+<script src="/plugin/leaflet/leaflet.ChineseTmsProviders.js"></script>
+<script src="/plugin/leaflet/wind-js-leaflet.js"></script>
+<script src="/plugin/pic/viewer.js"></script>
+<script src="/plugin/siteTree/siteTree.js"></script>
+<script src="/js/desktop/map-boot.js"></script>
+<script src="/js/desktop/other.js"></script>
+<script src="/plugin/leaflet/ml.js"></script>
+<script src="/js/desktop/desktop.js"></script>
+<script src="/js/desktop/desktop-windy.js"></script>
+<script src="/plugin/echarts/echarts.min.js"></script>
+<script src="/js/vidicon/ezuikit.js"></script>
+<script src="/js/vidicon/hls.min.js"></script>
+<script src="/js/vidicon/common.js"></script>
+<!--<script src="/plugin/amap/getGeoJSON.js"></script>-->
+
+
+<!--<script src="https://webapi.amap.com/maps?v=1.3&key=7c42bd396475066a40de929712bbba7b&callback=init"></script>-->
+<!--<script src="/content/js/map/map.js"></script>-->
+<!--<script type="text/javascript">-->
+<!--var center = [114.358299, 30.46484];-->
+<!--function init() {-->
+<!--var map = new AMap.Map(container, {-->
+<!--resizeEnable: true,-->
+<!--center: center-->
+<!--});-->
+<!--//map.setMapStyle("amap://styles/6820cb1f0f04636e5de0440896e5935f");-->
+<!--map.setMapStyle("blue_night");-->
+<!--map.on("complete", function () {-->
+<!--InitPage(this);-->
+<!--});-->
+<!--}-->
+<!--</script>-->

@@ -1,0 +1,123 @@
+<% layout('/include/default.html',{libs:["layui"]}){ %>
+
+<div class="wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <input  name="id" class="form-control" value="${airSite.id}"
+                                   type="hidden">
+                            <div class="col-sm-6">
+                            <label class="col-sm-3 col-sm-offset-3 control-label">站点名称：</label>
+                            <label class=" control-label">
+                                ${airSite.name}
+                            </label>
+                            </div>
+                            <div class="col-sm-6">
+                            <label class="col-sm-3 control-label">站点类型：</label>
+                            <label class="control-label">
+                                ${airSite.siteType=="1"?"水":airSite.siteType=="2"?"空气":airSite.siteType=="3"?"涉气污染源":"涉水污染源"}
+                            </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                            <label class="col-sm-3 col-sm-offset-3 control-label">经度：</label>
+                                <label class="control-label">
+                                ${airSite.longitude}
+
+                            </label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-3 control-label">纬度：</label>
+                            <label class="control-label">
+                                ${airSite.latitude}
+                            </label>
+                            </div>
+                        </div>
+
+                        <div id="airD">
+
+
+
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                <label class="col-sm-3 col-sm-offset-3 control-label">站点编码：</label>
+                                <label class="control-label">
+                                    ${airSite.siteCode}
+                                </label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">站点地址：</label>
+                                <label class="control-label">
+                                 ${airSite.address}
+                                </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                <label class="col-sm-3 col-sm-offset-3 control-label">站点状态：</label>
+                            <label class="control-label">
+                                           ${airSite.siteType=='1'?'正常':'停运'}
+                            </label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">行政区划：</label>
+                            <label class="control-label">
+                               ${airSite.areaType=='1'?'城区':'乡镇'}
+                            </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 col-sm-offset-3 control-label">备注：</label>
+                                <label class="control-label">
+                                  ${airSite.remark}
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="pollutantD">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                <label class="col-sm-3 col-sm-offset-3 control-label">原公司名：</label>
+                                <label class="control-label">
+                                    ${airSite.oldName}
+                                </label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">公司地址：</label>
+                                <label class="control-label">
+                                    ${airSite.address}
+                                </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                <label class="col-sm-3 col-sm-offset-3 control-label">负责人：</label>
+                                <label class="control-label">
+                                  ${user==null?"":user.username}
+                                </label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">联系电话：</label>
+                                <label class="control-label">
+                                   ${user==null?"":user.mobile}
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>

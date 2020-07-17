@@ -1,0 +1,164 @@
+.one-reduce {
+    background: url("/image/vidicon/icon/reduce.png") no-repeat center;
+    background-size: 40%;
+}
+
+.one-plus {
+    background: url("/image/vidicon/icon/plus.png") no-repeat center;
+    background-size: 40%;
+}
+
+.two-reduce {
+    background: url("/image/vidicon/icon/reduce.png") no-repeat center;
+    background-size: 40%;
+}
+
+.two-plus {
+    background: url("/image/vidicon/icon/plus.png") no-repeat center;
+    background-size: 40%;
+}
+
+.three-reduce {
+    background: url("/image/vidicon/icon/reduce.png") no-repeat center;
+    background-size: 40%;
+}
+
+.three-plus {
+    background: url("/image/vidicon/icon/plus.png") no-repeat center;
+    background-size: 40%;
+}
+
+.top-ctrl {
+    background: url("/image/vidicon/icon/direction.png") no-repeat center;
+    background-size: 100%;
+    width: 80px;
+    height: 50px;
+    top: 17px;
+    left: 46px;
+}
+
+.right-ctrl {
+    background: url("/image/vidicon/icon/direction.png") no-repeat center;
+    transform: rotate(90deg);
+    background-size: 100%;
+    width: 80px;
+    height: 50px;
+    right: 11px;
+    top: 50px;
+}
+
+.bottom-ctrl {
+    /*background: url("/image/vidicon/icon/bottom.svg") no-repeat center;*/
+    background: url("/image/vidicon/icon/direction.png") no-repeat center;
+    transform: rotate(180deg);
+    background-size: 100%;
+    width: 80px;
+    height: 50px;
+    top: 83px;
+    left: 46px;
+}
+
+.left-ctrl {
+    /*background: url("/image/vidicon/icon/left.svg") no-repeat center;*/
+    background: url("/image/vidicon/icon/direction.png") no-repeat center;
+    transform: rotate(-90deg);
+    background-size: 100%;
+    width: 80px;
+    height: 50px;
+    top: 50px;
+    left: 13px;
+}
+
+.top-ctrl:hover, .right-ctrl:hover, .bottom-ctrl:hover, .left-ctrl:hover {
+    background: url("/image/vidicon/icon/direction-hover.png") no-repeat center;
+    background-size: 100%;
+}
+
+.video-ctrl {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+}
+
+.ctrl-text {
+    position: relative;
+    top: -12px;
+}
+
+.vido_constrl span {
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.vido_constrl span:hover {
+    border: #14cfd0 1px solid;
+    border-radius: 50%;
+    box-shadow: inset 0 0 10px 0 #14cfd1;
+}
+
+.ctrl-line {
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+}
+
+div.ctrl-line > div {
+    width: 30%;
+    display: inline-block;
+    height: 35px;
+}
+
+div.ctrl-line > div:nth-child(1) {
+    text-align: right;
+}
+
+div.ctrl-line > div:nth-child(2) {
+    text-align: center;
+    color: #14cfd0;
+}
+
+div.ctrl-line > div:nth-child(3) {
+    text-align: left;
+}
+
+#four-line {
+    background: url("/image/vidicon/icon/cameraBg.png") center center no-repeat;
+    background-size: 90%;
+    height: 150px;
+    width: 170px;
+    position: relative;
+}
+
+#four-line > div:hover {
+
+}
+
+.video-ctrl-dire {
+    position: absolute;
+    display: inline-block;
+    cursor: pointer;
+}
+div.camera-operate {
+    display: inline-block !important;
+    width: 30% !important;
+    text-align: center !important;
+}
+.camera-operate>i:hover {
+    cursor: pointer;
+}
+.camera-operate:hover {
+    border: #14cfd0 1px solid;
+    box-shadow: inset 0 0 10px 0 #14cfd1;
+}
+.camera-operate i {
+    font-size: 25px;
+    color: #00fff0;
+}
+.videoTime {
+    width: 145px !important;
+    height: 30px !important;
+    text-align: center;
+    background: inherit;
+}

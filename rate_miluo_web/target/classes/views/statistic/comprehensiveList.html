@@ -1,0 +1,220 @@
+<%layout('/include/default.html',{libs:["table","layer","layui","tree"]}){%>
+<link href="/plugin/site/style.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="/plugin/siteTree/siteTree.css">
+<style>
+    ::-webkit-scrollbar {
+        width: initial;
+    }
+    .select-bg {
+        border: 1px solid #dddddd;
+        border-radius: 6px;
+        background-color: #F4F4F4;
+        padding-left: 10px;
+        /*padding-bottom: 20px;*/
+        /*margin-bottom: -10px;*/
+        padding-bottom: 8px;
+        padding-top: 8px;
+        width: 99%;
+    }
+
+    .table {
+        table-layout: fixed;
+    }
+</style>
+
+<div class="wrapper-content" style="padding-top: 5px;">
+    <div class="row" style="padding: 0;">
+        <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 10px;">
+            <li class="active" style="margin-left: 10px;"><a data-toggle="tab" data-value="1" onclick="minute()">综合指数(排名)</a></li>
+            <li><a data-toggle="tab" data-value="2" onclick="hourTime()">综合指数(变化趋势)</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-2" style="height: -webkit-calc(88vh); overflow: auto;">
+            <div id="siteTree">
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="form-inline select-bg">
+                <div style="width: 100%">
+                    <label class="label-serch">日期类型：</label>
+                    <input type="radio" name="dataStatus" value="1" style="margin-left: 0px;width: 20px" id="ds1" checked/>
+                    <label class="label-serch" style="margin-left: 0px;" id="dss1">月份</label>&nbsp&nbsp
+                    <input type="radio" name="dataStatus"  style="margin-left: 0px;width: 20px" value="2" id="ds2"/>
+                    <label class="label-serch" style="margin-left: 0px;" id="dss2">季度</label> &nbsp&nbsp
+                    <input type="radio" name="dataStatus"  style="margin-left: 0px;width: 20px" value="3" id="ds3"/>
+                    <label class="label-serch" style="margin-left: 0px;" id="dss3">年份</label> &nbsp&nbsp
+                    <input type="radio" name="dataStatus"  style="margin-left: 0px;width: 20px" value="4" id="ds4"/>
+                    <label class="label-serch" style="margin-left: 0px;" id="dss4">时段</label> &nbsp&nbsp
+
+                    <input type="text"
+                           placeholder="请选择开始月份" autocomplete="off" id="startMonth"
+                           name="startMonth" class="form-control"
+                           style="display: inline-block; width: 130px; vertical-align: middle;">
+                    <input
+                            type="text" placeholder="请选择结束月份" autocomplete="off"
+                            class="form-control" id="endMonth" name="endMonth"
+                            style="display: inline-block; width: 130px; vertical-align: middle;">
+
+                    <input type="text"
+                           placeholder="请选择年" autocomplete="off" id="startYear"
+                           name="startYear" class="form-control"
+                           style="display: inline-block; width: 130px; vertical-align: middle;">
+                    <select name="jd1" id="jd1" class="form-control">
+                        <option value="1" selected>第一季度</option>
+                        <option value="2">第二季度</option>
+                        <option value="3">第三季度</option>
+                        <option value="4">第四季度</option>
+                    </select>
+                    <input type="text"
+                           placeholder="请选择年" autocomplete="off" id="endYear"
+                           name="endYear" class="form-control"
+                           style="display: inline-block; width: 130px; vertical-align: middle;">
+                    <select name="jd2" id="jd2" class="form-control">
+                        <option value="1">第一季度</option>
+                        <option value="2">第二季度</option>
+                        <option value="3">第三季度</option>
+                        <option value="4" selected>第四季度</option>
+                    </select>
+
+                    <input type="text"
+                           placeholder="请选择时段" autocomplete="off" id="startDay"
+                           name="startDay" class="form-control"
+                           style="display: inline-block; width: 130px; vertical-align: middle;">
+                    <input type="text"
+                           placeholder="请选择时段" autocomplete="off" id="endDay"
+                           name="endDay" class="form-control"
+                           style="display: inline-block; width: 130px; vertical-align: middle;">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm"
+                            style="margin-left: 23px" onclick="reLoad()">
+                        <i class="layui-icon">&#xe615;</i> 查询
+                    </button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" style="margin-left: 10px;"
+                            onclick="exportExcel();">
+                        <i class="layui-icon">&#xe601;</i> 导出
+                    </button>
+                </div>
+            </div>
+            <table id="exampleTable" data-mobile-responsive="true" class="table-bordered">
+            </table>
+            <div id="table2">
+                <table id="exampleTable2" data-mobile-responsive="true" class="table-bordered">
+                </table>
+            </div>
+
+<!--            <div id="main" style="height: 400px;width: 1200px;margin-top: 30px;"></div>-->
+<!--            <div id="main2" style="height: 400px;width: 1200px;margin-top: 30px;"></div>-->
+        </div>
+    </div>
+</div>
+<% } %>
+<script type="text/javascript" src="/js/statistic/comprehensive/comprehensiveList.js"></script>
+<script src="/plugin/echarts/echarts.min.js"></script>
+<script>
+
+    $(':radio').click(function(){
+        var ch= $("input[type='radio'][name='dataStatus']:checked").val(); //获取选中的radio的值
+        if (ch==1){
+            $("#startYear").hide();
+            $("#endYear").hide();
+            $("#jd1").hide();
+            $("#jd2").hide();
+            $("#startDay").hide();
+            $("#endDay").hide();
+            $("#startMonth").show();
+            $("#endMonth").show()
+        }else if (ch==2) {
+            $("#startYear").show();
+            $("#endYear").show();
+            $("#jd1").show();
+            $("#jd2").show();
+            $("#startMonth").hide();
+            $("#endMonth").hide();
+            $("#startDay").hide();
+            $("#endDay").hide();
+        }else if (ch==3){
+            $("#startYear").show();
+            $("#endYear").show();
+            $("#jd1").hide();
+            $("#jd2").hide();
+            $("#startMonth").hide();
+            $("#endMonth").hide();
+            $("#startDay").hide();
+            $("#endDay").hide();
+        }else if (ch==4){
+            $("#startYear").hide();
+            $("#endYear").hide();
+            $("#jd1").hide();
+            $("#jd2").hide();
+            $("#startMonth").hide();
+            $("#endMonth").hide();
+            $("#startDay").show();
+            $("#endDay").show();
+        }
+    });
+
+    $(function () {
+        $("#myTab li").on('click', function (e) {
+            // e.preventDefault();
+            $("#myTab li").removeClass('active');
+            $(this).addClass('active');
+        });
+
+        $("#startYear").hide();
+        $("#endYear").hide();
+        $("#jd1").hide();
+        $("#jd2").hide();
+        $("#startDay").hide();
+        $("#endDay").hide();
+        $("#startMonth").show();
+        $("#endMonth").show();
+        $("#main").hide();
+        layui.use('laydate',function() {
+            var laydate = layui.laydate;
+            laydate.render({
+                type: 'year',
+                elem : '#startYear',
+                format : 'yyyy',
+                value : '2019'
+            });
+            laydate.render({
+                type: 'year',
+                elem : '#endYear',
+                format : 'yyyy',
+                value : '2019'
+            });
+            //年月选择器
+            laydate.render({
+                elem: '#startMonth',
+                type: 'month',
+                value :preMonth(new Date())
+            });
+            laydate.render({
+                elem: '#endMonth',
+                type: 'month',
+                value :preMonth(new Date())
+            });
+            laydate.render({
+                elem: '#startDay',
+                value: preDay(new Date())
+            });
+            laydate.render({
+                elem: '#endDay',
+                value: preDay(new Date())
+            });
+        });
+    });
+
+    function preMonth(nowDate) {
+        if (nowDate != null) {
+            return new Date(nowDate.setMonth((nowDate.getMonth() - 1)));
+        }
+    }
+
+    function preDay(nowDate) {
+        if (nowDate != null) {
+            return new Date(nowDate.getTime() - 24 * 60 * 60 * 1000*7);
+        }
+    }
+
+</script>

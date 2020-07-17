@@ -1,0 +1,241 @@
+<% layout('/include/default.html',{libs:[]}){ %>
+<link href="/css/vidicon/jquery-confirm.min.css" rel="stylesheet" />
+<link href="/css/vidicon/bundled.css" rel="stylesheet" />
+<link href="/css/vidicon/siteVideo.css" rel="stylesheet" />
+<style>
+embed {
+	width: 96%;
+}
+</style>
+<input type="hidden" id="vidiconId" value="${vidiconId}">
+<div id="videoDiv" class="videoDiv">
+	<video id="myPlayer" autoplay="autoplay">
+		<source src="###" />
+	</video>
+</div>
+
+<div class="vido_constrl">
+	<div class="video_addtwo" style="top: 1rem; left: 0.8rem;"
+		direction="9" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 1rem; left: 2.35rem;"
+		direction="8" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 1.8rem; left: 0.8rem;"
+		direction="10" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 1.8rem; left: 2.35rem;"
+		direction="11" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 2.5rem; left: 0.8rem;"></div>
+	<div class="video_addtwo" style="top: 2.5rem; left: 2.35rem;"></div>
+	<div class="video_addtwo" style="top: 3.6rem; left: 1.6rem;"
+		direction="0" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 4.2rem; left: 0.9rem;"
+		direction="2" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 4.2rem; left: 2.2rem;"
+		direction="3" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 4.8rem; left: 1.6rem;"
+		direction="1" onclick="changeVideo(this)"></div>
+	<div class="video_addtwo" style="top: 4.33rem; left: 1.56rem;"
+		onclick="printScreen()"></div>
+</div>
+
+<% } %>
+
+<script src="/js/vidicon/ezuikit.js"></script>
+<script src="/js/vidicon/hls.min.js"></script>
+<script src="/js/vidicon/js.cookie.min.js"></script>
+<script src="/js/vidicon/common.js"></script>
+<script src="/js/vidicon/jquery-confirm.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		setVideo();
+	});
+	//视频类型
+	var vedioType = "";
+	var deviceSerial;
+	var ChannelNumber;
+	var accessToken;
+	var vidiconId;
+	//海康提示语
+	var ret = {
+		'10001' : '参数错误',
+		'10002' : 'accessToken异常或过期',
+		'10004' : '用户不存在',
+		'10005' : 'appKey异常',
+		'10017' : 'appKey不存在',
+		'20002' : '设备不存在',
+		'20007' : '设备不在线',
+		'20014' : 'deviceSerial不合法',
+		'20018' : '该用户不拥有该设备',
+		'20032' : '该用户下通道不存在',
+		'60020' : '不支持该命令',
+		'60060' : '地址未绑定',
+		'49999' : '数据异常'
+	}
+	var Status = {
+		'0' : '未使用或直播已关闭',
+		'1' : '使用中',
+		'2' : '已过期',
+		'3' : '直播已暂停'
+	}
+	var Exception = {
+		'1' : '设备不在线',
+		'2' : '设备开启视频加密',
+		'3' : '设备删除',
+		'4' : '失效',
+		'5' : '未绑定',
+		'6' : '账户下流量已超出'
+	}
+	//视频
+	var player;
+
+	//改变视频
+	function setVideo() {
+		var bigwidth = '1550';
+		var aa = (bigwidth - 0) / 100
+
+		document.getElementsByTagName("html")[0].style.fontSize = window.innerWidth
+				/ aa + "px";
+		getvediopagger();
+	}
+
+	//获取视频ID信息等
+	function getvediopagger() {
+		$.ajax({
+			// 			url : BaseApiUrl + ApiUrls.Equip.Camera.GetVideoLiveAddress,
+			url : '/vidicon/vidiconVideoData?vidiconId='
+					+ $("#vidiconId").val(),
+			type : 'get',
+			dataType : 'json',
+			async : false,
+			success : function(data) {
+				//获取
+				deviceSerial = data.seriesNumber;
+				ChannelNumber = '1';
+				vedioType = data.supplier;
+				vidiconId = data.id;
+				if (data.supplier == "海康") {
+					haikangSetVedio(data)
+				}
+
+			}
+		});
+
+	}
+
+	function changeVideo(a) {
+		if (vedioType == "海康") {
+			var direction = $(a).attr("direction");
+			changeVideoDirection(direction);
+			clearVideo(direction);
+		} else {
+			//弹出窗
+			$.alert({
+				title : '提示',
+				content : "目前该设备不能支持云台控制",
+				boxWidth : '40px',
+				buttons : {
+					ok : {
+						text : '确定'
+					}
+				}
+			});
+		}
+	}
+	function clearVideo(direction) {
+		var obj = {
+			accessToken : accessToken,
+			deviceSerial : deviceSerial,
+			channelNo : ChannelNumber,
+			direction : direction,
+			speed : 1
+		}
+		$.ajax({
+			url : 'https://open.ys7.com/api/lapp/device/ptz/stop',
+			type : 'post',
+			data : obj,
+			async : false,
+			success : function(data) {
+
+			}
+		});
+
+	}
+	function changeVideoDirection(direction) {
+		var obj = {
+			accessToken : accessToken,
+			deviceSerial : deviceSerial,
+			channelNo : ChannelNumber,
+			direction : direction,
+			speed : 1
+		}
+		$.ajax({
+			url : 'https://open.ys7.com/api/lapp/device/ptz/start',
+			type : 'post',
+			data : obj,
+			async : false,
+			success : function(data) {
+				console.log(data);
+			}
+		});
+
+	}
+	//海康视频添加
+	function haikangSetVedio(data) {
+		accessToken = data.accessToken;
+		vedioType = data.supplier;
+		let d = data.defaultUrl;
+		if (d.indexOf("ezopen") > -1) {
+            //let url = "https://open.ys7.com/ezopen/h5/iframe?url=" + data[d] + "&autoplay=1&accessToken=" + accessToken;
+            let url="https://open.ys7.com/ezopen/h5/iframe_se?url="+data[d]+"&autoplay=1&audio=1&accessToken="+accessToken;
+
+            let iframe = "<iframe id='ysOpenDevice' width=78% height=90% src='" + url + "' allowfullscreen></iframe>";
+            $("#videoDiv").empty();
+            $("#videoDiv").html(iframe);
+		} else {
+            $("#myPlayer").attr("src", data[d]);
+            player = new EZUIPlayer('myPlayer');
+		}
+	}
+	//截图
+	function printScreen() {
+		$.ajax({
+			cache : true,
+			type : "POST",
+			url : "https://open.ys7.com/api/lapp/device/capture",
+			data : {
+				accessToken : accessToken,
+				deviceSerial : deviceSerial,
+				channelNo : "1"
+			},
+			async : false,
+			success : function(data) {
+				if (data.code == "200") {
+					//将图片上传至服务器
+					uploadPic(data.data.picUrl);
+				} else {
+					parent.layer.alert(data.msg);
+				}
+			}
+		});
+	}
+	//上传截图
+	function uploadPic(picUrl) {
+		$.ajax({
+			cache : true,
+			type : "POST",
+			url : "/vidicon/uploadPic",
+			data : {
+				picUrl : picUrl,
+				vidiconId : vidiconId
+			},
+			async : false,
+			success : function(data) {
+				if (data.code == 0) {
+					parent.layer.alert("截图成功!!");
+				} else {
+					parent.layer.alert("截图失败!!");
+				}
+			}
+		});
+	}
+</script>
+

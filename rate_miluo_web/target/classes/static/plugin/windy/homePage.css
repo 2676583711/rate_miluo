@@ -1,0 +1,461 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	overflow: hidden
+}
+
+/* 超级站点位DIV*/
+.popupDiv {
+	background-color: transparent;
+	text-align: center;
+	height: 80px;
+}
+
+.productItem {
+	height: 80px;
+	width: 80px;
+	background-color: rgba(0, 0, 0, 0.36);
+	border-color: #FFFFFF;
+	border-style: solid;
+	border-width: 0px;
+	border-radius: 50%;
+	float: left;
+	cursor: pointer;
+	margin-left: 10px;
+	position: relative;
+	font-weight:bold;
+	/*box-shadow: 5px 5px 10px gray;*/
+	color: #FFFFFF;
+	font-size: 14px;
+	transition: background-color 0.5s, border-color 0.5s;
+	-webkit-transition: background-color 0.5s, border-color 0.5s;
+}
+
+.produceItemFont {
+	margin-top: 24px;
+	line-height: 16px;
+}
+
+.productItem:hover {
+	border-color: #FFFFFF;
+	background-color: rgba(216, 202, 47, 0.36);
+	/*box-shadow: 10px 10px 20px gray;*/
+}
+
+/* 产品弹出窗样式 */
+.leaflet-popup-content-wrapper,.leaflet-popup-tip {
+	background: transparent !important;;
+	box-shadow: none !important;;
+}
+
+.popup {
+	position: absolute;
+	top: -255px;
+	left: -263px;
+	text-align: center;
+	margin-bottom: 20px;
+	height: 252px;
+	width: 600px;
+	z-index: 5;
+}
+.popup-content-wrapper {
+	padding: 10px;
+	text-align: left;
+	border-radius: 10px;
+	background-color: #FFFFFF;
+	color: #000000;
+	box-shadow: 5px 5px 10px gray;
+}
+.popup-content {
+	line-height: 1.4;
+	background-color: #FFFFFF;
+}
+.popup-content p {
+	margin: 18px 0;
+}
+
+.popup-tip-container {
+	width: 40px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-left: -20px;
+	overflow: hidden;
+	pointer-events: none;
+}
+.popup-tip {
+	background-color: #FFFFFF;
+	width: 17px;
+	height: 17px;
+	padding: 1px;
+	margin: -10px auto 0;
+	box-shadow: 5px 5px 10px gray;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+/* 右下角图层控件样式 */
+#overlaysDiv {
+	position: absolute;
+	border: rgba(255, 255, 255, 0.5);
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.2);
+	/*margin-top: 60px;*/
+	height: 162px;
+	width: 102px;
+	right: 80px;
+	bottom: 32px;
+	/*float: left;*/
+}
+
+.overlays {
+	list-style-type: none;
+	margin-top: 10px;
+	padding: 0;
+}
+.overlays li {
+	width: 100px;
+	height: 30px;
+	text-align: center;
+	font-size: 12px;
+	color: #FFFFFF;
+	line-height: 30px;
+	background-color: transparent;
+	position: relative;
+	font-family:Microsoft YaHei,tahoma,serif,simsun,fantasy
+}
+.overlays li.unchecked {
+	background-color: transparent;
+}
+.overlays li.checked {
+	background-color: #9D0300;
+}
+.overlays li label {
+	cursor: default;
+	padding: 5px 24px 5px 24px;
+}
+.overlays span {
+	font-size: 12px;
+}
+
+#levelDiv {
+	border: rgba(255, 255, 255, 0.5);
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.2);
+	height: 240px;
+	width: 72px;
+	float: left;
+	margin-left: 10px;
+}
+
+.level {
+	list-style-type: none;
+	margin-top: 7px;
+	padding: 0;
+}
+.level li {
+	width: 70px;
+	height: 15px;
+	text-align: center;
+	font-size: 10px;
+	color: #FFFFFF;
+	line-height: 15px;
+	background-color: transparent;
+	position: relative;
+	font-family:Microsoft YaHei,tahoma,serif,simsun,fantasy
+}
+.level li.unchecked {
+	background-color: transparent;
+}
+.level li.checked {
+	background-color: #9D0300;
+}
+.level li label {
+	cursor: default;
+	padding: 2px 1px 2px 1px;
+}
+
+/* 左下角AQI控件样式 */
+.aqiContainer {
+	height: 20px;
+	width: 100%;
+	position: relative;
+	border: transparent;
+	background: transparent;
+}
+
+.aqiSlideBtn {
+	position: relative;
+	left: 50%;
+	background-color: #32B8FC;
+	width: 60px;
+	height: 20px;
+	margin-left: -30px;
+	cursor: pointer;
+	line-height: 18px;
+	text-align: center;
+}
+
+.arrow-font {
+	height: 18px;
+	width: 38px;
+	font-weight: bold;
+}
+
+.aqiContext {
+	background-color: #FFFFFF;
+	width: 100%;
+	height: 591px;
+	display: none;
+}
+
+/* 右上角AQI项目控件样式 */
+.aqiItemDiv {
+	border: rgba(255, 255, 255, 0.5);
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.2);
+	margin-top: 5px;
+	margin-left: 0px;
+	height: 180px;
+	width: 52px;
+	float: left;
+}
+
+.aqiItemOverlays {
+	list-style-type: none;
+	margin-top: 5px;
+	padding: 0;
+}
+.aqiItemOverlays li {
+	width: 40px;
+	height: 25px;
+	text-align: center;
+	line-height: 25px;
+	background-color: transparent;
+	position: relative;
+	font-family:Microsoft YaHei,tahoma,serif,simsun,fantasy
+}
+.aqiItemOverlays li.unchecked {
+	background-color: transparent;
+}
+.aqiItemOverlays li.checked {
+	background-color: #9D0300;
+}
+.aqiItemOverlays li label {
+	font-size: 12px;
+	cursor: default;
+}
+
+/* AQI详细显示框 */
+table.aqiDetailTable {
+	width: 100%;
+	border: 0px solid #d7d7d7;
+	background-color: #fff;
+	font-size: 12px;
+}
+
+table.aqiDetailTable tr td {
+	border-bottom: 1px solid #d7d7d7;
+	border-right: 1px solid #d7d7d7;
+	text-align: left;
+	height: 18px;
+	line-height: 18px;
+}
+
+/* 左上角AQI详细窗口控件 */
+#aqiDialogDiv {
+	height: 100%;
+	width: 242px;
+	min-height: 410px;
+	position: relative;
+	border: transparent;
+	background: transparent;
+}
+
+.aqiDialogDiv {
+	position: relative;
+	margin-top: 40px;
+	border: rgba(255, 255, 255, 0.7);
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0);
+	font-family: Microsoft YaHei,tahoma,serif,simsun,fantasy;
+	color: #FFFFFF;
+	width: 240px;
+	height: 410px;
+}
+
+.aqiDialogHeader {
+	background: rgba(255, 255, 255, 0.3);
+	text-align: center;
+	width: 100%;
+	height: 56px;
+}
+
+.aqiDialogHeader .title {
+	padding-top: 5px;
+	font-size: 18px;
+	line-height: 24px;
+	width: 100%;
+	height: 24px;
+}
+
+.aqiDialogHeader .content {
+	font-size: 14px;
+	line-height: 24px;
+	width: 100%;
+	height: 24px;
+}
+
+.aqiDialogNeck {
+	background: rgba(255, 255, 255, 0);
+	text-align: center;
+	font-family: Microsoft YaHei,tahoma,serif,simsun,fantasy;
+	color: #FFFFFF;
+	width: 100%;
+	height: 80px;
+}
+
+.aqiDialogNeck .cityName {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	font-size: 18px;
+	line-height: 16px;
+	width: 100%;
+	height: 16px;
+}
+
+.aqiDialogNeck .aqiLevel {
+	font-size: 13px;
+	line-height: 32px;
+	width: 100%;
+	height: 32px;
+}
+
+.aqiDialogNeck .aqiLevel span{
+	font-size: 20px;
+	font-weight: bold;
+	margin-left: 8px;
+}
+
+.aqiDialogNeck .primaryPollutant {
+	font-size: 13px;
+	line-height: 24px;
+	width: 100%;
+	height: 24px;
+}
+
+.aqiDialogNeck .primaryPollutant span {
+	font-size: 14px;
+	margin-left: 8px;
+}
+
+.aqiDialogBody {
+	width: 100%;
+	height: 208px;
+	font-size: 13px;
+}
+
+.aqiDialogBody .aqiItemContainer {
+	margin: 2px 4px 2px 4px;
+	width: 112px;
+	height: 64px;
+	float: left;
+}
+
+.aqiDialogFooter {
+	width: 100%;
+	height: 68px;
+	font-size: 13px;
+}
+
+.aqiDialogFooter .title {
+	text-align: left;
+	padding-left: 16px;
+	width: 100%;
+	height: 12px;
+}
+
+.aqiDialogFooter .aqiLevelContainer {
+	width: 100%;
+	height: 48px;
+	padding: 6px 6px 2px 6px;
+}
+
+.aqiDialogFooter .aqiLevelContainer .aqiLevel{
+	width: 60px;
+	height: 16px;
+	text-align: center;
+	line-height: 16px;
+	margin: 2px 6px 2px 6px;
+	font-size: 13px;
+	float: left;
+}
+
+/* 底部时间轴样式 */
+input[type=range] {
+	outline: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background: -webkit-linear-gradient(#8B0000, #8B0000) no-repeat, #A9A9A9;
+	background: -moz-linear-gradient(#8B0000, #8B0000) no-repeat, #A9A9A9;
+	/*设置左边颜色为#61bd12，右边颜色为#ddd*/
+	background-size: 0% 100%; /*设置左右宽度比例*/
+	height: 10px; /*横条的高度*/
+}
+
+/*拖动块的样式*/
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none; /*清除系统默认样式*/
+	height: 0px; /*拖动块高度*/
+	width: 0px; /*拖动块宽度*/
+	background: #61bd12; /*拖动块背景*/
+	border-radius: 0%; /*外观设置为圆形*/
+	border: solid 0px #ddd; /*设置边框*/
+}
+
+table.rangeTooltipTbl tr th{
+	border-collapse:collapse;
+	border-style:none;
+	border-width:1px;
+	font-size: 13px;
+}
+
+table.rangeTooltipTbl th{
+	background-color:rgba(105,105,105,0.5);/* --最后一个参数设置透明度，前面三个是RGB颜色值-- */
+	height: 30px;
+	width: 70px;
+	text-align: left;
+	text-indent: 10px;
+}
+
+table.rangeTooltipTbl{
+	margin-left: -52px;
+	margin-top: -7px;
+	color: white;
+	font-size: 20px;
+}
+
+/* 火狐浏览器设置range滑块隐藏 */
+input[type=range]::-moz-range-thumb {
+	border: 0px solid #000000;
+	height: 0px;
+	width: 0px;
+}
+
+input[type=range]::-moz-range-track {
+	height: 0px;
+	background: -moz-linear-gradient(#8B0000, #8B0000) no-repeat, #A9A9A9;
+	background-size: 0% 100%;
+} 

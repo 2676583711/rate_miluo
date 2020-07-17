@@ -1,0 +1,44 @@
+<% 
+	if(@ListUtils.inString("table", libs!)){ 
+%>
+		<script src="/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<%	}	%>
+<% 
+	if(@ListUtils.inString("layer", libs!)){ 
+%>
+		<!-- 弹窗 -->
+		<script src="/plugins/layer/layer.min.js"></script>
+<%	}	%>
+<% 
+	if(@ListUtils.inString("tree", libs!)){ 
+%>
+		<!-- 树形结构 -->
+		<script src="/plugins/jsTree/jstree.min.js"></script>
+		<script src="/plugins/jquery/jqTreeGrid/jquery.treegrid.extension.js"></script>
+		<script src="/plugins/jquery/jqTreeGrid/jquery.treegrid.js"></script>
+		<script src="/plugins/jquery/jqTreeGrid/jquery.treegrid.min.js"></script>
+		<script src="/plugins/jquery/jqTreeGrid/jquery.treegrid.bootstrap3.js"></script>
+<%	}	%>
+
+<% 
+	if(@ListUtils.inString("layui", libs!)){ 
+%>
+		<!-- layui -->
+		<script src="/plugins/layui/layui.js"></script>
+<%	}	%>
+
+<%
+      if(@ListUtils.inString("layuiAll", libs!)){
+%>
+<!-- layuiAll -->
+       <script src="/plugins/layui/layui.all.js"></script>
+
+<%	}	%>
+
+<% 
+	if(@ListUtils.inString("socket", libs!)){ 
+%>
+		<script src="/js/socket.io.js"></script>
+		<script src="/js/socket.utils.js"></script>
+<%	}	%>

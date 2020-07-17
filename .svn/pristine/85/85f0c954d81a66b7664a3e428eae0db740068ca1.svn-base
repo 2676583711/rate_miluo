@@ -1,0 +1,44 @@
+<% layout('/include/default.html', {libs:["tree","table","layer"]}){ %>
+<html>
+	<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button type="button"
+							class="btn btn-primary" onclick="add()">
+							<i class="fa fa-plus" aria-hidden="true"></i>添加
+						</button>
+						<button  type="button"
+							class="btn btn-danger" onclick="batchRemove()">
+							<i class="fa fa-trash" aria-hidden="true"></i>批量删除
+						</button>
+						</div>
+						
+						<div class="columns pull-right" role="group">
+							<button class="btn btn-success" onclick="reLoad()">
+								<i class="fa fa-search" aria-hidden="true"></i>查询
+							</button>
+							<button class="btn btn-primary" onclick="reFresh()">刷新</button>
+						</div>
+						<div class="pull-right search col-md-2" style="margin-top:12px;">
+							<input id="description" type="text" class="form-control"
+								placeholder="类型描述">
+						</div>
+						<div class="pull-right search col-md-2" style="margin-top:12px;">
+							<input id="name" type="text" class="form-control"
+								placeholder="名称">
+						</div>
+					</div>
+					
+					<table id="dictTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	
+<body>
+	<% } %>
+	<script type="text/javascript" src="/js/appjs/sys/dict/list.js"></script>
+</body>
+</html>

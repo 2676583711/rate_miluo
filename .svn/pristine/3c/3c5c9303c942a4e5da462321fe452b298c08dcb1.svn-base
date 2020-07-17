@@ -1,0 +1,502 @@
+package com.rate.web.statistic.util;
+
+import com.rate.web.statistic.vo.Grade;
+import com.rate.web.statistic.vo.PrimaryDays;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.util.CellRangeAddress;
+
+import java.util.List;
+
+/**
+ * @Author chenshixue
+ * @Date 2020/2/10
+ */
+public class PollutantExcelUtil {
+
+    /**
+     * 表头样式
+     * @param wb
+     * @Return  org.apache.poi.hssf.usermodel.HSSFCellStyle
+     * @Author  chenshixue
+     * @Date    2020/2/10 16:42
+     */
+    public static HSSFCellStyle getTHeadStyle(HSSFWorkbook wb) {
+        // 生成一种样式style
+        HSSFCellStyle style = wb.createCellStyle();
+        // 设置样式
+        style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
+        style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+
+        // 生成一种字体
+        HSSFFont font = wb.createFont();
+        // 设置字体
+        font.setFontName("微软雅黑");
+        // 设置字体大小
+        font.setFontHeightInPoints((short) 12);
+        // 字体加粗
+        font.setBold(true);
+        // 在样式中引用这种字体
+        style.setFont(font);
+        return style;
+    }
+
+    /**
+     * 单元格样式
+     * @param wb
+     * @Return  org.apache.poi.hssf.usermodel.HSSFCellStyle
+     * @Author  chenshixue
+     * @Date    2020/2/10 16:42
+     */
+    public static HSSFCellStyle getTBodyStyle(HSSFWorkbook wb) {
+        // 生成一种样式style
+        HSSFCellStyle style = wb.createCellStyle();
+        // 设置样式
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+
+        // 生成一种字体
+        HSSFFont font = wb.createFont();
+        // 设置字体
+        font.setFontName("微软雅黑");
+        // 设置字体大小
+        font.setFontHeightInPoints((short) 12);
+        // 在样式中引用这种字体
+        style.setFont(font);
+        return style;
+    }
+
+    /**
+     * 添加行内容，设置行样式
+     * @param row
+     * @param sheet
+     * @param style
+     * @param headNum
+     * @param index
+     * @Return  org.apache.poi.hssf.usermodel.HSSFSheet
+     * @Author  chenshixue
+     * @Date    2020/2/10 17:33
+     */
+    public static void insertRow(HSSFRow row, HSSFSheet sheet, HSSFCellStyle style, String[] headNum, int index) {
+        for (int i = 0; i <headNum.length; i++) {
+            HSSFCell cell = row.createCell(i + index);  //第二行表头从第几列开始
+            cell.setCellValue(headNum[i]);
+            cell.setCellStyle(style);
+            sheet.autoSizeColumn(i, true);  // 根据字段长度自动调整列的宽度
+        }
+    }
+
+    /**
+     * 动态合并单元格
+     * @param sheet
+     * @param headNum
+     * @Return  org.apache.poi.hssf.usermodel.HSSFSheet
+     * @Author  chenshixue
+     * @Date    2020/2/10 17:03
+     */
+    public static void mergeCell(HSSFSheet sheet, String[] headNum) {
+        for (int i = 0; i < headNum.length; i++) {
+            sheet.autoSizeColumn(i, true);
+            String[] temp = headNum[i].split(",");
+            Integer startRow = Integer.parseInt(temp[0]);
+            Integer overRow = Integer.parseInt(temp[1]);
+            Integer startCol = Integer.parseInt(temp[2]);
+            Integer overCol = Integer.parseInt(temp[3]);
+            if (!(startRow.equals(overRow) && startCol.equals(overCol))) {
+                sheet.addMergedRegion(new CellRangeAddress(startRow, overRow, startCol, overCol));
+            }
+        }
+    }
+
+    /**
+     * 首要污染物天数
+     * @param dataSet
+     * @param dateRange
+     * @Return  org.apache.poi.hssf.usermodel.HSSFWorkbook
+     * @Author  chenshixue
+     * @Date    2020/2/10 18:37
+     */
+    public HSSFWorkbook exportPrimaryDays(List<PrimaryDays> dataSet, String dateRange) {
+
+        // 第0行表头文字
+        String[] header00 = {"首要污染物天数表（" + dateRange + "）"};
+        // 第0行表头数组
+        String[] headerNum00 = {"0,0,0,7"};
+
+        // 第1行表头文字
+        String[] header01 = {"站点", "时间", "首要污染物", "良(天数)", "轻度污染(天数)", "中度污染(天数)", "重度污染(天数)", "严重污染(天数)"};
+        // 第1行表头数组
+        String[] headerNum01 = {
+                "1,1,0,0",
+                "1,1,1,1",
+                "1,1,2,2",
+                "1,1,3,3",
+                "1,1,4,4",
+                "1,1,5,5",
+                "1,1,6,6",
+                "1,1,7,7"};
+
+        // 声明一个工作簿
+        HSSFWorkbook wb = new HSSFWorkbook();
+        // 生成一个表格
+        HSSFSheet sheet = wb.createSheet("空气站点首要污染物天数");
+        // 生成表头样式style
+        HSSFCellStyle style = getTHeadStyle(wb);
+
+        // 生成单元格样式style2
+        HSSFCellStyle style2 = getTBodyStyle(wb);
+
+        // 创建第0行
+        HSSFRow row = sheet.createRow(0);
+        // 添加行内容，设置行样式
+        insertRow(row, sheet, style, header00, 0);
+        // 合并行
+        mergeCell(sheet, headerNum00);
+
+        // 创建第1行
+        row = sheet.createRow(1);
+        // 添加行内容，设置行样式
+        insertRow(row, sheet, style, header01, 0);
+        // 合并行
+        mergeCell(sheet, headerNum01);
+
+        // 单独设置某列宽度
+        sheet.setColumnWidth(0, 15 * 256);
+        sheet.setColumnWidth(1, 25 * 256);
+
+        // 这个至此只是输出了表头，对于表格内容应当遍历list，循环填充每一个单元格
+        for (int i = 0; i < dataSet.size(); i++) {
+            PrimaryDays days = dataSet.get(i);
+            row = sheet.createRow(i + 2);
+            HSSFCell cell1 = row.createCell(0);
+            if (days.getSiteName() != null) {
+                cell1.setCellValue(days.getSiteName());
+                cell1.setCellStyle(style2);
+            }
+            HSSFCell cell2 = row.createCell(1);
+            if (days.getDataTime() != null) {
+                cell2.setCellValue(days.getDataTime());
+                cell2.setCellStyle(style2);
+            }
+            HSSFCell cell3 = row.createCell(2);
+            if (days.getPrimaryEp() != null) {
+                cell3.setCellValue(days.getPrimaryEp());
+                cell3.setCellStyle(style2);
+            }
+            HSSFCell cell4 = row.createCell(3);
+            if (days.getGoodDays() != null) {
+                cell4.setCellValue(days.getGoodDays());
+                cell4.setCellStyle(style2);
+            }
+            HSSFCell cell5 = row.createCell(4);
+            if (days.getMildDays() != null) {
+                cell5.setCellValue(days.getMildDays());
+                cell5.setCellStyle(style2);
+            }
+            HSSFCell cell6 = row.createCell(5);
+            if (days.getMiddleDays() != null) {
+                cell6.setCellValue(days.getMiddleDays());
+                cell6.setCellStyle(style2);
+            }
+            HSSFCell cell7 = row.createCell(6);
+            if (days.getSevereDays() != null) {
+                cell7.setCellValue(days.getSevereDays());
+                cell7.setCellStyle(style2);
+            }
+            HSSFCell cell8 = row.createCell(7);
+            if (days.getWorstDays() != null) {
+                cell8.setCellValue(days.getWorstDays());
+                cell8.setCellStyle(style2);
+            }
+        }
+        return wb;
+    }
+
+
+    /**
+     * 超标污染物天数（站点）
+     * @param dataSet
+     * @param dateRange
+     * @Return  org.apache.poi.hssf.usermodel.HSSFWorkbook
+     * @Author  chenshixue
+     * @Date    2020/2/10 19:04
+     */
+    public HSSFWorkbook exportExceedDays(List<PrimaryDays> dataSet, String dateRange) {
+        String[] header00 = {"超标污染物天数表（" + dateRange + "）"};
+        String[] headerNum00 = {"0,0,0,7"};
+
+        String[] header01 = {"站点", "时间", "超标污染物", "轻度污染(天数)", "中度污染(天数)", "重度污染(天数)", "严重污染(天数)"};
+        String[] headerNum01 = {
+                "1,1,0,0",
+                "1,1,1,1",
+                "1,1,2,2",
+                "1,1,3,3",
+                "1,1,4,4",
+                "1,1,5,5",
+                "1,1,6,6",};
+
+        // 声明一个工作簿
+        HSSFWorkbook wb = new HSSFWorkbook();
+        // 生成一个表格
+        HSSFSheet sheet = wb.createSheet("空气站点超标污染物天数");
+        // 生成表头样式style
+        HSSFCellStyle style = getTHeadStyle(wb);
+
+        // 生成单元格样式style2
+        HSSFCellStyle style2 = getTBodyStyle(wb);
+
+        // 创建第0行
+        HSSFRow row = sheet.createRow(0);
+        // 添加行内容，设置行样式
+        insertRow(row, sheet, style, header00, 0);
+        // 合并行
+        mergeCell(sheet, headerNum00);
+
+        // 创建第1行
+        row = sheet.createRow(1);
+        // 添加行内容，设置行样式
+        insertRow(row, sheet, style, header01, 0);
+        // 合并行
+        mergeCell(sheet, headerNum01);
+
+        // 单独设置某列宽度
+        sheet.setColumnWidth(0, 25 * 256);
+        sheet.setColumnWidth(1, 25 * 256);
+
+        // 这个至此只是输出了表头，对于表格内容应当遍历list，循环填充每一个单元格
+        for (int i = 0; i < dataSet.size(); i++) {
+            int k = 0;
+            PrimaryDays days = dataSet.get(i);
+            row = sheet.createRow(i + 2);
+
+            HSSFCell cell1 = row.createCell(k++);
+            if (days.getSiteName() != null) {
+                cell1.setCellValue(days.getSiteName());
+                cell1.setCellStyle(style2);
+            }
+            HSSFCell cell2 = row.createCell(k++);
+            if (days.getDataTime() != null) {
+                cell2.setCellValue(days.getDataTime());
+                cell2.setCellStyle(style2);
+            }
+            HSSFCell cell3 = row.createCell(k++);
+            if (days.getPrimaryEp() != null) {
+                cell3.setCellValue(days.getPrimaryEp());
+                cell3.setCellStyle(style2);
+            }
+            HSSFCell cell4 = row.createCell(k++);
+            if (days.getMildDays() != null) {
+                cell4.setCellValue(days.getMildDays());
+                cell4.setCellStyle(style2);
+            }
+            HSSFCell cell5 = row.createCell(k++);
+            if (days.getMiddleDays() != null) {
+                cell5.setCellValue(days.getMiddleDays());
+                cell5.setCellStyle(style2);
+            }
+            HSSFCell cell6 = row.createCell(k++);
+            if (days.getSevereDays() != null) {
+                cell6.setCellValue(days.getSevereDays());
+                cell6.setCellStyle(style2);
+            }
+            HSSFCell cell7 = row.createCell(k++);
+            if (days.getWorstDays() != null) {
+                cell7.setCellValue(days.getWorstDays());
+                cell7.setCellStyle(style2);
+            }
+        }
+        return wb;
+    }
+
+
+    /**
+     * 等级分布（站点）
+     * @param dataSet
+     * @param dateRange
+     * @Return  org.apache.poi.hssf.usermodel.HSSFWorkbook
+     * @Author  chenshixue
+     * @Date    2020/2/11 10:57
+     */
+    public HSSFWorkbook exportExceedGrade(List<Grade> dataSet, String dateRange) {
+        String[] header00 = {"空气质量等级分布表（" + dateRange + "）"};
+        String[] headerNum00 = {"0,0,0,20"};
+        String[] header01 = {"站点", "时间", "空气质量类别分布（天数）", "", "", "", "", "", "首要污染物分布（天数）", "", "", "", "", "", "优良率（%）", "优良天数", "有效天数", "总天数", "PM2.5优良天数", "PM2.5有效天数", "PM2.5优良天数比例（%）"};
+        String[] headerNum01 = {
+                "1,2,0,0",
+                "1,2,1,1",
+                "1,1,2,7",
+                "1,1,8,13",
+                "1,2,14,14",
+                "1,2,15,15",
+                "1,2,16,16",
+                "1,2,17,17",
+                "1,2,18,18",
+                "1,2,19,19",
+                "1,2,20,20"};
+
+        String[] header02 = {"优", "良", "轻度污染", "中度污染", "重度污染", "严重污染", "PM2.5", "PM10", "O3", "NO2", "SO2", "CO"};
+        String[] headerNum02 = {"2,2,2,2","2,2,3,3","2,2,4,4","2,2,5,5","2,2,6,6","2,2,7,7","2,2,8,8","2,2,9,9", "2,2,10,10", "2,2,11,11", "2,2,12,12", "2,2,13,13"};
+
+        // 声明一个工作簿
+        HSSFWorkbook wb = new HSSFWorkbook();
+        // 生成一个表格
+        HSSFSheet sheet = wb.createSheet("空气站点空气质量等级分布");
+
+        // 生成表头样式style
+        HSSFCellStyle style = getTHeadStyle(wb);
+
+        // 生成单元格样式style2
+        HSSFCellStyle style2 = getTBodyStyle(wb);
+
+        // 创建第0行
+        HSSFRow row = sheet.createRow(0);
+        // 添加行内容，设置行样式
+        insertRow(row, sheet, style, header00, 0);
+        // 合并行
+        mergeCell(sheet, headerNum00);
+
+        // 创建第1行
+        row = sheet.createRow(1);
+        // 添加行内容，设置行样式
+        insertRow(row, sheet, style, header01, 0);
+        // 合并行
+        mergeCell(sheet, headerNum01);
+
+        // 创建第2行
+        row = sheet.createRow(2);
+        // 添加行内容，设置行样式
+        insertRow(row, sheet, style, header02, 2);
+        // 合并行
+        mergeCell(sheet, headerNum02);
+
+        sheet.setColumnWidth(0, 25 * 256);
+        sheet.setColumnWidth(1, 25 * 256);
+        for (int i = 2; i < header01.length; i++) {
+            sheet.setColumnWidth(i, 15 * 256);
+        }
+        sheet.setColumnWidth(18, 20 * 256);
+        sheet.setColumnWidth(19, 20 * 256);
+        sheet.setColumnWidth(20, 28 * 256);
+
+        // 这个至此只是输出了表头，对于表格内容应当遍历list，循环填充每一个单元格
+        for (int i = 0; i < dataSet.size(); i++) {
+            int k = 0;
+            Grade grade = dataSet.get(i);
+            row = sheet.createRow(i + 3);
+            HSSFCell cell1 = row.createCell(k++);
+            if (grade.getSiteName() != null) {
+                cell1.setCellValue(grade.getSiteName());
+                cell1.setCellStyle(style2);
+            }
+            HSSFCell cell2 = row.createCell(k++);
+            if (grade.getDataTime() != null) {
+                cell2.setCellValue(grade.getDataTime());
+                cell2.setCellStyle(style2);
+            }
+            HSSFCell cell3 = row.createCell(k++);
+            if (grade.getGreatDays() != null) {
+                cell3.setCellValue(grade.getGreatDays());
+                cell3.setCellStyle(style2);
+            }
+            HSSFCell cell4 = row.createCell(k++);
+            if (grade.getGoodDays() != null) {
+                cell4.setCellValue(grade.getGoodDays());
+                cell4.setCellStyle(style2);
+            }
+            HSSFCell cell5 = row.createCell(k++);
+            if (grade.getMildDays() != null) {
+                cell5.setCellValue(grade.getMildDays());
+                cell5.setCellStyle(style2);
+            }
+            HSSFCell cell6 = row.createCell(k++);
+            if (grade.getMiddleDays() != null) {
+                cell6.setCellValue(grade.getMiddleDays());
+                cell6.setCellStyle(style2);
+            }
+            HSSFCell cell7 = row.createCell(k++);
+            if (grade.getSevereDays() != null) {
+                cell7.setCellValue(grade.getSevereDays());
+                cell7.setCellStyle(style2);
+            }
+            HSSFCell cell8 = row.createCell(k++);
+            if (grade.getWorstDays() != null) {
+                cell8.setCellValue(grade.getWorstDays());
+                cell8.setCellStyle(style2);
+            }
+            HSSFCell cell9 = row.createCell(k++);
+            if (grade.getPm25FirstDays() != null) {
+                cell9.setCellValue(grade.getPm25FirstDays());
+                cell9.setCellStyle(style2);
+            }
+            HSSFCell cell10 = row.createCell(k++);
+            if (grade.getPm10FirstDays() != null) {
+                cell10.setCellValue(grade.getPm10FirstDays());
+                cell10.setCellStyle(style2);
+            }
+            HSSFCell cell11 = row.createCell(k++);
+            if (grade.getO3FirstDays() != null) {
+                cell11.setCellValue(grade.getO3FirstDays());
+                cell11.setCellStyle(style2);
+            }
+            HSSFCell cell12 = row.createCell(k++);
+            if (grade.getNo2FirstDays() != null) {
+                cell12.setCellValue(grade.getNo2FirstDays());
+                cell12.setCellStyle(style2);
+            }
+            HSSFCell cell13 = row.createCell(k++);
+            if (grade.getSo2FirstDays() != null) {
+                cell13.setCellValue(grade.getSo2FirstDays());
+                cell13.setCellStyle(style2);
+            }
+            HSSFCell cell14 = row.createCell(k++);
+            if (grade.getCoFirstDays() != null) {
+                cell14.setCellValue(grade.getCoFirstDays());
+                cell14.setCellStyle(style2);
+            }
+            HSSFCell cell15 = row.createCell(k++);
+            if (grade.getOkRate() != null) {
+                cell15.setCellValue(grade.getOkRate());
+                cell15.setCellStyle(style2);
+            }
+            HSSFCell cell16 = row.createCell(k++);
+            if (grade.getOkDays() != null) {
+                cell16.setCellValue(grade.getOkDays());
+                cell16.setCellStyle(style2);
+            }
+            HSSFCell cell17 = row.createCell(k++);
+            if (grade.getValidDays() != null) {
+                cell17.setCellValue(grade.getValidDays());
+                cell17.setCellStyle(style2);
+            }
+            HSSFCell cell18 = row.createCell(k++);
+            if (grade.getTotalDays() != null) {
+                cell18.setCellValue(grade.getTotalDays());
+                cell18.setCellStyle(style2);
+            }
+            HSSFCell cell19 = row.createCell(k++);
+            if (grade.getPm25OkDays() != null) {
+                cell19.setCellValue(grade.getPm25OkDays());
+                cell19.setCellStyle(style2);
+            }
+            HSSFCell cell20 = row.createCell(k++);
+            if (grade.getPm25ValidDays() != null) {
+                cell20.setCellValue(grade.getPm25ValidDays());
+                cell20.setCellStyle(style2);
+            }
+            HSSFCell cell21 = row.createCell(k++);
+            if (grade.getPm25OkDaysRate() != null) {
+                cell21.setCellValue(grade.getPm25OkDaysRate());
+                cell21.setCellStyle(style2);
+            }
+        }
+        return wb;
+    }
+
+}

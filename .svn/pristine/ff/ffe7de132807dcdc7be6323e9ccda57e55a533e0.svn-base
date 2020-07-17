@@ -1,0 +1,63 @@
+<%layout('/include/default.html',{libs:["table","layer","layui","tree"]}){%>
+<link href="/plugin/site/style.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="/plugin/siteTree/siteTree.css">
+<style>
+
+    .select-bg {
+        border-radius: 6px;
+        background-color: #F4F4F4;
+        padding-left: 10px;
+        padding-bottom: 20px;
+        margin-bottom: -20px;
+        padding-bottom: 8px;
+        padding-top: 8px;
+    }
+    .table {
+        table-layout: fixed;
+    }
+    #top li a {
+        background-color: rgb(231, 231, 231);
+        color: #575757;
+    }
+
+    #top li:first-child a {
+        background-color: rgb(27, 137, 200);
+        color: white;
+    }
+
+    #top li a:hover {
+        background-color: rgb(27, 137, 200);
+        color: white;
+        cursor: pointer;
+    }
+    .siteTree{
+        display: none;
+    }
+    .show{
+        display: initial;
+    }
+</style>
+
+<div class="wrapper-content ">
+    <div class="row">
+        <button class="layui-btn layui-btn-sm" style="margin-left: 10px"
+                onclick="exportExcel();">
+            <i class="layui-icon">&#xe601;</i> 导出Excel
+        </button>
+            <input type="hidden" id="id" name="id" value="${id}">
+            <input type="hidden" id="time" name="time" value="${time}">
+        <input type="hidden" id="pollutant" name="pollutant" value="${pollutant}">
+            <div style="z-index: 1; background-color: #F4F4F4;">
+                <table id="exampleTable" style="overflow-x: scroll"></table>
+            </div>
+        </div>
+</div>
+<% } %>
+<script src="/js/alarm/pollutantSituation/eventDetail.js" type="text/javascript"></script>
+<script>
+$(function () {
+
+    load(id);
+});
+
+</script>

@@ -1,0 +1,114 @@
+<% layout('/include/default.html',{libs:["layui"]}){ %>
+<div class="wrapper-content">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="dbForm">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input id="alarmId" name="alarmId" type="hidden" value="${info.id}"/>
+                            <input id="seriousExceed" name="seriousExceed" type="hidden" value="${info.seriousExceed}"/>
+                            <label class="col-sm-3 control-label">设备编号：</label>
+                            <div class="col-sm-3">
+                                <input id="equipmentId" name="stationCode" value="${info.equipmentId}"
+                                       class="form-control" type="text" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">负责人:</label>
+                            <div class="col-sm-3">
+                                <input type="hidden" id="fzr" name="chargePersonId" value="${info.fzr}">
+                                <input id="fzrName" name="fzrName" value="${info.fzrName}"
+                                       class="notSubmit form-control" type="text" readonly>
+                            </div>
+                            <label class="col-sm-2 control-label">电话:</label>
+                            <div class="col-sm-3">
+                                <input id="mobile" name="mobile" value="${info.mobile}"
+                                       class="form-control" type="text" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">任务类型:</label>
+                            <div class="col-sm-3" id="taskTypeDiv">
+                                <select id="taskType" name="taskType" class="form-control">
+                                    <option value="9">因子超标</option>
+                                    <!--<option value="">请选择</option>-->
+                                    <option value="1">巡检</option>
+                                    <option value="2">维护</option>
+
+                                    <!--<option value="3">易耗品更换</option>-->
+                                    <!--<option value="4">仪器标定校准</option>-->
+                                    <option value="5">设备维修</option>
+                                    <!--<option value="6">试剂标液更换</option>-->
+                                    <!--<option value="7">废液回收</option>-->
+                                    <option value="8">其他任务</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label">紧急程度:</label>
+                            <div class="col-sm-3">
+                                <select id="degreeEmergency" name="degreeEmergency" class="form-control">
+                                    <!--<option value="">请选择</option>-->
+                                    <option value="2">最高级别</option>
+                                    <option value="0">普通不紧急</option>
+                                    <option value="1">重要紧急</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">任务描述:</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" rows="3" id="remark" name="remark">${info.dataTime,'yyyy-MM-dd HH:mm:ss'} ${info.siteName}站点 ${info.pollutant}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">任务名称:</label>
+                            <div class="col-sm-8">
+                                <input id="name" name="name" value="${info.siteName}站点${info.pollutant}"
+                                       class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">开始时间:</label>
+                            <div class="col-sm-3">
+                                <input id="startDate" name="startTime" class="form-control"
+                                       type="text" autocomplete="off">
+                            </div>
+                            <label class="col-sm-2 control-label">预计结束时间:</label>
+                            <div class="col-sm-3">
+                                <input id="endDate" name="endTime" type="text" class="form-control"
+                                       autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary" id="submit">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+
+<script type="text/javascript">
+    // 日期时间选择器
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#startDate',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            trigger: 'click',
+            value: new Date()
+        });
+        laydate.render({
+            elem: '#endDate',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            trigger: 'click',
+            value: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+        });
+    });
+</script>
+<script type="text/javascript" src="/js/alarm/pollutantdata/save.js"></script>

@@ -1,0 +1,171 @@
+<% layout('/include/default.html',{libs:["layui"]}){ %>
+<link href="/content/css/bootstrap-select.min.css" rel="stylesheet">
+
+<div class="wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+
+                            <label class="col-sm-3 control-label">站点名称 <font color="red">*</font>：</label>
+                            <div class="col-sm-3">
+                                <input id="name" name="name" class="form-control"
+                                       type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">站点类型：</label>
+                            <div class="col-sm-3">
+                                <select id="siteType" name="siteType" class="form-control"
+                                        onchange="typeChange()">
+                                    <option value="1">水</option>
+                                    <option value="2">空气</option>
+                                    <option value="3">涉气污染源</option>
+                                    <option value="4">涉水污染源</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">经度 <font color="red">*</font>：</label>
+                            <div class="col-sm-3">
+                                <input type="text" id="longitude" name="longitude"
+                                       class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">纬度 <font color="red">*</font>：</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="latitude" name="latitude"
+                                       class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">站点编码：</label>
+                            <div class="col-sm-3">
+                                <input id="siteCode" name="siteCode" class="form-control"
+                                       type="text">
+                            </div>
+                            <label class="col-sm-2 control-label">地址 <font color="red">*</font>：</label>
+                            <div class="col-sm-4">
+                                <input id="address" name="address" class="form-control"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="col-sm-3 control-label">状态：</label>
+                        <div class="col-sm-3">
+                            <label  class="radio-inline checkbox-inline">
+                                <input type="radio" name="status" class="radio-inline checkbox-inline" checked="true" value="1">正常
+                            </label>
+                            <label  class="radio-inline checkbox-inline">
+                                <input type="radio" name="status" class="radio-inline checkbox-inline" value="0">停运
+                            </label>
+                        </div>
+                        <label class="col-sm-2 control-label">行政区划：</label>
+                        <div class="col-sm-3">
+                            <select id="areaType" class="form-control" name="areaType">
+                                <option>--请选择--</option>
+                                <option value=1>--城区--</option>
+                                <option value=2>--乡镇--</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">负责人：</label>
+                            <div class="col-sm-3">
+                                <select id="fzr" name="fzr" class="selectpicker show-tick form-control" data-live-search="true">
+                                    <option value="">-请选择-</option>
+                                    <%if(userList!=null && userList.~size > 0){%>
+                                    <%for(user in userList){%>
+                                    <option value="${user.userId}">${user.username}</option>
+                                    <%}%>
+                                    <%}%>
+                                </select>
+
+                            </div>
+                            <label class="col-sm-2 control-label">联系电话：</label>
+                            <div class="col-sm-4">
+                                <input id="phone" name="phone" class="form-control"
+                                       type="text" maxlength="12" disabled="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="airD">
+                                <label class="col-sm-3 control-label">站点规模：</label>
+                                <div class="col-sm-3">
+                                    <select id="siteCategory" name="siteCategory" class="form-control">
+                                        <option value="0">选填</option>
+                                        <option value=1>微型站</option>
+                                        <option value=2>标准站</option>
+                                        <option value=3>国控站</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="pollutantD" class="hidden">
+                                <label class="col-sm-3 control-label">公司原名：</label>
+                                <div class="col-sm-3">
+                                    <input id="oldName" name="oldName" class="form-control"
+                                           type="text">
+                                </div>
+                            </div>
+                            <label class="col-sm-2 control-label">备注：</label>
+                            <div class="col-sm-4">
+                                <input id="remark" name="remark" class="form-control"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/airSite/addSite.js"></script>
+<script type="text/javascript" src="/js/airSite/bootstrap-select.min.js"></script>
+<script>
+    var userList;
+    $(function () {
+        $.ajax({
+            type : "GET",
+            dataType : "json",
+            url : "/airSite/getUserList",
+            data : {},
+            success : function (data) {
+
+                userList=data;
+
+        }
+
+    });
+    });
+
+    $("#fzr").change(function(){
+
+        var id =$("#fzr").val();
+        for (var p in userList) {//遍历json数组时，这么写p为索引，0,1
+           var userId= userList[p].userId;
+           if (id==userId) {
+               $("#phone").val(userList[p].mobile);
+               return
+           }
+        }
+
+    });
+
+    //日期时间选择器
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#test5'
+            ,type: 'datetime'
+        });
+    });
+</script>

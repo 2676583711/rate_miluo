@@ -1,0 +1,225 @@
+<html lang="en">
+<head>
+  <meta charset=utf-8"UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="x5-fullscreen" content="true">
+  <title>汨罗生态环境数据管理实时发布系统</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #fefefe;
+      font-size: 14px;
+      color: #333;
+      font-family: 'Microsoft YaHei';
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    .wrapper {
+      padding-bottom: 50px;
+    }
+
+    .top-title {
+      font-size: 16px;
+      text-align: center;
+      margin: 0;
+      height: 40px;
+      color: #fff;
+      text-align: center;
+      line-height: 40px;
+      font-family: 'Microsoft YaHei';
+      background-color: #16d3cc;
+      background-size: cover;
+    }
+
+    .center-content {
+      width: 90%;
+      margin: 0 auto;
+      font-size: 16px;
+    }
+
+
+    .text {
+      text-indent: 20px;
+    }
+
+    .download-box {
+      width: 90%;
+      margin: 0 auto;
+      text-align: center;
+      height:150px;
+    }
+
+    .download-box a {
+      margin: 0 auto;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .download-box img {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+    }
+
+    .app-icon {
+      margin-top: 5px;
+      float: left;
+      width: 40%;
+      height:150px;
+    }
+
+    .download {
+      float: right;
+      width: 52%;
+      height:150px;
+      display:table;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40px;
+      color: #333;
+      line-height: 40px;
+      text-align: center;
+      background-color: #f0f0f0;
+      border-top: 1px solid #ddd;
+    }
+
+    .dark-bg {
+      position: fixed;
+      display: none;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,.75);
+    }
+
+    .dark-bg img {
+      width: 100%;
+    }
+
+    .img-box {
+      width: 90%;
+      margin: 0 auto;
+      clear: both;
+    }
+
+    .img-box img {
+      width: 100%;
+    }
+
+    .img-left, .img-right {
+      float: left;
+      width: 46%;
+    }
+
+    .img-right {
+      float: right;
+    }
+
+    .intro {
+      width: 90%;
+      padding: 10px;
+      margin: 0 auto;
+      clear: both;
+      background-color: #f1f1f1;
+      border-radius: 6px;
+    }
+
+    .intro ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+  </style>
+
+</head>
+<body>
+<div class="wrapper">
+  <h3 class="top-title">系统升级公告</h3>
+
+  <div class="center-content">
+    <p class="user">尊敬的用户:</p>
+    <p class="text">您好,“汨罗生态环境数据管理”已经升级，新系统增加提供了APP的发布方式，请依据下图指引安装新版软件"汨罗生态环境数据管理"APP。</p>
+  </div>
+  <div class="download-box">
+    <div class="app-icon">
+      <img src="/image/log.png" alt="logo" tppabs="http://59.172.208.250:9093/images/app-icon.png" />
+    </div>
+    <div class="download">
+      <div style="width:100%;display:table-cell; vertical-align:middle;">
+        <a id="androidDownload" href="javascript:void(0)"><img src="/image/d-and.png" alt="android下载"/></a>
+        <a id="goBower" href="javascript:void(0)"><img src="/image/d-bower.png" alt="访问网页版" /></a>
+      </div>
+    </div>
+  </div>
+  <div class="img-box">
+    <div class="img-left">
+      <img src="/image/home.jpg" alt="首页" />
+    </div>
+    <div class="img-right">
+      <img src="/image/map.jpg" alt="地图" />
+    </div>
+  </div>
+
+  <div class="intro">
+    <strong>功能介绍</strong>
+    <ul>
+      <li>首页：可查看汨罗市省控、国控站点最近一小时数据情况，以及过去24小时和7天数据</li>
+      <li>地图：可查看汨罗市各个站点数据情况，可点击查看详情</li>
+      <li>工单管理：可查看任务情况，修改任务</li>
+      <li>报警：可查看汨罗市站点监测因子超标情况，以及添加任务</li>
+      <li>更多：可更新版本</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    技术支持电话：400-139-7077
+  </div>
+</div>
+<div id="darkLayout" class="dark-bg"><img src="/image/live_weixin.png" /></div>
+</body>
+</html>
+
+<script type="text/javascript">
+  window.onload = function () {
+    var btn = document.getElementById('androidDownload');
+    var iosBtn = document.getElementById('iosDownload');
+    var bowerBtn = document.getElementById('goBower');
+    var darkLayout = document.getElementById('darkLayout');
+    btn.onclick = function (e) {
+      if (isWeiXin()) {
+        darkLayout.style.position = "fixed";
+        darkLayout.style.display = "block";
+      }
+      else {
+        location.href = "http://218.75.181.68:8306/mlAPP/ml.apk";
+      }
+    }
+    bowerBtn.onclick = function (e) {
+      location.href = "http://218.75.181.68:8306/mlAPP/index.html";
+    }
+    function isWeiXin() {
+      var ua = window.navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+</script>

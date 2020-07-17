@@ -1,0 +1,43 @@
+<% layout('/include/default.html', {libs:["tree","table","layer","layui"]}){ %>
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class=" ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>   </h5>
+                </div>
+                <div class="layui-form ibox-content">
+                    <form  class="layui-form form-horizontal m-t" id="addForm">
+
+
+                <input id="createBy" name="createBy" type="hidden" value="${userId}">
+
+                <h5>短信推送</h5><input type="checkbox" name="sms" id="sms" lay-skin="switch" lay-text="ON|OFF" ${smsBoolean?'checked':''}>
+                <h5>App推送</h5><input type="checkbox" name="app" id="app" lay-skin="switch" lay-text="ON|OFF"  ${appBoolean?'checked':''}>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">请提交：</label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="layui-btn" id="formSwitch">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<script type="text/javascript" src="/js/connectedata/sms/addSwitch.js">
+</script>
+<script>
+
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formSwitch)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>

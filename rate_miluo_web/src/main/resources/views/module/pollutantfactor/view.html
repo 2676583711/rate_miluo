@@ -1,0 +1,78 @@
+<% layout('/include/default.html',{libs:["layui"]}){ %>
+<link href="/content/css/bootstrap-select.min.css" rel="stylesheet">
+<div class="wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">因子名称<font color="red">*</font>：</label>
+                            <div class="col-sm-3">
+                                <input id="name" name="name" class="form-control" value="${miluoPollutantFactor.name}" 
+                                       type="text" readonly="readonly">
+                                         <input id="id"  name="id" class="form-control" value="${miluoPollutantFactor.id}"
+                                       type="hidden">
+                            </div>
+                            <label class="col-sm-3 control-label">国标2017因子编码：</label>
+                            <div class="col-sm-3">
+                                 <input id="code2017" name="code2017" class="form-control" value="${miluoPollutantFactor.code2017}"
+                                       type="text" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">国标2005因子编码：</label>
+                            <div class="col-sm-3">
+                                 <input id="code2005" name="code2005" class="form-control" value="${miluoPollutantFactor.code2005}"
+                                       type="text" readonly="readonly">
+                            </div>
+                           <label class="col-sm-3 control-label">单位：</label>
+                            <div class="col-sm-3">
+                                 <input id="unitName" name="unitName" class="form-control" value="${miluoPollutantFactor.unitName}"
+                                       type="text" readonly="readonly">
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">数据类型：</label>
+                                <div class="col-sm-3">
+                                    <input id="dataType" name="dataType" class="form-control"  value="${miluoPollutantFactor.dataType}"
+                                           type="text" readonly="readonly">
+                                </div>
+                                <label class="col-sm-3 control-label">范围：</label>
+                                <div class="col-sm-3">
+                                    <input id="ranges" name="ranges" class="form-control" value="${miluoPollutantFactor.ranges}"
+                                           type="text" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                             <label class="col-sm-3 control-label">上限：</label>
+                                <div class="col-sm-3">
+                                    <input id="upValue" name="upValue" class="form-control" value="${miluoPollutantFactor.upValue}"
+                                           type="text" readonly="readonly">
+                                </div>
+                             <label class="col-sm-3 control-label">下限：</label>
+                                <div class="col-sm-3">
+                                    <input id="downValue" name="downValue" class="form-control" value="${miluoPollutantFactor.downValue}"
+                                           type="text" readonly="readonly">  
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/airSite/bootstrap-select.min.js"></script>
+<script>
+    //日期时间选择器
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#test5'
+            ,type: 'datetime'
+        });
+    });
+</script>

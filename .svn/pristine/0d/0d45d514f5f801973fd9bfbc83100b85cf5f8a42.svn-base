@@ -1,0 +1,136 @@
+package com.rate.web.site.controller;
+
+import com.rate.system.rate_system.controller.BaseController;
+import com.rate.system.rate_system.entity.User;
+import com.rate.system.rate_system.service.UserService;
+import com.rate.system.rate_system.utils.R;
+import com.rate.system.rate_system.utils.StringUtils;
+import com.rate.web.site.service.SiteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author shuzhangyao
+ * @date 2019/5/27 10:34
+ **/
+@Controller
+@RequestMapping("/site")
+public class SiteController extends BaseController {
+
+    @Autowired
+    private SiteService siteService;
+
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping("/tree/data")
+    @ResponseBody
+    public R findSiteList(@RequestParam Map<String, Object> params){
+        params.put("userId",getUserId());
+        R r = new R();
+        r.put("code", 200);
+        try {
+            r.put("data", siteService.findSiteList(params));
+        } catch (Exception e) {
+            e.printStackTrace();
+            r.put("code", 500);
+            r.put("msg", "服务异常");
+            r.put("data", null);
+        }
+        return r;
+    }
+
+    @RequestMapping("/tree/all")
+    @ResponseBody
+    public R findSiteTree(@RequestParam Map<String, Object> params){
+        User user=userService.get(getUserId());
+        if(user.getFactoryId()!=null){
+            params.put("factoryId",user.getFactoryId());
+        }
+        params.put("userId",getUserId());
+        R r = new R();
+        r.put("code", 200);
+        try{
+            r.put("data", siteService.findAllSiteTree(params));
+        } catch (Exception e) {
+            e.printStackTrace();
+            r.put("code", 500);
+            r.put("msg", "服务异常");
+            r.put("data", null);
+        }
+        return r;
+    }
+
+    @RequestMapping("/tree/single/{type}")
+    @ResponseBody
+    public R findSiteSingleTree(@PathVariable("type") String type) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", getUserId());
+        params.put("siteType", type);
+        R r = new R();
+        r.put("code", 200);
+        try {
+            r.put("data", siteService.findSiteSingleTree(getUserId(), type));
+        } catch (Exception e) {
+            e.printStackTrace();
+            r.put("code", 500);
+            r.put("msg", "服务异常");
+            r.put("data", null);
+        }
+        return r;
+    }
+
+    @RequestMapping("/tree/item")
+    @ResponseBody
+    public R findSiteTreeItem(@RequestParam Map<String, Object> params){
+
+        User user=userService.get(getUserId());
+//        if(user.getFactoryId()!=null){
+//            params.put("factoryId",user.getFactoryId());
+//        }
+        params.put("userId",getUserId());
+        R r = new R();
+        r.put("code", 200);
+        try{
+            String all = (String) params.get("tree");
+            if(StringUtils.isNotBlank(all) && "all".equals(all)){
+                r.put("data", siteService.findAllSiteTree(params));
+            }else{
+                r.put("data", siteService.findSiteTreeByType(params));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            r.put("code", 500);
+            r.put("msg", "服务异常");
+            r.put("data", null);
+        }
+        return r;
+    }
+
+    @RequestMapping("/tree/video/item")
+    @ResponseBody
+    public R findSiteTreeVideoItem(@RequestParam Map<String, Object> params){
+        params.put("userId",getUserId());
+        R r = new R();
+        r.put("code", 200);
+        try{
+            r.put("data", siteService.findSiteVideoTreeByType(params));
+        } catch (Exception e) {
+            e.printStackTrace();
+            r.put("code", 500);
+            r.put("msg", "服务异常");
+            r.put("data", null);
+        }
+        return r;
+    }
+
+
+
+}

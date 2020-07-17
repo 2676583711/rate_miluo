@@ -1,0 +1,205 @@
+package com.rate.web.statistic.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.rate.system.rate_system.controller.BaseController;
+import com.rate.system.rate_system.utils.PageUtils;
+import com.rate.system.rate_system.utils.StringUtils;
+import com.rate.web.statistic.dto.TimeConstant;
+import com.rate.web.statistic.service.DailyStatementService;
+import com.rate.web.statistic.util.FormatEntity;
+import com.rate.web.statistic.util.PollutantExcelUtil;
+import com.rate.web.statistic.vo.PrimaryDays;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.beetl.sql.core.engine.PageQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * @Author chenshixue
+ * @Date 2019/12/23
+ */
+@Controller
+@RequestMapping("/statistic/pollutant")
+public class PollutantController extends BaseController {
+
+    @Autowired
+    private DailyStatementService dailyStatementService;
+
+    // 首页
+    @GetMapping
+    public String page() {
+        Long roleId = getRoleId();
+        if (roleId == 1 || roleId == 73 || roleId == 74 || roleId == 75 || roleId == 77 || roleId == 81) {
+            return "/statistic/pollutant";
+        } else {
+            return "/statistic/404";
+        }
+    }
+
+    /**
+     * 空气质量（首要污染物天数）/ 空气质量（超标污染物天数）
+     * @param params
+     * @param pageSize
+     * @param pageNumber
+     * @Return  com.rate.system.rate_system.utils.PageUtils
+     * @Author  chenshixue
+     * @Date    2019/12/23 19:55
+     */
+    @ResponseBody
+    @GetMapping("/primaryDay/list")
+    public PageUtils primaryDayList(@RequestParam Map<String, Object> params, Long pageSize, Long pageNumber) {
+        String siteCodeList = (String) params.get("siteCodes");
+        if (StringUtils.isBlank(siteCodeList)) {
+            params.remove("siteCodes");
+        } else {
+            params.put("siteCodes", siteCodeList.split(","));
+        }
+        PageQuery<PrimaryDays> pageQuery = new PageQuery<>(pageNumber, pageSize, params);
+        String timeType = (String) params.get("timeType");
+        params.put("timePattern", TimeConstant.PATTERN.get(timeType));
+        // 季度
+        if ("2".equals(timeType)) {
+            String startTime = (String) params.get("startDate");
+            String endTime = (String) params.get("endDate");
+            Pattern p = Pattern.compile("[^0-9]");
+            if (StringUtils.isNotBlank(startTime)) {
+                Matcher m = p.matcher(startTime);
+                params.put("startDate", m.replaceAll("").trim());
+            }
+            if (StringUtils.isNotBlank(endTime)) {
+                Matcher m = p.matcher(endTime);
+                m.replaceAll("").trim();
+                params.put("endDate", m.replaceAll("").trim());
+            }
+        }
+        PageQuery<PrimaryDays> page = dailyStatementService.primaryList(pageQuery);
+        return new PageUtils(page.getList(), page.getTotalRow());
+    }
+
+    /**
+     * 首要污染物图形
+     * @param params
+     * @Return  com.alibaba.fastjson.JSONObject
+     * @Author  chenshixue
+     * @Date    2020/2/6 10:22
+     */
+    @ResponseBody
+    @GetMapping("/primary/graphic")
+    public JSONObject primaryGraphicList(@RequestParam Map<String, Object> params) {
+        JSONObject obj;
+        String siteCodeList = (String) params.get("siteCodes");
+        if (StringUtils.isBlank(siteCodeList)) {
+            params.remove("siteCodes");
+        } else {
+            params.put("siteCodes", siteCodeList.split(","));
+        }
+        String timeType = (String) params.get("timeType");
+        params.put("timePattern", TimeConstant.PATTERN.get(timeType));
+        // 季度
+        if ("2".equals(timeType)) {
+            String startTime = (String) params.get("startDate");
+            String endTime = (String) params.get("endDate");
+            Pattern p = Pattern.compile("[^0-9]");
+            if (StringUtils.isNotBlank(startTime)) {
+                Matcher m = p.matcher(startTime);
+                params.put("startDate", m.replaceAll("").trim());
+            }
+            if (StringUtils.isNotBlank(endTime)) {
+                Matcher m = p.matcher(endTime);
+                m.replaceAll("").trim();
+                params.put("endDate", m.replaceAll("").trim());
+            }
+        }
+        return dailyStatementService.primaryGraphicList(params);
+    }
+
+    // 导出功能
+    @RequestMapping("/exportExcelPrimary")
+    @ResponseBody
+    public void exportExcel(@RequestParam Map<String, Object> params, HttpServletResponse response,
+                            HttpServletRequest request) throws Exception {
+        String siteCodeList = (String) params.get("siteCodes");
+        if (StringUtils.isBlank(siteCodeList)) {
+            params.remove("siteCodes");
+        } else {
+            params.put("siteCodes", siteCodeList.split(","));
+        }
+        String timeType = (String) params.get("timeType");
+        params.put("timePattern", TimeConstant.PATTERN.get(timeType));
+        String startTime = (String) params.get("startDate");
+        String endTime = (String) params.get("endDate");
+        String dateRange = startTime + "~" + endTime;
+        // 季度
+        if ("2".equals(timeType)) {
+            Pattern p = Pattern.compile("[^0-9]");
+            if (StringUtils.isNotBlank(startTime)) {
+                Matcher m = p.matcher(startTime);
+                params.put("startDate", m.replaceAll("").trim());
+            }
+            if (StringUtils.isNotBlank(endTime)) {
+                Matcher m = p.matcher(endTime);
+                m.replaceAll("").trim();
+                params.put("endDate", m.replaceAll("").trim());
+            }
+        }
+        List<PrimaryDays> list;
+        list = dailyStatementService.primaryList(params);
+        if ("2".equals(timeType)) {
+            for (PrimaryDays days : list) {
+                String season = FormatEntity.formatSingleSeasonByYear(days.getDataTime());
+                days.setDataTime(season);
+            }
+        }
+        String type = (String) params.get("type");
+        this.doExportXls(response, request, list, PrimaryDays.class, "首要污染物报表", dateRange, type);
+    }
+
+    protected <T> void doExportXls(HttpServletResponse response, HttpServletRequest request,
+                                   List<PrimaryDays> dataSet, Class<PrimaryDays> pojoClass, String title, String dateRange, String type) throws Exception {
+        response.setContentType("application/vnd.ms-excel");
+        ServletOutputStream out = null;
+        try {
+            response.reset();
+            response.setHeader("Cache-Control", "private");
+            response.setHeader("Pragma", "private");
+            response.setContentType("application/vnd.ms-excel;charset=UTF-8");
+            response.setHeader("Content-Type", "application/force-download");
+            String workBookName = URLEncoder.encode(title + ".xls", "UTF-8");
+            response.setHeader("Content-disposition", "attachment;filename=" + workBookName);
+            PollutantExcelUtil excelUtil = new PollutantExcelUtil();
+            HSSFWorkbook wb;
+            if (type != null) {  // type=1 超标污染天数，  type=null 首要污染天数
+                wb = excelUtil.exportExceedDays(dataSet, dateRange);
+            } else {
+                wb = excelUtil.exportPrimaryDays(dataSet, dateRange);
+            }
+            out = response.getOutputStream();
+            wb.write(out);
+        } catch (Exception var15) {
+            var15.printStackTrace();
+            throw new Exception("导出失败！");
+        } finally {
+            try {
+                out.flush();
+                out.close();
+            } catch (IOException var14) {
+                var14.printStackTrace();
+            }
+        }
+    }
+
+}
